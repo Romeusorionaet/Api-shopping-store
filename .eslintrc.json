@@ -1,0 +1,16 @@
+{
+    "extends": ["@rocketseat/eslint-config/node"],
+    "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "auto"
+          }
+        ],
+        "@typescript-eslint/adjacent-overload-signatures": "off",
+        "camelCase": "off",
+        "no-useless-constructor": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-empty-function": "off"
+      }
+}
