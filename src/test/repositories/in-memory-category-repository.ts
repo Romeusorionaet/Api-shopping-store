@@ -5,6 +5,16 @@ import { Category } from "src/domain/store/enterprise/entities/category";
 export class InMemoryCategoryRepository implements CategoryRepository {
   public items: Category[] = [];
 
+  async getByTitle(title: string): Promise<Category | null> {
+    const category = this.items.find((item) => item.title === title);
+
+    if (!category) {
+      return null;
+    }
+
+    return category;
+  }
+
   async findMany({ page }: PaginationParams): Promise<Category[]> {
     const categories = this.items
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
