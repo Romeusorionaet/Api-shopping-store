@@ -3,7 +3,7 @@ import { describe, test, beforeEach, expect } from "vitest";
 import { CreateCategoryUseCase } from "./create-category";
 import { AlreadyExistsError } from "src/core/errors/already-exists-error";
 
-let inMemoryCategoryRepository = new InMemoryCategoryRepository();
+let inMemoryCategoryRepository: InMemoryCategoryRepository;
 let sut: CreateCategoryUseCase;
 
 describe("Create Category", () => {

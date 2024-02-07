@@ -3,7 +3,7 @@ import { describe, test, beforeEach, expect } from "vitest";
 import { FetchCategoryUseCase } from "./fetch-category";
 import { MakeCategory } from "src/test/factories/make-category";
 
-let inMemoryCategoryRepository = new InMemoryCategoryRepository();
+let inMemoryCategoryRepository: InMemoryCategoryRepository;
 let sut: FetchCategoryUseCase;
 
 describe("Fetch Category", () => {
@@ -12,7 +12,7 @@ describe("Fetch Category", () => {
     sut = new FetchCategoryUseCase(inMemoryCategoryRepository);
   });
 
-  test("should be fetch categories", async () => {
+  test("should be able fetch categories", async () => {
     const category1 = MakeCategory();
     const category2 = MakeCategory();
     const category3 = MakeCategory();
