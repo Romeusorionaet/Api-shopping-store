@@ -5,6 +5,7 @@ import { Either, right } from "src/core/either";
 
 interface CreateProductUseCaseRequest {
   categoryId: string;
+  categoryTitle: string;
   title: string;
   description: string;
   price: number;
@@ -27,6 +28,7 @@ export class CreateProductUseCase {
 
   async execute({
     categoryId,
+    categoryTitle,
     title,
     description,
     price,
@@ -43,6 +45,7 @@ export class CreateProductUseCase {
   }: CreateProductUseCaseRequest): Promise<CreateProductUseCaseResponse> {
     const product = Product.create({
       categoryId: new UniqueEntityID(categoryId),
+      categoryTitle,
       title,
       description,
       price,

@@ -13,7 +13,8 @@ export function MakeProduct(
   const product = Product.create(
     {
       categoryId: new UniqueEntityID(),
-      title: faker.lorem.sentence(),
+      categoryTitle: faker.lorem.sentence(15),
+      title: faker.lorem.sentence(15),
       slug: Slug.create("title-slug-test-default"),
       description: faker.lorem.text(),
       price: faker.number.int(),
@@ -25,7 +26,7 @@ export function MakeProduct(
       height: faker.number.int(),
       weight: faker.number.int(),
       corsList: ["color1", "color2", "color3", "color4"],
-      placeOfSale: faker.lorem.sentence(),
+      placeOfSale: faker.lorem.sentence(10),
       star: faker.number.int(),
       ...override,
     },

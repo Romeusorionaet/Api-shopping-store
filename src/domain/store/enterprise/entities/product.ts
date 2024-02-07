@@ -6,6 +6,7 @@ import { Entity } from "src/core/entities/entity";
 
 export interface ProductProps {
   categoryId: UniqueEntityID;
+  categoryTitle: string;
   title: string;
   slug: Slug;
   description: string;
@@ -27,6 +28,10 @@ export interface ProductProps {
 export class Product extends Entity<ProductProps> {
   get categoryId() {
     return this.props.categoryId;
+  }
+
+  get categoryTitle() {
+    return this.props.categoryTitle;
   }
 
   get title() {

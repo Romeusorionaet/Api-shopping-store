@@ -9,8 +9,11 @@ export class InMemoryProductRepository implements ProductRepository {
 
     return this.items
       .filter((item) =>
-        queryWords.every((word) =>
-          item.title.toLocaleLowerCase().includes(word),
+        queryWords.some(
+          (word) =>
+            item.title.toLowerCase().includes(word) ||
+            (item.categoryTitle &&
+              item.categoryTitle.toLowerCase().includes(word)),
         ),
       )
       .slice((page - 1) * 20, page * 20);

@@ -29,6 +29,7 @@ describe("Create Product", () => {
 
     const result = await sut.execute({
       categoryId: category.id.toString(),
+      categoryTitle: category.title,
       title: product.title,
       description: product.description,
       price: product.price,
