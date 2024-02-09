@@ -2,23 +2,23 @@ import { Either, right } from "src/core/either";
 import { Category } from "../../enterprise/entities/category";
 import { CategoryRepository } from "../repositories/category-repository";
 
-interface FetchCategoryUseCaseRequest {
+interface FetchCategoriesUseCaseRequest {
   page: number;
 }
 
-type FetchCategoryUseCaseResponse = Either<
+type FetchCategoriesUseCaseResponse = Either<
   null,
   {
     categories: Category[];
   }
 >;
 
-export class FetchCategoryUseCase {
+export class FetchCategoriesUseCase {
   constructor(private categoryRepository: CategoryRepository) {}
 
   async execute({
     page,
-  }: FetchCategoryUseCaseRequest): Promise<FetchCategoryUseCaseResponse> {
+  }: FetchCategoriesUseCaseRequest): Promise<FetchCategoriesUseCaseResponse> {
     const categories = await this.categoryRepository.findMany({ page });
 
     return right({ categories });

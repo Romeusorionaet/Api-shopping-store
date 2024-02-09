@@ -1,15 +1,15 @@
 import { describe, test, beforeEach, expect } from "vitest";
-import { FetchCategoryUseCase } from "./fetch-category";
-import { MakeCategory } from "src/test/factories/make-category";
 import { InMemoryCategoriesRepository } from "src/test/repositories/in-memory-categories-repository";
+import { FetchCategoriesUseCase } from "./fetch-categories";
+import { MakeCategory } from "src/test/factories/make-category";
 
 let categoriesRepository: InMemoryCategoriesRepository;
-let sut: FetchCategoryUseCase;
+let sut: FetchCategoriesUseCase;
 
-describe("Fetch Category", () => {
+describe("Fetch Categories", () => {
   beforeEach(() => {
     categoriesRepository = new InMemoryCategoriesRepository();
-    sut = new FetchCategoryUseCase(categoriesRepository);
+    sut = new FetchCategoriesUseCase(categoriesRepository);
   });
 
   test("should be able fetch categories", async () => {
