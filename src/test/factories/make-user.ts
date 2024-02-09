@@ -19,6 +19,6 @@ export async function MakeUser(
     },
     id,
   );
-  console.log(user);
+
   return user;
 }
