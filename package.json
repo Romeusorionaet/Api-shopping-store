@@ -13,11 +13,13 @@
   "author": "Romeu soares de souto.",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.10"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.0",
     "@rocketseat/eslint-config": "^2.1.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.11.13",
     "eslint": "^8.56.0",
     "typescript": "^5.3.3",
