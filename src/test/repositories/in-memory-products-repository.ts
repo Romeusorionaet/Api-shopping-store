@@ -4,6 +4,16 @@ import { Product } from "src/domain/store/enterprise/entities/product";
 export class InMemoryProductsRepository implements ProductRepository {
   public items: Product[] = [];
 
+  async findById(id: string): Promise<Product | null> {
+    const product = this.items.find((item) => item.id.toString() === id);
+
+    if (!product) {
+      return null;
+    }
+
+    return product;
+  }
+
   async searchMany(query: string, page: number): Promise<Product[]> {
     const queryWords = query.toLocaleLowerCase().split(" ");
 
