@@ -1,7 +1,7 @@
 import { ProductRepository } from "src/domain/store/application/repositories/product-repository";
 import { Product } from "src/domain/store/enterprise/entities/product";
 
-export class InMemoryProductRepository implements ProductRepository {
+export class InMemoryProductsRepository implements ProductRepository {
   public items: Product[] = [];
 
   async searchMany(query: string, page: number): Promise<Product[]> {

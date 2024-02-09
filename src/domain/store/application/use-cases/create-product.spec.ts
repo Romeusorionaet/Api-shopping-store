@@ -1,17 +1,17 @@
-import { InMemoryProductRepository } from "src/test/repositories/in-memory-product-repository";
 import { describe, test, beforeEach, expect } from "vitest";
 import { CreateProductUseCase } from "./create-product";
 import { MakeProduct } from "src/test/factories/make-product";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { MakeCategory } from "src/test/factories/make-category";
+import { InMemoryProductsRepository } from "src/test/repositories/in-memory-products-repository";
 
-let inMemoryProductRepository: InMemoryProductRepository;
+let productsRepository: InMemoryProductsRepository;
 let sut: CreateProductUseCase;
 
 describe("Create Product", () => {
   beforeEach(() => {
-    inMemoryProductRepository = new InMemoryProductRepository();
-    sut = new CreateProductUseCase(inMemoryProductRepository);
+    productsRepository = new InMemoryProductsRepository();
+    sut = new CreateProductUseCase(productsRepository);
   });
 
   test("should be able create a product", async () => {
@@ -25,7 +25,7 @@ describe("Create Product", () => {
       new UniqueEntityID("product-id-01"),
     );
 
-    await inMemoryProductRepository.create(product);
+    await productsRepository.create(product);
 
     const result = await sut.execute({
       categoryId: category.id.toString(),

@@ -1,15 +1,15 @@
-import { InMemoryCategoryRepository } from "src/test/repositories/in-memory-category-repository";
 import { describe, test, beforeEach, expect } from "vitest";
 import { CreateCategoryUseCase } from "./create-category";
 import { CategoryAlreadyExistsError } from "src/core/errors/category-already-exists-error";
+import { InMemoryCategoriesRepository } from "src/test/repositories/in-memory-categories-repository";
 
-let inMemoryCategoryRepository: InMemoryCategoryRepository;
+let categoriesRepository: InMemoryCategoriesRepository;
 let sut: CreateCategoryUseCase;
 
 describe("Create Category", () => {
   beforeEach(() => {
-    inMemoryCategoryRepository = new InMemoryCategoryRepository();
-    sut = new CreateCategoryUseCase(inMemoryCategoryRepository);
+    categoriesRepository = new InMemoryCategoriesRepository();
+    sut = new CreateCategoryUseCase(categoriesRepository);
   });
 
   test("should be able create a category", async () => {
@@ -20,9 +20,7 @@ describe("Create Category", () => {
     });
 
     expect(result.isRight()).toBe(true);
-    expect(inMemoryCategoryRepository.items[0].title).toEqual(
-      "First category test",
-    );
+    expect(categoriesRepository.items[0].title).toEqual("First category test");
   });
 
   test("should not be able create a category if the title already exists", async () => {

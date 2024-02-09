@@ -1,16 +1,16 @@
-import { InMemoryProductRepository } from "src/test/repositories/in-memory-product-repository";
 import { describe, test, beforeEach, expect } from "vitest";
 import { MakeProduct } from "src/test/factories/make-product";
 import { SearchProductUseCase } from "./search-product";
 import { MakeCategory } from "src/test/factories/make-category";
+import { InMemoryProductsRepository } from "src/test/repositories/in-memory-products-repository";
 
-let inMemoryProductRepository: InMemoryProductRepository;
+let productsRepository: InMemoryProductsRepository;
 let sut: SearchProductUseCase;
 
 describe("Search Product", () => {
   beforeEach(() => {
-    inMemoryProductRepository = new InMemoryProductRepository();
-    sut = new SearchProductUseCase(inMemoryProductRepository);
+    productsRepository = new InMemoryProductsRepository();
+    sut = new SearchProductUseCase(productsRepository);
   });
 
   test("should be able to search for products", async () => {
@@ -18,9 +18,9 @@ describe("Search Product", () => {
     const product2 = MakeProduct({ title: "second product" });
     const product3 = MakeProduct({ title: "test different" });
 
-    await inMemoryProductRepository.create(product1);
-    await inMemoryProductRepository.create(product2);
-    await inMemoryProductRepository.create(product3);
+    await productsRepository.create(product1);
+    await productsRepository.create(product2);
+    await productsRepository.create(product3);
 
     const result = await sut.execute({ query: "Product", page: 1 });
 
@@ -32,9 +32,7 @@ describe("Search Product", () => {
 
   test("should be able to fetch paginated product search", async () => {
     for (let i = 1; i <= 22; i++) {
-      await inMemoryProductRepository.create(
-        MakeProduct({ title: `product ${i}` }),
-      );
+      await productsRepository.create(MakeProduct({ title: `product ${i}` }));
     }
 
     const result = await sut.execute({
@@ -70,9 +68,9 @@ describe("Search Product", () => {
       categoryTitle: secondCategory.title,
     });
 
-    await inMemoryProductRepository.create(firstProduct);
-    await inMemoryProductRepository.create(secondProduct);
-    await inMemoryProductRepository.create(thirdProduct);
+    await productsRepository.create(firstProduct);
+    await productsRepository.create(secondProduct);
+    await productsRepository.create(thirdProduct);
 
     const result = await sut.execute({ query: "first", page: 1 });
 
