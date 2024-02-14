@@ -1,7 +1,7 @@
 import { Either, left, right } from "src/core/either";
 import { CategoryRepository } from "../repositories/category-repository";
-import { Category } from "../../enterprise/entities/category";
 import { CategoryAlreadyExistsError } from "src/core/errors/category-already-exists-error";
+import { Category } from "../../enterprise/entities/category";
 
 interface CreateCategoryUseCaseRequest {
   title: string;
