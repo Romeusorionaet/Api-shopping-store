@@ -4,7 +4,7 @@ import { BuyerAddressRepository } from "../repositories/buyer-address-repository
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 
 interface GetBuyerAddressUseCaseRequest {
-  buyerAddressId: string;
+  buyerId: string;
 }
 
 type GetBuyerAddressUseCaseResponse = Either<
@@ -18,10 +18,9 @@ export class GetBuyerAddressUseCase {
   constructor(private buyerAddressRepository: BuyerAddressRepository) {}
 
   async execute({
-    buyerAddressId,
+    buyerId,
   }: GetBuyerAddressUseCaseRequest): Promise<GetBuyerAddressUseCaseResponse> {
-    const buyerAddress =
-      await this.buyerAddressRepository.findById(buyerAddressId);
+    const buyerAddress = await this.buyerAddressRepository.findById(buyerId);
 
     if (!buyerAddress) {
       return left(new ResourceNotFoundError());
