@@ -20,7 +20,7 @@ describe("Purchase Order", () => {
 
     const buyerAddress = await MakeBuyerAddress(
       {},
-      new UniqueEntityID("buyer-address-test-id"),
+      new UniqueEntityID("purchase-order-buyer-address-test-id"),
     );
 
     const product = MakeProduct({}, new UniqueEntityID("product-test-id"));
@@ -28,7 +28,7 @@ describe("Purchase Order", () => {
     const result = await sut.execute({
       buyerId: user.id.toString(),
       productId: product.id.toString(),
-      buyerAddressId: buyerAddress.id.toString(),
+      buyerAddress,
       quantity: 2,
     });
 
@@ -39,7 +39,12 @@ describe("Purchase Order", () => {
         expect.objectContaining({
           buyerId: new UniqueEntityID("user-test-id"),
           productId: new UniqueEntityID("product-test-id"),
-          buyerAddressId: new UniqueEntityID("buyer-address-test-id"),
+        }),
+      );
+
+      expect(result.value.order.buyerAddress).toEqual(
+        expect.objectContaining({
+          id: new UniqueEntityID("purchase-order-buyer-address-test-id"),
         }),
       );
     }

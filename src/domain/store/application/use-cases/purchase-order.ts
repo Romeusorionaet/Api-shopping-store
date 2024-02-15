@@ -2,11 +2,12 @@ import { Either, right } from "src/core/either";
 import { OrderRepository } from "../repositories/order-repository";
 import { Order } from "../../enterprise/entities/order";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
+import { BuyerAddress } from "../../enterprise/entities/buyer-address";
 
 interface PurchaseOrderUseCaseRequest {
   productId: string;
   buyerId: string;
-  buyerAddressId: string;
+  buyerAddress: BuyerAddress;
   quantity: number;
 }
 
@@ -23,13 +24,13 @@ export class PurchaseOrderUseCase {
   async execute({
     productId,
     buyerId,
-    buyerAddressId,
+    buyerAddress,
     quantity,
   }: PurchaseOrderUseCaseRequest): Promise<PurchaseOrderUseCaseResponse> {
     const order = Order.create({
       buyerId: new UniqueEntityID(buyerId),
       productId: new UniqueEntityID(productId),
-      buyerAddressId: new UniqueEntityID(buyerAddressId),
+      buyerAddress,
       quantity,
     });
 

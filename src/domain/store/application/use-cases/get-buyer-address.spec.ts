@@ -29,7 +29,7 @@ describe("Get Address", () => {
     await buyerAddressRepository.create(buyerAddress);
 
     const result = await sut.execute({
-      buyerId: buyerAddress.buyerId.toString(),
+      buyerAddressId: buyerAddress.buyerId.toString(),
     });
 
     expect(result.isRight()).toBe(true);

@@ -2,11 +2,12 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { Optional } from "src/core/@types/optional";
 import dayjs from "dayjs";
 import { Entity } from "src/core/entities/entity";
+import { BuyerAddress } from "./buyer-address";
 
 export interface OrderProps {
   productId: UniqueEntityID;
   buyerId: UniqueEntityID;
-  buyerAddressId: UniqueEntityID;
+  buyerAddress: BuyerAddress;
   quantity: number;
   createdAt: Date;
   updatedAt?: Date;
@@ -21,8 +22,8 @@ export class Order extends Entity<OrderProps> {
     return this.props.buyerId;
   }
 
-  get buyerAddressId() {
-    return this.props.buyerAddressId;
+  get buyerAddress() {
+    return this.props.buyerAddress;
   }
 
   get quantity() {

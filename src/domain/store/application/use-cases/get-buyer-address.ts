@@ -1,14 +1,14 @@
 import { Either, left, right } from "src/core/either";
 import { BuyerAddress } from "../../enterprise/entities/buyer-address";
 import { BuyerAddressRepository } from "../repositories/buyer-address-repository";
-import { UserNotFoundError } from "src/core/errors/user-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 
 interface GetBuyerAddressUseCaseRequest {
-  buyerId: string;
+  buyerAddressId: string;
 }
 
 type GetBuyerAddressUseCaseResponse = Either<
-  UserNotFoundError,
+  ResourceNotFoundError,
   {
     buyerAddress: BuyerAddress;
   }
@@ -18,12 +18,13 @@ export class GetBuyerAddressUseCase {
   constructor(private buyerAddressRepository: BuyerAddressRepository) {}
 
   async execute({
-    buyerId,
+    buyerAddressId,
   }: GetBuyerAddressUseCaseRequest): Promise<GetBuyerAddressUseCaseResponse> {
-    const buyerAddress = await this.buyerAddressRepository.findById(buyerId);
+    const buyerAddress =
+      await this.buyerAddressRepository.findById(buyerAddressId);
 
     if (!buyerAddress) {
-      return left(new UserNotFoundError());
+      return left(new ResourceNotFoundError());
     }
 
     return right({ buyerAddress });
