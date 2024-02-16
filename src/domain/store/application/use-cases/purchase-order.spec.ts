@@ -16,14 +16,14 @@ describe("Purchase Order", () => {
   });
 
   test("should be able to create a purchase order", async () => {
-    const user = await MakeUser({}, new UniqueEntityID("user-test-id"));
+    const user = await MakeUser({}, new UniqueEntityID("user-test-id-01"));
 
     const buyerAddress = await MakeBuyerAddress(
       {},
       new UniqueEntityID("purchase-order-buyer-address-test-id"),
     );
 
-    const product = MakeProduct({}, new UniqueEntityID("product-test-id"));
+    const product = MakeProduct({}, new UniqueEntityID("product-test-id-01"));
 
     const result = await sut.execute({
       buyerId: user.id.toString(),
@@ -37,8 +37,8 @@ describe("Purchase Order", () => {
     if (result.isRight()) {
       expect(result.value.order).toEqual(
         expect.objectContaining({
-          buyerId: new UniqueEntityID("user-test-id"),
-          productId: new UniqueEntityID("product-test-id"),
+          buyerId: new UniqueEntityID("user-test-id-01"),
+          productId: new UniqueEntityID("product-test-id-01"),
         }),
       );
 

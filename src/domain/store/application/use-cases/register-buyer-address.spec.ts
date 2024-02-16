@@ -23,7 +23,10 @@ describe("Buyer Address", () => {
   });
 
   test("should be able to register buyer address", async () => {
-    const user = await MakeUser({}, new UniqueEntityID("user-test-id"));
+    const user = await MakeUser(
+      {},
+      new UniqueEntityID("register-user-test-id"),
+    );
 
     await usersRepository.create(user);
 
@@ -49,7 +52,7 @@ describe("Buyer Address", () => {
     if (result.isRight()) {
       expect(result.value.buyerAddress).toEqual(
         expect.objectContaining({
-          buyerId: new UniqueEntityID("user-test-id"),
+          buyerId: new UniqueEntityID("register-user-test-id"),
         }),
       );
     }
