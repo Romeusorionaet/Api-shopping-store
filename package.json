@@ -4,8 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "tsx watch src/server.ts",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
+    "test:e2e": "vitest run --dir src/http",
+    "test:e2e:watch": "vitest run --dir src/http",
+    "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
+    "test:install-prisma-environment": "npm link vitest-environment-prisma",
+    "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix"
   },
@@ -13,15 +19,25 @@
   "author": "Romeu soares de souto.",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cookie": "9.3.1",
+    "@prisma/client": "5.9.1",
     "bcryptjs": "^2.4.3",
-    "dayjs": "^1.11.10"
+    "dayjs": "^1.11.10",
+    "dotenv": "16.4.5",
+    "fastify": "4.26.1",
+    "zod": "3.22.4"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.0",
     "@rocketseat/eslint-config": "^2.1.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.11.13",
+    "@types/supertest": "6.0.2",
     "eslint": "^8.56.0",
+    "npm-run-all": "4.1.5",
+    "prisma": "5.9.1",
+    "supertest": "6.3.4",
+    "tsx": "4.7.1",
     "typescript": "^5.3.3",
     "vite-tsconfig-paths": "^4.3.1",
     "vitest": "^1.2.2"

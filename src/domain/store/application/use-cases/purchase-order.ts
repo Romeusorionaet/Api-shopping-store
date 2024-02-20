@@ -35,7 +35,9 @@ export class PurchaseOrderUseCase {
       quantity,
     });
 
-    if (!order.buyerAddress) {
+    const hasBuyerAddress = Object.keys(order.buyerAddress).length === 0;
+
+    if (hasBuyerAddress) {
       return left(new OrderWithEmptyAddressError());
     }
 

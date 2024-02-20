@@ -49,4 +49,19 @@ describe("Purchase Order", () => {
       );
     }
   });
+
+  test("should not be able to create a purchase order without address buyer", async () => {
+    const user = await MakeUser({}, new UniqueEntityID("user-test-id-02"));
+
+    const product = MakeProduct({}, new UniqueEntityID("product-test-id-02"));
+
+    const result = await sut.execute({
+      buyerId: user.id.toString(),
+      productId: product.id.toString(),
+      buyerAddress: {} as any,
+      quantity: 2,
+    });
+
+    expect(result.isLeft()).toEqual(true);
+  });
 });

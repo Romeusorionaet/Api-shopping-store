@@ -53,6 +53,10 @@ export class Category extends Entity<CategoryProps> {
     this.touch();
   }
 
+  set productQuantity(value: number) {
+    this.props.productQuantity = value ?? 0;
+  }
+
   set imgUrl(imgUrl: string) {
     this.props.imgUrl = imgUrl;
 

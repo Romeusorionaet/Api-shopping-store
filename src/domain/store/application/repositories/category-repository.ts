@@ -1,8 +1,8 @@
 import { PaginationParams } from "src/core/repositories/pagination-params";
-import { Category } from "../../enterprise/entities/category";
+import { Category, Prisma } from "@prisma/client";
 
 export interface CategoryRepository {
-  create(category: Category): Promise<void>;
+  create(category: Prisma.CategoryCreateInput): Promise<void>;
   findMany(page: PaginationParams): Promise<Category[]>;
-  getByTitle(title: string): Promise<Category | null>;
+  getByTitle(title: string): Promise<Category[]>;
 }

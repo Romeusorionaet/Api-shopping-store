@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ModeOfSale {
+  SELLS_ONLY_IN_THE_REGION
+  ONLINE_STORE
+}
+
+model Category {
+  id              String @id @default(uuid())
+  title           String
+  slug            String
+  productQuantity Int    @default(0)
+  imgUrl          String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("categories")
+}
+
+model Product {
+  id                   String     @id @default(uuid())
+  categoryId           String
+  categoryTitle        String
+  title                String
+  slug                 String
+  description          String     @db.Text
+  price                String
+  imgUrlList           String[]
+  stockQuantity        Int        @default(10)
+  minimumQuantityStock Int        @default(2)
+  discountPercentage   Int        @default(0)
+  width                Int?
+  height               Int?
+  weight               Int?
+  corsList             String[]
+  placeOfSale          ModeOfSale @default(ONLINE_STORE)
+  star                 Int?       @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("products")
+}

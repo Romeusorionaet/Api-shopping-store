@@ -24,9 +24,11 @@ export class CreateCategoryUseCase {
     productQuantity,
     imgUrl,
   }: CreateCategoryUseCaseRequest): Promise<CreateCategoryUseCaseResponse> {
-    const existCategory = await this.categoryRepository.getByTitle(title);
+    const categoryList = await this.categoryRepository.getByTitle(title);
 
-    if (existCategory) {
+    const existCategoryInList = categoryList.length !== 0;
+
+    if (existCategoryInList) {
       return left(new CategoryAlreadyExistsError());
     }
 
@@ -36,7 +38,15 @@ export class CreateCategoryUseCase {
       imgUrl,
     });
 
-    await this.categoryRepository.create(category);
+    const categoryWithIdAsString = {
+      id: category.id.toString(),
+      title: category.title,
+      slug: category.slug.toString(),
+      productQuantity: category.productQuantity,
+      imgUrl: category.imgUrl,
+    };
+
+    await this.categoryRepository.create(categoryWithIdAsString);
 
     return right({ category });
   }

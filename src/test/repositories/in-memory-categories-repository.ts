@@ -1,18 +1,24 @@
+import { Category, Prisma } from "@prisma/client";
+import { randomUUID } from "crypto";
 import { PaginationParams } from "src/core/repositories/pagination-params";
 import { CategoryRepository } from "src/domain/store/application/repositories/category-repository";
-import { Category } from "src/domain/store/enterprise/entities/category";
+import { Slug } from "src/domain/store/enterprise/entities/value-objects/slug";
 
 export class InMemoryCategoriesRepository implements CategoryRepository {
   public items: Category[] = [];
 
-  async getByTitle(title: string): Promise<Category | null> {
-    const category = this.items.find((item) => item.title === title);
+  async create(data: Prisma.CategoryCreateInput): Promise<void> {
+    const category = {
+      id: data.id ?? randomUUID(),
+      title: data.title,
+      slug: data.slug ?? Slug.createFromText(data.title),
+      imgUrl: data.imgUrl,
+      productQuantity: data.productQuantity ?? 0,
+      updatedAt: new Date(),
+      createdAt: new Date(),
+    };
 
-    if (!category) {
-      return null;
-    }
-
-    return category;
+    this.items.push(category);
   }
 
   async findMany({ page }: PaginationParams): Promise<Category[]> {
@@ -23,7 +29,9 @@ export class InMemoryCategoriesRepository implements CategoryRepository {
     return categories;
   }
 
-  async create(category: Category): Promise<void> {
-    this.items.push(category);
+  async getByTitle(title: string): Promise<Category[]> {
+    const category = this.items.filter((item) => item.title === title);
+
+    return category;
   }
 }
