@@ -1,9 +1,10 @@
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { ProductRepository } from "../../../store/application/repositories/product-repository";
-import { Product } from "../../enterprise/entities/product";
+import { ModeOfSale, Product } from "../../enterprise/entities/product";
 import { Either, right } from "src/core/either";
 
 interface CreateProductUseCaseRequest {
+  id: string;
   categoryId: string;
   categoryTitle: string;
   title: string;
@@ -13,12 +14,12 @@ interface CreateProductUseCaseRequest {
   stockQuantity: number;
   minimumQuantityStock: number;
   discountPercentage: number;
-  width: number;
-  height: number;
-  weight: number;
+  width: number | null;
+  height: number | null;
+  weight: number | null;
   corsList: string[];
-  placeOfSale: string;
-  star: number;
+  placeOfSale?: ModeOfSale;
+  star: number | null;
 }
 
 type CreateProductUseCaseResponse = Either<null, { product: Product }>;

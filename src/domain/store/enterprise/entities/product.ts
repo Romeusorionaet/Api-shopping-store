@@ -4,23 +4,25 @@ import { Optional } from "src/core/@types/optional";
 import dayjs from "dayjs";
 import { Entity } from "src/core/entities/entity";
 
+export type ModeOfSale = "SELLS_ONLY_IN_THE_REGION" | "ONLINE_STORE";
+
 export interface ProductProps {
-  categoryId: UniqueEntityID;
+  categoryId: UniqueEntityID | string;
   categoryTitle: string;
   title: string;
-  slug: Slug;
+  slug: Slug | string;
   description: string;
   price: number;
   imgUrlList: string[];
   stockQuantity: number;
   minimumQuantityStock: number;
   discountPercentage: number;
-  width: number;
-  height: number;
-  weight: number;
+  width: number | null;
+  height: number | null;
+  weight: number | null;
   corsList: string[];
-  placeOfSale: string;
-  star: number;
+  placeOfSale?: ModeOfSale;
+  star: number | null;
   createdAt: Date;
   updatedAt?: Date;
 }
@@ -118,7 +120,7 @@ export class Product extends Entity<ProductProps> {
   }
 
   static create(
-    props: Optional<ProductProps, "createdAt" | "slug">,
+    props: Optional<ProductProps, "createdAt" | "slug" | "placeOfSale">,
     id?: UniqueEntityID,
   ) {
     const product = new Product(
@@ -126,6 +128,7 @@ export class Product extends Entity<ProductProps> {
         ...props,
         slug: props.slug ?? Slug.createFromText(props.title),
         createdAt: props.createdAt ?? new Date(),
+        placeOfSale: props.placeOfSale ?? "ONLINE_STORE",
       },
       id,
     );

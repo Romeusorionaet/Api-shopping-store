@@ -1,9 +1,9 @@
-import { PrismaCategoryRepository } from "../../repositories/prisma/prisma-product-repository";
-import { CreateCategoryUseCase } from "../create-category";
+import { PrismaProductRepository } from "../../repositories/prisma/prisma-product-repository";
+import { CreateProductUseCase } from "../create-product";
 
-export function makeCreateCategoryUseCase() {
-  const categoryRepository = new PrismaCategoryRepository();
-  const useCase = new CreateCategoryUseCase(categoryRepository);
+export function makeCreateProductUseCase() {
+  const productRepository = new PrismaProductRepository();
+  const useCase = new CreateProductUseCase(productRepository);
 
   return useCase;
 }

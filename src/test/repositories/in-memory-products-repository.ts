@@ -1,11 +1,44 @@
 import { ProductRepository } from "src/domain/store/application/repositories/product-repository";
-import { Product } from "src/domain/store/enterprise/entities/product";
+import {
+  Product,
+  ProductProps,
+} from "src/domain/store/enterprise/entities/product";
+
+interface ProductPropsWithId extends ProductProps {
+  id: string;
+}
 
 export class InMemoryProductsRepository implements ProductRepository {
-  public items: Product[] = [];
+  public items: ProductPropsWithId[] = [];
 
-  async findById(id: string): Promise<Product | null> {
-    const product = this.items.find((item) => item.id.toString() === id);
+  async create(data: Product): Promise<void> {
+    const product = {
+      id: data.id.toString(),
+      categoryId: data.categoryId.toString(),
+      categoryTitle: data.categoryTitle,
+      title: data.title,
+      slug: data.slug.toString(),
+      description: data.description,
+      price: data.price,
+      imgUrlList: data.imgUrlList,
+      stockQuantity: data.stockQuantity,
+      minimumQuantityStock: data.minimumQuantityStock,
+      discountPercentage: data.discountPercentage,
+      width: data.width,
+      height: data.height,
+      weight: data.weight,
+      corsList: data.corsList,
+      placeOfSale: data.placeOfSale,
+      star: data.star,
+      updatedAt: new Date(),
+      createdAt: new Date(),
+    };
+
+    this.items.push(product);
+  }
+
+  async findById(id: string): Promise<ProductProps | null> {
+    const product = this.items.find((item) => item.id?.toString() === id);
 
     if (!product) {
       return null;
@@ -14,7 +47,7 @@ export class InMemoryProductsRepository implements ProductRepository {
     return product;
   }
 
-  async searchMany(query: string, page: number): Promise<Product[]> {
+  async searchMany(query: string, page: number): Promise<ProductProps[]> {
     const queryWords = query.toLocaleLowerCase().split(" ");
 
     return this.items
@@ -27,9 +60,5 @@ export class InMemoryProductsRepository implements ProductRepository {
         ),
       )
       .slice((page - 1) * 20, page * 20);
-  }
-
-  async create(product: Product): Promise<void> {
-    this.items.push(product);
   }
 }

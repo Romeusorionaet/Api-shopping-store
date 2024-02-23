@@ -1,5 +1,5 @@
 import { Either, left, right } from "src/core/either";
-import { Product } from "../../enterprise/entities/product";
+import { ProductProps } from "../../enterprise/entities/product";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 import { ProductRepository } from "../repositories/product-repository";
 
@@ -10,7 +10,7 @@ interface GetProductDetailsUseCaseRequest {
 type GetProductDetailsUseCaseResponse = Either<
   ResourceNotFoundError,
   {
-    product: Product;
+    product: ProductProps;
   }
 >;
 

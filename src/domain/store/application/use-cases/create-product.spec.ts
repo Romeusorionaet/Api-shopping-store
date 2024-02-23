@@ -28,6 +28,7 @@ describe("Create Product", () => {
     await productsRepository.create(product);
 
     const result = await sut.execute({
+      id: product.id.toString(),
       categoryId: category.id.toString(),
       categoryTitle: category.title,
       title: product.title,

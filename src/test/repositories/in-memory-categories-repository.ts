@@ -2,7 +2,6 @@ import { Category, Prisma } from "@prisma/client";
 import { randomUUID } from "crypto";
 import { PaginationParams } from "src/core/repositories/pagination-params";
 import { CategoryRepository } from "src/domain/store/application/repositories/category-repository";
-import { Slug } from "src/domain/store/enterprise/entities/value-objects/slug";
 
 export class InMemoryCategoriesRepository implements CategoryRepository {
   public items: Category[] = [];
@@ -11,7 +10,7 @@ export class InMemoryCategoriesRepository implements CategoryRepository {
     const category = {
       id: data.id ?? randomUUID(),
       title: data.title,
-      slug: data.slug ?? Slug.createFromText(data.title),
+      slug: data.slug,
       imgUrl: data.imgUrl,
       productQuantity: data.productQuantity ?? 0,
       updatedAt: new Date(),

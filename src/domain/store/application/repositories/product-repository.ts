@@ -1,7 +1,7 @@
-import { Product } from "../../enterprise/entities/product";
+import { ProductProps } from "../../enterprise/entities/product";
 
 export interface ProductRepository {
-  create(product: Product): Promise<void>;
-  searchMany(query: string, page: number): Promise<Product[]>;
-  findById(id: string): Promise<Product | null>;
+  create(data: ProductProps): Promise<void>;
+  findById(id: string): Promise<ProductProps | null>;
+  searchMany(query: string, page: number): Promise<ProductProps[]>;
 }

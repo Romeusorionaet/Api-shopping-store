@@ -26,7 +26,7 @@ export function MakeProduct(
       height: faker.number.int(),
       weight: faker.number.int(),
       corsList: ["color1", "color2", "color3", "color4"],
-      placeOfSale: faker.lorem.sentence(10),
+      placeOfSale: "ONLINE_STORE",
       star: faker.number.int(),
       ...override,
     },
