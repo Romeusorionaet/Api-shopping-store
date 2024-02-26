@@ -13,7 +13,6 @@ export function MakeCategory(
   const category = Category.create(
     {
       title: faker.lorem.sentence(),
-      productQuantity: 0,
       imgUrl: "https://defaul-url-test",
       slug: Slug.create("title-slug-test-default"),
       ...override,

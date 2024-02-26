@@ -28,7 +28,6 @@ describe("Create Product", () => {
     await productsRepository.create(product);
 
     const result = await sut.execute({
-      id: product.id.toString(),
       categoryId: category.id.toString(),
       categoryTitle: category.title,
       title: product.title,
@@ -43,7 +42,7 @@ describe("Create Product", () => {
       weight: product.weight,
       corsList: product.corsList,
       placeOfSale: product.placeOfSale,
-      star: product.star,
+      stars: product.stars,
     });
 
     expect(result.isRight()).toBe(true);

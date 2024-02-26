@@ -13,39 +13,42 @@ enum ModeOfSale {
 }
 
 model Category {
-  id              String @id @default(uuid())
-  title           String
-  slug            String
-  productQuantity Int    @default(0)
-  imgUrl          String
+  id     String @id @default(uuid())
+  title  String
+  slug   String
+  imgUrl String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  Product Product[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("categories")
 }
 
 model Product {
   id                   String     @id @default(uuid())
-  categoryId           String
   categoryTitle        String
   title                String
   slug                 String
   description          String     @db.Text
-  price                Int
   imgUrlList           String[]
-  stockQuantity        Int        @default(10)
-  minimumQuantityStock Int        @default(2)
-  discountPercentage   Int        @default(0)
-  width                Int?
-  height               Int?
-  weight               Int?
   corsList             String[]
+  price                Int
+  stockQuantity        Int
+  minimumQuantityStock Int
+  discountPercentage   Int
+  width                Int
+  height               Int
+  weight               Int
   placeOfSale          ModeOfSale @default(ONLINE_STORE)
-  star                 Int?       @default(0)
+  stars                Int?       @default(0)
+  categoryId           String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  Category Category @relation(fields: [categoryId], references: [id])
 
   @@map("products")
 }

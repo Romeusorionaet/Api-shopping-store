@@ -1,25 +1,25 @@
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { ProductRepository } from "../../../store/application/repositories/product-repository";
-import { ModeOfSale, Product } from "../../enterprise/entities/product";
+import { Product } from "../../enterprise/entities/product";
 import { Either, right } from "src/core/either";
+import { ModeOfSale } from "src/core/entities/mode-of-sale";
 
 interface CreateProductUseCaseRequest {
-  id: string;
   categoryId: string;
   categoryTitle: string;
   title: string;
   description: string;
   price: number;
   imgUrlList: string[];
+  corsList: string[];
   stockQuantity: number;
   minimumQuantityStock: number;
   discountPercentage: number;
-  width: number | null;
-  height: number | null;
-  weight: number | null;
-  corsList: string[];
+  width: number;
+  height: number;
+  weight: number;
   placeOfSale?: ModeOfSale;
-  star: number | null;
+  stars: number;
 }
 
 type CreateProductUseCaseResponse = Either<null, { product: Product }>;
@@ -34,15 +34,15 @@ export class CreateProductUseCase {
     description,
     price,
     imgUrlList,
+    corsList,
     stockQuantity,
     minimumQuantityStock,
     discountPercentage,
     width,
     height,
     weight,
-    corsList,
     placeOfSale,
-    star,
+    stars,
   }: CreateProductUseCaseRequest): Promise<CreateProductUseCaseResponse> {
     const product = Product.create({
       categoryId: new UniqueEntityID(categoryId),
@@ -51,15 +51,15 @@ export class CreateProductUseCase {
       description,
       price,
       imgUrlList,
+      corsList,
       stockQuantity,
       minimumQuantityStock,
       discountPercentage,
       width,
       height,
       weight,
-      corsList,
       placeOfSale,
-      star,
+      stars,
     });
 
     await this.productRepository.create(product);

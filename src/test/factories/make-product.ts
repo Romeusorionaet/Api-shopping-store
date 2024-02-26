@@ -5,6 +5,7 @@ import {
   ProductProps,
 } from "src/domain/store/enterprise/entities/product";
 import { Slug } from "src/domain/store/enterprise/entities/value-objects/slug";
+import { ModeOfSale } from "@prisma/client";
 
 export function MakeProduct(
   override: Partial<ProductProps> = {},
@@ -19,15 +20,15 @@ export function MakeProduct(
       description: faker.lorem.text(),
       price: faker.number.int(),
       imgUrlList: ["img1", "img2", "img3", "img4"],
+      corsList: ["color1", "color2", "color3", "color4"],
       stockQuantity: faker.number.int(),
       minimumQuantityStock: faker.number.int(),
       discountPercentage: faker.number.int(),
       width: faker.number.int(),
       height: faker.number.int(),
       weight: faker.number.int(),
-      corsList: ["color1", "color2", "color3", "color4"],
-      placeOfSale: "ONLINE_STORE",
-      star: faker.number.int(),
+      placeOfSale: ModeOfSale.ONLINE_STORE,
+      stars: faker.number.int(),
       ...override,
     },
     id,

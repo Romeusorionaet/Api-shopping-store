@@ -5,7 +5,6 @@ import { Category } from "../../enterprise/entities/category";
 
 interface CreateCategoryUseCaseRequest {
   title: string;
-  productQuantity: number;
   imgUrl: string;
 }
 
@@ -21,7 +20,6 @@ export class CreateCategoryUseCase {
 
   async execute({
     title,
-    productQuantity,
     imgUrl,
   }: CreateCategoryUseCaseRequest): Promise<CreateCategoryUseCaseResponse> {
     const categoryList = await this.categoryRepository.getByTitle(title);
@@ -34,19 +32,10 @@ export class CreateCategoryUseCase {
 
     const category = Category.create({
       title,
-      productQuantity,
       imgUrl,
     });
 
-    const categoryWithIdAsString = {
-      id: category.id.toString(),
-      title: category.title,
-      slug: category.slug.toString(),
-      productQuantity: category.productQuantity,
-      imgUrl: category.imgUrl,
-    };
-
-    await this.categoryRepository.create(categoryWithIdAsString);
+    await this.categoryRepository.create(category);
 
     return right({ category });
   }

@@ -3,26 +3,25 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { Optional } from "src/core/@types/optional";
 import dayjs from "dayjs";
 import { Entity } from "src/core/entities/entity";
-
-export type ModeOfSale = "SELLS_ONLY_IN_THE_REGION" | "ONLINE_STORE";
+import { ModeOfSale } from "src/core/entities/mode-of-sale";
 
 export interface ProductProps {
-  categoryId: UniqueEntityID | string;
+  categoryId: UniqueEntityID;
   categoryTitle: string;
   title: string;
-  slug: Slug | string;
+  slug: Slug;
   description: string;
   price: number;
   imgUrlList: string[];
+  corsList: string[];
   stockQuantity: number;
   minimumQuantityStock: number;
   discountPercentage: number;
-  width: number | null;
-  height: number | null;
-  weight: number | null;
-  corsList: string[];
+  width: number;
+  height: number;
+  weight: number;
   placeOfSale?: ModeOfSale;
-  star: number | null;
+  stars: number;
   createdAt: Date;
   updatedAt?: Date;
 }
@@ -88,8 +87,8 @@ export class Product extends Entity<ProductProps> {
     return this.props.placeOfSale;
   }
 
-  get star() {
-    return this.props.star;
+  get stars() {
+    return this.props.stars;
   }
 
   get createdAt() {
@@ -120,7 +119,7 @@ export class Product extends Entity<ProductProps> {
   }
 
   static create(
-    props: Optional<ProductProps, "createdAt" | "slug" | "placeOfSale">,
+    props: Optional<ProductProps, "createdAt" | "slug">,
     id?: UniqueEntityID,
   ) {
     const product = new Product(
@@ -128,7 +127,6 @@ export class Product extends Entity<ProductProps> {
         ...props,
         slug: props.slug ?? Slug.createFromText(props.title),
         createdAt: props.createdAt ?? new Date(),
-        placeOfSale: props.placeOfSale ?? "ONLINE_STORE",
       },
       id,
     );

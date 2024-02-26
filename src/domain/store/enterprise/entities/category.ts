@@ -7,7 +7,6 @@ import { Optional } from "src/core/@types/optional";
 export interface CategoryProps {
   title: string;
   slug: Slug;
-  productQuantity: number;
   imgUrl: string;
   createdAt: Date;
   updatedAt?: Date;
@@ -20,10 +19,6 @@ export class Category extends Entity<CategoryProps> {
 
   get slug() {
     return this.props.slug;
-  }
-
-  get productQuantity() {
-    return this.props.productQuantity;
   }
 
   get imgUrl() {
@@ -51,10 +46,6 @@ export class Category extends Entity<CategoryProps> {
     this.props.slug = Slug.createFromText(title);
 
     this.touch();
-  }
-
-  set productQuantity(value: number) {
-    this.props.productQuantity = value ?? 0;
   }
 
   set imgUrl(imgUrl: string) {

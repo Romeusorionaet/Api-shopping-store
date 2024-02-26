@@ -1,5 +1,5 @@
 import { Either, left, right } from "src/core/either";
-import { ProductProps } from "../../enterprise/entities/product";
+import { Product } from "../../enterprise/entities/product";
 import { ProductRepository } from "../repositories/product-repository";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 
@@ -11,7 +11,7 @@ interface SearchProductUseCaseRequest {
 type SearchProductUseCaseResponse = Either<
   ResourceNotFoundError,
   {
-    product: ProductProps[];
+    product: Product[];
   }
 >;
 
