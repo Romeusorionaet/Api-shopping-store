@@ -17,7 +17,7 @@ describe("Authenticate Use Case", () => {
   test("should be able to authenticate", async () => {
     const user = await MakeUser({
       email: "firstuser@gmail.com",
-      password: await hash("123456", 6),
+      password: await hash("123456", 8),
     });
 
     await usersRepository.create(user);
@@ -41,7 +41,7 @@ describe("Authenticate Use Case", () => {
   test("should not be able to authenticate with wrong email", async () => {
     const user = await MakeUser({
       email: "firstuser@gmail.com",
-      password: await hash("123456", 6),
+      password: await hash("123456", 8),
     });
 
     await usersRepository.create(user);
@@ -58,7 +58,7 @@ describe("Authenticate Use Case", () => {
   test("should not be able to authenticate with wrong password", async () => {
     const user = await MakeUser({
       email: "firstuser@gmail.com",
-      password: await hash("123456", 6),
+      password: await hash("123456", 8),
     });
 
     await usersRepository.create(user);

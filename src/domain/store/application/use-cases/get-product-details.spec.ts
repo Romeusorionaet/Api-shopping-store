@@ -32,8 +32,8 @@ describe("Get Product Details", () => {
     if (result.isRight()) {
       expect(result.value.product).toEqual(
         expect.objectContaining({
-          id: "first-product-id",
-          categoryId: "first-category-id",
+          id: new UniqueEntityID("first-product-id"),
+          categoryId: new UniqueEntityID("first-category-id"),
           title: "my product",
         }),
       );
