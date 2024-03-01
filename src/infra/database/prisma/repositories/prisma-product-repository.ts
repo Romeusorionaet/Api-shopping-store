@@ -28,7 +28,7 @@ export class PrismaProductRepository implements ProductRepository {
     const product = await prisma.product.create({
       data: prismaProductInput,
     });
-    console.log(product);
+
     return PrismaProductMapper.toDomain(product);
   }
 
@@ -36,6 +36,20 @@ export class PrismaProductRepository implements ProductRepository {
     const product = await prisma.product.findUnique({
       where: {
         id,
+      },
+    });
+
+    if (!product) {
+      return null;
+    }
+
+    return PrismaProductMapper.toDomain(product);
+  }
+
+  async findByTitle(title: string): Promise<Product | null> {
+    const product = await prisma.product.findUnique({
+      where: {
+        title,
       },
     });
 

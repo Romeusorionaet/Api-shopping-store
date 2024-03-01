@@ -1,8 +1,9 @@
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { ProductRepository } from "../../../store/application/repositories/product-repository";
 import { Product } from "../../enterprise/entities/product";
-import { Either, right } from "src/core/either";
+import { Either, left, right } from "src/core/either";
 import { ModeOfSale } from "src/core/entities/mode-of-sale";
+import { ItemAlreadyExistsError } from "src/core/errors/item-already-exists-error";
 
 interface CreateProductUseCaseRequest {
   categoryId: string;
@@ -19,10 +20,13 @@ interface CreateProductUseCaseRequest {
   height: number;
   weight: number;
   placeOfSale?: ModeOfSale;
-  stars: number;
+  stars?: number | null;
 }
 
-type CreateProductUseCaseResponse = Either<null, { product: Product }>;
+type CreateProductUseCaseResponse = Either<
+  ItemAlreadyExistsError,
+  { product: Product }
+>;
 
 export class CreateProductUseCase {
   constructor(private productRepository: ProductRepository) {}
@@ -44,6 +48,12 @@ export class CreateProductUseCase {
     placeOfSale,
     stars,
   }: CreateProductUseCaseRequest): Promise<CreateProductUseCaseResponse> {
+    const existProduct = await this.productRepository.findByTitle(title);
+
+    if (existProduct) {
+      return left(new ItemAlreadyExistsError());
+    }
+
     const product = Product.create({
       categoryId: new UniqueEntityID(categoryId),
       categoryTitle,
@@ -61,7 +71,6 @@ export class CreateProductUseCase {
       placeOfSale,
       stars,
     });
-
     await this.productRepository.create(product);
 
     return right({ product });

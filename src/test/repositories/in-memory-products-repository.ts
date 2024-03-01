@@ -1,43 +1,16 @@
 import { ProductRepository } from "src/domain/store/application/repositories/product-repository";
-import {
-  Product,
-  ProductProps,
-} from "src/domain/store/enterprise/entities/product";
-
-interface ProductPropsWithId extends ProductProps {
-  id: string;
-}
+import { Product } from "src/domain/store/enterprise/entities/product";
 
 export class InMemoryProductsRepository implements ProductRepository {
-  public items: ProductPropsWithId[] = [];
+  public items: Product[] = [];
 
-  async create(data: Product): Promise<void> {
-    const product = {
-      id: data.id.toString(),
-      categoryId: data.categoryId.toString(),
-      categoryTitle: data.categoryTitle,
-      title: data.title,
-      slug: data.slug.toString(),
-      description: data.description,
-      price: data.price,
-      imgUrlList: data.imgUrlList,
-      stockQuantity: data.stockQuantity,
-      minimumQuantityStock: data.minimumQuantityStock,
-      discountPercentage: data.discountPercentage,
-      width: data.width,
-      height: data.height,
-      weight: data.weight,
-      corsList: data.corsList,
-      placeOfSale: data.placeOfSale,
-      star: data.star,
-      updatedAt: new Date(),
-      createdAt: new Date(),
-    };
+  async create(data: Product): Promise<Product> {
+    this.items.push(data);
 
-    this.items.push(product);
+    return data;
   }
 
-  async findById(id: string): Promise<ProductProps | null> {
+  async findById(id: string): Promise<Product | null> {
     const product = this.items.find((item) => item.id?.toString() === id);
 
     if (!product) {
@@ -47,7 +20,21 @@ export class InMemoryProductsRepository implements ProductRepository {
     return product;
   }
 
-  async searchMany(query: string, page: number): Promise<ProductProps[]> {
+  async findByTitle(title: string): Promise<Product | null> {
+    const titleLowerCase = title.toLowerCase();
+
+    const product = this.items.find(
+      (item) => item.title.toLocaleLowerCase() === titleLowerCase,
+    );
+
+    if (!product) {
+      return null;
+    }
+
+    return product;
+  }
+
+  async searchMany(query: string, page: number): Promise<Product[]> {
     const queryWords = query.toLocaleLowerCase().split(" ");
 
     return this.items

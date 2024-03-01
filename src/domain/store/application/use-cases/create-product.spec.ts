@@ -16,16 +16,14 @@ describe("Create Product", () => {
 
   test("should be able create a product", async () => {
     const category = MakeCategory(
-      { title: "category-title-01" },
+      { title: "category title for product 01" },
       new UniqueEntityID("category-id-01"),
     );
 
-    const product = MakeProduct(
-      { categoryId: category.id },
-      new UniqueEntityID("product-id-01"),
-    );
-
-    await productsRepository.create(product);
+    const product = MakeProduct({
+      categoryId: category.id,
+      title: "first product register 01",
+    });
 
     const result = await sut.execute({
       categoryId: category.id.toString(),
@@ -46,9 +44,11 @@ describe("Create Product", () => {
     });
 
     expect(result.isRight()).toBe(true);
-    expect(result.value?.product.categoryId.toString()).toEqual(
-      "category-id-01",
-    );
-    expect(product.id.toString()).toEqual("product-id-01");
+
+    if (result.isRight()) {
+      expect(result.value?.product.categoryId.toString()).toEqual(
+        "category-id-01",
+      );
+    }
   });
 });

@@ -4,6 +4,10 @@ import { BuyerAddress } from "src/domain/store/enterprise/entities/buyer-address
 export class InMemoryBuyerAddressRepository implements BuyerAddressRepository {
   public items: BuyerAddress[] = [];
 
+  update(buyerAddress: BuyerAddress): Promise<BuyerAddress> {
+    throw new Error("Method not implemented.");
+  }
+
   async findById(buyerId: string): Promise<BuyerAddress | null> {
     const buyerAddress = this.items.find(
       (items) => items.buyerId.toString() === buyerId,
