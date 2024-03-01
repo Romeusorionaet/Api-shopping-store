@@ -1,15 +1,16 @@
-import { ProductRepository } from "../product-repository";
-import { prisma } from "src/lib/prisma";
-import { ProductProps } from "src/domain/store/enterprise/entities/product";
+import { ProductRepository } from "src/domain/store/application/repositories/product-repository";
+import { Product } from "src/domain/store/enterprise/entities/product";
+import { prisma } from "../prisma";
+import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
 
 export class PrismaProductRepository implements ProductRepository {
-  async create(data: ProductProps & { id: string }): Promise<void> {
+  async create(data: Product): Promise<Product> {
     const prismaProductInput = {
-      id: data.id,
+      id: data.id.toString(),
       categoryId: data.categoryId.toString(),
       categoryTitle: data.categoryTitle,
       title: data.title,
-      slug: data.slug.toString(),
+      slug: data.slug.value,
       description: data.description,
       price: data.price,
       imgUrlList: data.imgUrlList,
@@ -21,17 +22,17 @@ export class PrismaProductRepository implements ProductRepository {
       weight: data.weight,
       corsList: data.corsList,
       placeOfSale: data.placeOfSale,
-      star: data.star,
-      updatedAt: new Date(),
-      createdAt: new Date(),
+      stars: data.stars,
     };
 
-    await prisma.product.create({
+    const product = await prisma.product.create({
       data: prismaProductInput,
     });
+    console.log(product);
+    return PrismaProductMapper.toDomain(product);
   }
 
-  async findById(id: string): Promise<ProductProps | null> {
+  async findById(id: string): Promise<Product | null> {
     const product = await prisma.product.findUnique({
       where: {
         id,
@@ -42,10 +43,10 @@ export class PrismaProductRepository implements ProductRepository {
       return null;
     }
 
-    return product;
+    return PrismaProductMapper.toDomain(product);
   }
 
-  async searchMany(query: string, page: number): Promise<ProductProps[]> {
+  async searchMany(query: string, page: number): Promise<Product[]> {
     const queryWords = query.toLowerCase().split(" ");
 
     const result = await prisma.product.findMany({
@@ -57,10 +58,13 @@ export class PrismaProductRepository implements ProductRepository {
           },
         })),
       },
+      orderBy: {
+        createdAt: "desc",
+      },
       skip: (page - 1) * 20,
       take: 20,
     });
 
-    return result;
+    return result.map(PrismaProductMapper.toDomain);
   }
 }

@@ -9,7 +9,7 @@ export interface CategoryProps {
   slug: Slug;
   imgUrl: string;
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt?: Date | null;
 }
 
 export class Category extends Entity<CategoryProps> {

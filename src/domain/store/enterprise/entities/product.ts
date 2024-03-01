@@ -21,9 +21,9 @@ export interface ProductProps {
   height: number;
   weight: number;
   placeOfSale?: ModeOfSale;
-  stars: number;
+  stars?: number | null;
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt?: Date | null;
 }
 
 export class Product extends Entity<ProductProps> {

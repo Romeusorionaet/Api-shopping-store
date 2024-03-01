@@ -1,5 +1,5 @@
 import { app } from "./app";
-import { env } from "./env";
+import { env } from "./infra/env";
 
 app
   .listen({
