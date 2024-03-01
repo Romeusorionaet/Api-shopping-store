@@ -12,58 +12,83 @@ enum ModeOfSale {
   ONLINE_STORE
 }
 
+enum OrderStatus {
+  WAITING_FOR_PAYMENT
+  PAYMENT_CONFIRMED
+}
+
 model Category {
-  id     String @id @default(uuid())
-  title  String
-  slug   String
-  imgUrl String
+  id        String    @id @default(uuid())
+  title     String    @unique
+  slug      String
+  imgUrl    String
+  updatedAt DateTime? @default(now()) @updatedAt @map("updated_at")
+  createdAt DateTime  @default(now()) @map("created_at")
 
-  Product Product[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  products Product[]
 
   @@map("categories")
 }
 
 model Product {
   id                   String     @id @default(uuid())
-  categoryTitle        String
-  title                String
+  categoryTitle        String     @map("category_title")
+  title                String     @unique
   slug                 String
   description          String     @db.Text
-  imgUrlList           String[]
-  corsList             String[]
+  imgUrlList           String[]   @map("img_url_list")
+  corsList             String[]   @map("color_list")
   price                Int
-  stockQuantity        Int
-  minimumQuantityStock Int
-  discountPercentage   Int
+  stockQuantity        Int        @map("stock_quantity")
+  minimumQuantityStock Int        @map("minimum_quantity_stock")
+  discountPercentage   Int        @map("discount_percentage")
   width                Int
   height               Int
   weight               Int
   placeOfSale          ModeOfSale @default(ONLINE_STORE)
   stars                Int?       @default(0)
-  categoryId           String
+  updatedAt            DateTime?  @default(now()) @updatedAt @map("updated_at")
+  createdAt            DateTime   @default(now()) @map("created_at")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  categoryId String
 
-  Category Category @relation(fields: [categoryId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  orderProducts OrderProduct[]
 
   @@map("products")
 }
 
 model Order {
-  id           String @id @default(uuid())
+  id           String      @id @default(uuid())
+  status       OrderStatus @default(WAITING_FOR_PAYMENT)
   productId    String
-  buyerId      String
-  buyerAddress String
-  quantity     Int
+  buyerAddress String      @map("buyer_address")
+  updatedAt    DateTime?   @default(now()) @updatedAt @map("updated_at")
+  createdAt    DateTime    @default(now()) @map("created_at")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  buyerId String
+
+  user User @relation(fields: [buyerId], references: [id])
+
+  orderProducts OrderProduct[]
 
   @@map("orders")
+}
+
+model OrderProduct {
+  id                 String  @id @default(uuid())
+  basePrice          Decimal @map("base_price") @db.Decimal(8, 2)
+  discountPercentage Int     @default(0) @map("discount_percentage")
+  quantity           Int
+
+  productId String
+  orderId   String
+
+  product Product @relation(fields: [productId], references: [id])
+  order   Order   @relation(fields: [orderId], references: [id])
+
+  @@map("order_products")
 }
 
 model User {
@@ -72,9 +97,10 @@ model User {
   email        String @unique
   passwordHash String @map("password_hash")
 
-  BuyerAddress BuyerAddress[]
+  order        Order[]
+  buyerAddress BuyerAddress[]
 
-  @@map("user")
+  @@map("users")
 }
 
 model BuyerAddress {
@@ -84,14 +110,15 @@ model BuyerAddress {
   uf           String
   street       String
   neighborhood String
-  houseNumber  Int
+  houseNumber  Int    @map("house_number")
   complement   String
-  phoneNumber  Int
+  phoneNumber  Int    @map("phone_number")
   username     String
   email        String
 
-  User    User   @relation(fields: [buyerId], references: [id])
   buyerId String
+
+  user User @relation(fields: [buyerId], references: [id])
 
   @@map("buyer_address")
 }
