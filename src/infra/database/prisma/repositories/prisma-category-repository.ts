@@ -5,16 +5,11 @@ import { prisma } from "src/infra/database/prisma/prisma";
 import { PrismaCategoryMapper } from "../mappers/prisma-category-mapper";
 
 export class PrismaCategoryRepository implements CategoryRepository {
-  async create(data: Category): Promise<void> {
-    const category = {
-      id: data.id.toString(),
-      title: data.title,
-      slug: data.slug.value,
-      imgUrl: data.imgUrl,
-    };
+  async create(category: Category): Promise<void> {
+    const data = PrismaCategoryMapper.toPrisma(category);
 
     await prisma.category.create({
-      data: category,
+      data,
     });
   }
 

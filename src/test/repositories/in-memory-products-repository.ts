@@ -4,10 +4,8 @@ import { Product } from "src/domain/store/enterprise/entities/product";
 export class InMemoryProductsRepository implements ProductRepository {
   public items: Product[] = [];
 
-  async create(data: Product): Promise<Product> {
+  async create(data: Product): Promise<void> {
     this.items.push(data);
-
-    return data;
   }
 
   async findById(id: string): Promise<Product | null> {
