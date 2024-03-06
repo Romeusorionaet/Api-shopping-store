@@ -3,7 +3,7 @@ import { ProductRepository } from "../../../store/application/repositories/produ
 import { Product } from "../../enterprise/entities/product";
 import { Either, left, right } from "src/core/either";
 import { ModeOfSale } from "src/core/entities/mode-of-sale";
-import { ItemAlreadyExistsError } from "src/core/errors/item-already-exists-error";
+import { ProductAlreadyExistsError } from "./errors/product-already-exists-error";
 
 interface CreateProductUseCaseRequest {
   categoryId: string;
@@ -24,7 +24,7 @@ interface CreateProductUseCaseRequest {
 }
 
 type CreateProductUseCaseResponse = Either<
-  ItemAlreadyExistsError,
+  ProductAlreadyExistsError,
   { product: Product }
 >;
 
@@ -51,7 +51,7 @@ export class CreateProductUseCase {
     const existProduct = await this.productRepository.findByTitle(title);
 
     if (existProduct) {
-      return left(new ItemAlreadyExistsError());
+      return left(new ProductAlreadyExistsError(existProduct.title));
     }
 
     const product = Product.create({

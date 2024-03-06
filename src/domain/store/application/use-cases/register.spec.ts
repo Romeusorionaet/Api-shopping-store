@@ -2,8 +2,8 @@ import { expect, describe, test, beforeEach } from "vitest";
 import { RegisterUseCase } from "./register";
 import { compare } from "bcryptjs";
 import { InMemoryUsersRepository } from "src/test/repositories/in-memory-users-repository";
-import { UserAlreadyExistsError } from "src/core/errors/user-already-exists";
 import { MakeUser } from "src/test/factories/make-user";
+import { EmailAlreadyExistsError } from "./errors/email-already-exists-error";
 
 let usersRepository: InMemoryUsersRepository;
 let sut: RegisterUseCase;
@@ -55,6 +55,6 @@ describe("Register Use Case", () => {
     });
 
     expect(result.isLeft()).toBe(true);
-    expect(result.value).toBeInstanceOf(UserAlreadyExistsError);
+    expect(result.value).toBeInstanceOf(EmailAlreadyExistsError);
   });
 });

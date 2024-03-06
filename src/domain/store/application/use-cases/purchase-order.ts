@@ -3,7 +3,7 @@ import { OrderRepository } from "../repositories/order-repository";
 import { Order } from "../../enterprise/entities/order";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { BuyerAddress } from "../../enterprise/entities/buyer-address";
-import { OrderWithEmptyAddressError } from "src/core/errors/order-with-empty-address-error";
+import { OrderWithEmptyAddressError } from "./errors/order-with-empty-address-error";
 
 interface PurchaseOrderUseCaseRequest {
   productId: string;

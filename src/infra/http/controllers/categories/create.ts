@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { ItemAlreadyExistsError } from "src/core/errors/item-already-exists-error";
+import { CategoryAlreadyExistsError } from "src/domain/store/application/use-cases/errors/category-already-exists-error";
 import { makeCreateCategoryUseCase } from "src/domain/store/application/use-cases/factories/make-create-category-use-case";
 import { z } from "zod";
 
@@ -19,7 +19,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   });
 
   if (result.isLeft()) {
-    const err: ItemAlreadyExistsError = result.value;
+    const err: CategoryAlreadyExistsError = result.value;
 
     return reply.status(400).send({ error: err.message });
   }

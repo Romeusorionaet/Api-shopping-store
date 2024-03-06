@@ -1,8 +1,8 @@
 import { describe, test, beforeEach, expect } from "vitest";
-import { ItemAlreadyExistsError } from "src/core/errors/item-already-exists-error";
 import { InMemoryCategoriesRepository } from "src/test/repositories/in-memory-categories-repository";
 import { CreateCategoryUseCase } from "./create-category";
 import { MakeCategory } from "src/test/factories/make-category";
+import { CategoryAlreadyExistsError } from "./errors/category-already-exists-error";
 
 let categoriesRepository: InMemoryCategoriesRepository;
 let sut: CreateCategoryUseCase;
@@ -34,6 +34,6 @@ describe("Create Category", () => {
     });
 
     expect(result.isLeft()).toBe(true);
-    expect(result.value).toBeInstanceOf(ItemAlreadyExistsError);
+    expect(result.value).toBeInstanceOf(CategoryAlreadyExistsError);
   });
 });

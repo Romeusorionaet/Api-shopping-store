@@ -1,6 +1,6 @@
 import { ModeOfSale } from "@prisma/client";
 import { FastifyRequest, FastifyReply } from "fastify";
-import { ItemAlreadyExistsError } from "src/core/errors/item-already-exists-error";
+import { ProductAlreadyExistsError } from "src/domain/store/application/use-cases/errors/product-already-exists-error";
 import { makeCreateProductUseCase } from "src/domain/store/application/use-cases/factories/make-create-product-use-case";
 import { z } from "zod";
 
@@ -64,7 +64,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   });
 
   if (result.isLeft()) {
-    const err: ItemAlreadyExistsError = result.value;
+    const err: ProductAlreadyExistsError = result.value;
 
     return reply.status(400).send({ error: err.message });
   }

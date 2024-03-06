@@ -1,7 +1,7 @@
 import { Either, left, right } from "src/core/either";
 import { CategoryRepository } from "../repositories/category-repository";
-import { ItemAlreadyExistsError } from "src/core/errors/item-already-exists-error";
 import { Category } from "../../enterprise/entities/category";
+import { CategoryAlreadyExistsError } from "./errors/category-already-exists-error";
 
 interface CreateCategoryUseCaseRequest {
   title: string;
@@ -9,7 +9,7 @@ interface CreateCategoryUseCaseRequest {
 }
 
 type CreateCategoryUseCaseResponse = Either<
-  ItemAlreadyExistsError,
+  CategoryAlreadyExistsError,
   {
     category: Category;
   }
@@ -25,7 +25,7 @@ export class CreateCategoryUseCase {
     const existCategory = await this.categoryRepository.findByTitle(title);
 
     if (existCategory) {
-      return left(new ItemAlreadyExistsError());
+      return left(new CategoryAlreadyExistsError(existCategory.title));
     }
 
     const category = Category.create({
