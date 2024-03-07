@@ -1,39 +1,42 @@
 import { UsersRepository } from "../repositories/users-repository";
 import { User } from "../../enterprise/entities/user";
-import { hash } from "bcryptjs";
 import { Either, left, right } from "src/core/either";
 import { EmailAlreadyExistsError } from "./errors/email-already-exists-error";
+import { HashGenerator } from "../cryptography/hash-generator";
 
-interface RegisterUseCaseRequest {
+interface RegisterUserUseCaseRequest {
   username: string;
   email: string;
   password: string;
 }
 
-type RegisterUseCaseResponse = Either<
+type RegisterUserUseCaseResponse = Either<
   EmailAlreadyExistsError,
   {
     user: User;
   }
 >;
 
-export class RegisterUseCase {
-  constructor(private usersRepository: UsersRepository) {}
+export class RegisterUserUseCase {
+  constructor(
+    private usersRepository: UsersRepository,
+    private hashGenerator: HashGenerator,
+  ) {}
 
   async execute({
     username,
     email,
     password,
-  }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
-    const passwordHash = await hash(password, 8);
-
+  }: RegisterUserUseCaseRequest): Promise<RegisterUserUseCaseResponse> {
     const userWithSameEmail = await this.usersRepository.findByEmail(email);
 
     if (userWithSameEmail) {
       return left(new EmailAlreadyExistsError(userWithSameEmail.email));
     }
 
-    const user = User.create({ username, email, password: passwordHash });
+    const hashedPassword = await this.hashGenerator.hash(password);
+
+    const user = User.create({ username, email, password: hashedPassword });
 
     await this.usersRepository.create(user);
 

@@ -1,23 +1,36 @@
 import { expect, describe, test, beforeEach } from "vitest";
-import { hash } from "bcryptjs";
-import { AuthenticateUseCase } from "./authenticate";
 import { InMemoryUsersRepository } from "src/test/repositories/in-memory-users-repository";
 import { MakeUser } from "src/test/factories/make-user";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
+import { AuthenticateUserUseCase } from "./authenticate-user";
+import { FakeHasher } from "src/test/cryptography/fake-hasher";
+import { FakeEncrypter } from "src/test/cryptography/fake-encrypter";
 
 let usersRepository: InMemoryUsersRepository;
-let sut: AuthenticateUseCase;
+let fakerHasher: FakeHasher;
+let fakeEncrypter: FakeEncrypter;
 
-describe("Authenticate Use Case", () => {
+let sut: AuthenticateUserUseCase;
+
+describe("Authenticate User", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
-    sut = new AuthenticateUseCase(usersRepository);
+
+    fakerHasher = new FakeHasher();
+
+    fakeEncrypter = new FakeEncrypter();
+
+    sut = new AuthenticateUserUseCase(
+      usersRepository,
+      fakerHasher,
+      fakeEncrypter,
+    );
   });
 
-  test("should be able to authenticate", async () => {
+  test("should be able to authenticate user", async () => {
     const user = await MakeUser({
       email: "firstuser@gmail.com",
-      password: await hash("123456", 8),
+      password: await fakerHasher.hash("123456"),
     });
 
     await usersRepository.create(user);
@@ -28,20 +41,15 @@ describe("Authenticate Use Case", () => {
     });
 
     expect(result.isRight()).toBe(true);
-
-    if (result.isRight()) {
-      expect(result.value.user).toEqual(
-        expect.objectContaining({
-          email: "firstuser@gmail.com",
-        }),
-      );
-    }
+    expect(result.value).toEqual({
+      accessToken: expect.any(String),
+    });
   });
 
-  test("should not be able to authenticate with wrong email", async () => {
+  test("should not be able to authenticate user with wrong email", async () => {
     const user = await MakeUser({
       email: "firstuser@gmail.com",
-      password: await hash("123456", 8),
+      password: await fakerHasher.hash("123456"),
     });
 
     await usersRepository.create(user);
@@ -58,7 +66,7 @@ describe("Authenticate Use Case", () => {
   test("should not be able to authenticate with wrong password", async () => {
     const user = await MakeUser({
       email: "firstuser@gmail.com",
-      password: await hash("123456", 8),
+      password: await fakerHasher.hash("123456"),
     });
 
     await usersRepository.create(user);
