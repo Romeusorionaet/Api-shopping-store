@@ -1,8 +1,8 @@
-import { test, describe, expect, beforeAll, afterAll } from "vitest";
 import request from "supertest";
 import { app } from "src/app";
+import { prisma } from "src/infra/database/prisma/prisma";
 
-describe("Create Product (e2e)", () => {
+describe("Create Product (E2E)", () => {
   beforeAll(async () => {
     await app.ready();
   });
@@ -24,7 +24,7 @@ describe("Create Product (e2e)", () => {
       .send({
         categoryId: category._id.value,
         categoryTitle: category.props.title,
-        title: "Aetestineo demonstro est crastinus debitis arguo velit vinculu",
+        title: "product test title 01",
         description:
           "Cauda advoco coruscus tristis talus abduco centum adnuo aiunt.\n" +
           "Ullam urbanus conspergo amaritudo aureus deleniti amor ascit natus canto.",
@@ -42,6 +42,14 @@ describe("Create Product (e2e)", () => {
       });
 
     expect(response.statusCode).toEqual(201);
+
+    const productOnDatabase = await prisma.product.findUnique({
+      where: {
+        title: "product test title 01",
+      },
+    });
+
+    expect(productOnDatabase).toBeTruthy();
   });
 
   test("should not be able to create a product twice with the same title", async () => {
@@ -57,7 +65,7 @@ describe("Create Product (e2e)", () => {
       .send({
         categoryId: category._id.value,
         categoryTitle: category.props.title,
-        title: "Aetestineo demonstro est crastinus debitis arguo velit vinculu",
+        title: "product test title 02",
         description:
           "Cauda advoco coruscus tristis talus abduco centum adnuo aiunt.\n" +
           "Ullam urbanus conspergo amaritudo aureus deleniti amor ascit natus canto.",
@@ -79,7 +87,7 @@ describe("Create Product (e2e)", () => {
       .send({
         categoryId: category._id.value,
         categoryTitle: category.props.title,
-        title: "Aetestineo demonstro est crastinus debitis arguo velit vinculu",
+        title: "product test title 02",
         description:
           "Cauda advoco coruscus tristis talus abduco centum adnuo aiunt.\n" +
           "Ullam urbanus conspergo amaritudo aureus deleniti amor ascit natus canto.",

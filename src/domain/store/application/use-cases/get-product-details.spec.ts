@@ -1,7 +1,7 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { GetProductDetailsUseCase } from "./get-product-details";
-import { InMemoryProductsRepository } from "src/test/repositories/in-memory-products-repository";
-import { MakeProduct } from "src/test/factories/make-product";
+import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
+import { MakeProduct } from "test/factories/make-product";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 let productsRepository: InMemoryProductsRepository;

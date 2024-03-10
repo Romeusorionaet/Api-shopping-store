@@ -1,10 +1,10 @@
 import { expect, describe, test, beforeEach } from "vitest";
-import { MakeUser } from "src/test/factories/make-user";
+import { MakeUser } from "test/factories/make-user";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { MakeBuyerAddress } from "src/test/factories/make-buyer-address";
+import { MakeBuyerAddress } from "test/factories/make-buyer-address";
 import { GetBuyerOrderUseCase } from "./get-buyer-order";
-import { InMemoryOrdersRepository } from "src/test/repositories/in-memory-orders-repository";
-import { MakeOrder } from "src/test/factories/make-order";
+import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
+import { MakeOrder } from "test/factories/make-order";
 
 let ordersRepository: InMemoryOrdersRepository;
 let sut: GetBuyerOrderUseCase;

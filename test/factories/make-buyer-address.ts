@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { faker } from "@faker-js/faker";
 import {

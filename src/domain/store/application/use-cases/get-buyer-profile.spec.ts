@@ -1,7 +1,7 @@
 import { expect, describe, test, beforeEach } from "vitest";
-import { InMemoryUsersRepository } from "src/test/repositories/in-memory-users-repository";
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { GetBuyerProfileUseCase } from "./get-buyer-profile";
-import { MakeUser } from "src/test/factories/make-user";
+import { MakeUser } from "test/factories/make-user";
 
 let usersRepository: InMemoryUsersRepository;
 let sut: GetBuyerProfileUseCase;

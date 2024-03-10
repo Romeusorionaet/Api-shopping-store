@@ -1,10 +1,10 @@
 import { expect, describe, test, beforeEach } from "vitest";
-import { InMemoryUsersRepository } from "src/test/repositories/in-memory-users-repository";
-import { MakeUser } from "src/test/factories/make-user";
+import { MakeUser } from "test/factories/make-user";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { AuthenticateUserUseCase } from "./authenticate-user";
-import { FakeHasher } from "src/test/cryptography/fake-hasher";
-import { FakeEncrypter } from "src/test/cryptography/fake-encrypter";
+import { FakeHasher } from "test/cryptography/fake-hasher";
+import { FakeEncrypter } from "test/cryptography/fake-encrypter";
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 
 let usersRepository: InMemoryUsersRepository;
 let fakerHasher: FakeHasher;

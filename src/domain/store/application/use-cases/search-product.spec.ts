@@ -1,8 +1,8 @@
 import { describe, test, beforeEach, expect } from "vitest";
-import { MakeProduct } from "src/test/factories/make-product";
+import { MakeProduct } from "test/factories/make-product";
 import { SearchProductUseCase } from "./search-product";
-import { MakeCategory } from "src/test/factories/make-category";
-import { InMemoryProductsRepository } from "src/test/repositories/in-memory-products-repository";
+import { MakeCategory } from "test/factories/make-category";
+import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 
 let productsRepository: InMemoryProductsRepository;
 let sut: SearchProductUseCase;

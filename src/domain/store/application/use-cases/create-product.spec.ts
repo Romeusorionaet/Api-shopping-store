@@ -1,9 +1,9 @@
 import { describe, test, beforeEach, expect } from "vitest";
 import { CreateProductUseCase } from "./create-product";
-import { MakeProduct } from "src/test/factories/make-product";
+import { MakeProduct } from "test/factories/make-product";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { MakeCategory } from "src/test/factories/make-category";
-import { InMemoryProductsRepository } from "src/test/repositories/in-memory-products-repository";
+import { MakeCategory } from "test/factories/make-category";
+import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 
 let productsRepository: InMemoryProductsRepository;
 let sut: CreateProductUseCase;

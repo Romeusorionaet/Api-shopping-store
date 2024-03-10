@@ -1,8 +1,8 @@
 import { UsersRepository } from "../repositories/users-repository";
 import { User } from "../../enterprise/entities/user";
 import { Either, left, right } from "src/core/either";
-import { EmailAlreadyExistsError } from "./errors/email-already-exists-error";
 import { HashGenerator } from "../cryptography/hash-generator";
+import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
 
 interface RegisterUserUseCaseRequest {
   username: string;
@@ -11,7 +11,7 @@ interface RegisterUserUseCaseRequest {
 }
 
 type RegisterUserUseCaseResponse = Either<
-  EmailAlreadyExistsError,
+  UserAlreadyExistsError,
   {
     user: User;
   }
@@ -31,7 +31,7 @@ export class RegisterUserUseCase {
     const userWithSameEmail = await this.usersRepository.findByEmail(email);
 
     if (userWithSameEmail) {
-      return left(new EmailAlreadyExistsError(userWithSameEmail.email));
+      return left(new UserAlreadyExistsError());
     }
 
     const hashedPassword = await this.hashGenerator.hash(password);

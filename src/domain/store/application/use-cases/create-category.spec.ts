@@ -1,7 +1,7 @@
 import { describe, test, beforeEach, expect } from "vitest";
-import { InMemoryCategoriesRepository } from "src/test/repositories/in-memory-categories-repository";
+import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { CreateCategoryUseCase } from "./create-category";
-import { MakeCategory } from "src/test/factories/make-category";
+import { MakeCategory } from "test/factories/make-category";
 import { CategoryAlreadyExistsError } from "./errors/category-already-exists-error";
 
 let categoriesRepository: InMemoryCategoriesRepository;

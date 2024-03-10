@@ -1,9 +1,9 @@
 import { expect, describe, test, beforeEach } from "vitest";
-import { InMemoryUsersRepository } from "src/test/repositories/in-memory-users-repository";
-import { MakeUser } from "src/test/factories/make-user";
-import { EmailAlreadyExistsError } from "./errors/email-already-exists-error";
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
+import { MakeUser } from "test/factories/make-user";
 import { RegisterUserUseCase } from "./register-user";
-import { FakeHasher } from "src/test/cryptography/fake-hasher";
+import { FakeHasher } from "test/cryptography/fake-hasher";
+import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
 
 let usersRepository: InMemoryUsersRepository;
 let fakerHasher: FakeHasher;
@@ -63,6 +63,6 @@ describe("Register User", () => {
     });
 
     expect(result.isLeft()).toBe(true);
-    expect(result.value).toBeInstanceOf(EmailAlreadyExistsError);
+    expect(result.value).toBeInstanceOf(UserAlreadyExistsError);
   });
 });
