@@ -17,6 +17,7 @@ export async function authenticate(
   );
 
   const registerUserUseCase = makeAuthenticateUserUseCase();
+  console.log(email, password, "=====http");
 
   const result = await registerUserUseCase.execute({
     email,

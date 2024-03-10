@@ -11,7 +11,7 @@ describe("Register User (E2E)", () => {
   });
 
   test("should be able to register a new user", async () => {
-    const response = await request(app.server).post("/register/user").send({
+    const response = await request(app.server).post("/user/register").send({
       username: "User test 01",
       email: "usertest01@gmail.com",
       password: "123456",
@@ -21,13 +21,13 @@ describe("Register User (E2E)", () => {
   });
 
   test("should not be able to register a user twice with the same e-mail", async () => {
-    await request(app.server).post("/register/user").send({
+    await request(app.server).post("/user/register").send({
       username: "User test 01",
       email: "usertest01@gmail.com",
       password: "123456",
     });
 
-    const response = await request(app.server).post("/register/user").send({
+    const response = await request(app.server).post("/user/register").send({
       username: "User test 01",
       email: "usertest01@gmail.com",
       password: "123456",

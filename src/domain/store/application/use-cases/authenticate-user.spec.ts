@@ -7,7 +7,7 @@ import { FakeEncrypter } from "test/cryptography/fake-encrypter";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 
 let usersRepository: InMemoryUsersRepository;
-let fakerHasher: FakeHasher;
+let fakeHasher: FakeHasher;
 let fakeEncrypter: FakeEncrypter;
 
 let sut: AuthenticateUserUseCase;
@@ -16,13 +16,13 @@ describe("Authenticate User", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
 
-    fakerHasher = new FakeHasher();
+    fakeHasher = new FakeHasher();
 
     fakeEncrypter = new FakeEncrypter();
 
     sut = new AuthenticateUserUseCase(
       usersRepository,
-      fakerHasher,
+      fakeHasher,
       fakeEncrypter,
     );
   });
@@ -30,7 +30,7 @@ describe("Authenticate User", () => {
   test("should be able to authenticate user", async () => {
     const user = await MakeUser({
       email: "firstuser@gmail.com",
-      password: await fakerHasher.hash("123456"),
+      password: await fakeHasher.hash("123456"),
     });
 
     await usersRepository.create(user);
@@ -49,7 +49,7 @@ describe("Authenticate User", () => {
   test("should not be able to authenticate user with wrong email", async () => {
     const user = await MakeUser({
       email: "firstuser@gmail.com",
-      password: await fakerHasher.hash("123456"),
+      password: await fakeHasher.hash("123456"),
     });
 
     await usersRepository.create(user);
@@ -66,7 +66,7 @@ describe("Authenticate User", () => {
   test("should not be able to authenticate with wrong password", async () => {
     const user = await MakeUser({
       email: "firstuser@gmail.com",
-      password: await fakerHasher.hash("123456"),
+      password: await fakeHasher.hash("123456"),
     });
 
     await usersRepository.create(user);

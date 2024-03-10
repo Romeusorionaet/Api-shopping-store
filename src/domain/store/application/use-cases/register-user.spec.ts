@@ -44,7 +44,6 @@ describe("Register User", () => {
       "123456",
       user.password,
     );
-    console.log(isPasswordCorrectlyHashed, "=====");
 
     expect(isPasswordCorrectlyHashed).toBe(true);
   });
