@@ -24,6 +24,7 @@ app.register(JWT, {
 });
 
 app.register(fastifyCookie);
+
 app.register(categoriesRoutes);
 app.register(productsRoutes);
 app.register(registerUserRoutes);

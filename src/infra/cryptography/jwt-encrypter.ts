@@ -1,8 +1,12 @@
 import { Encrypter } from "src/domain/store/application/cryptography/encrypter";
 import { app } from "../../app";
+import jwt from "jsonwebtoken";
 
 export class JwtEncrypter implements Encrypter {
   async encrypt(payload: Record<string, unknown>): Promise<string> {
-    return app.jwt.sign(payload, { expiresIn: "1m" });
+    const token = app.jwt.sign(payload);
+    jwt.decode(token, { complete: true });
+
+    return app.jwt.sign(payload, { expiresIn: "10m" });
   }
 }
