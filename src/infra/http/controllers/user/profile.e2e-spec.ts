@@ -19,7 +19,7 @@ describe("Profile (E2E)", () => {
       .set("Authorization", `Bearer ${accessToken}`);
 
     expect(result.statusCode).toEqual(200);
-    expect(result.body.props).toEqual(
+    expect(result.body).toEqual(
       expect.objectContaining({
         email: "romeusoaresdesouto@gmail.com",
       }),

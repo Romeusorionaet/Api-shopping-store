@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
-import { makeGetBuyerProfileUseCase } from "src/domain/store/application/use-cases/factories/make-get-buyer-profile";
+import { BuyerPresenter } from "../../presenters/buyer-presenter";
+import { makeGetBuyerProfileUseCase } from "src/domain/store/application/use-cases/factories/make-get-buyer-profile-use-case";
 
 export async function profile(request: FastifyRequest, reply: FastifyReply) {
   const getBuyerProfileUseCase = makeGetBuyerProfileUseCase();
@@ -15,6 +16,5 @@ export async function profile(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(400).send({ error: err.message });
   }
 
-  // parei aqui onde vou retoranr o presenter
-  return reply.status(200).send(result.value.buyer);
+  return reply.status(200).send(BuyerPresenter.toHTTP(result.value.buyer));
 }
