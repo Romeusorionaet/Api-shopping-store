@@ -13,6 +13,18 @@ export class PrismaCategoryRepository implements CategoryRepository {
     });
   }
 
+  async findById(id: string): Promise<Category | null> {
+    const category = await prisma.category.findUnique({
+      where: { id },
+    });
+
+    if (!category) {
+      return null;
+    }
+
+    return PrismaCategoryMapper.toDomain(category);
+  }
+
   async findMany({ page }: PaginationParams): Promise<Category[]> {
     const perPage = 10;
 

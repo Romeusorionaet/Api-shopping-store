@@ -9,14 +9,11 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     imgUrl: z.string(),
   });
 
-  const { title, imgUrl } = createCategoryBodySchema.parse(request.body);
+  const categoryData = createCategoryBodySchema.parse(request.body);
 
   const createCategoryUseCase = makeCreateCategoryUseCase();
 
-  const result = await createCategoryUseCase.execute({
-    title,
-    imgUrl,
-  });
+  const result = await createCategoryUseCase.execute(categoryData);
 
   if (result.isLeft()) {
     const err: CategoryAlreadyExistsError = result.value;
@@ -24,5 +21,5 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(400).send({ error: err.message });
   }
 
-  return reply.status(201).send(result.value.category);
+  return reply.status(201).send();
 }

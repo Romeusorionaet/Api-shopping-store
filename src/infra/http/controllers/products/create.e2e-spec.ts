@@ -12,18 +12,20 @@ describe("Create Product (E2E)", () => {
   });
 
   test("should be able to create a product", async () => {
-    const responseCategory = await request(app.server).post("/category").send({
+    await request(app.server).post("/category").send({
       title: "category test title 01",
       imgUrl: "http://teste.com.br",
     });
 
-    const category = responseCategory.body;
+    const responseCategories = await request(app.server).get("/categories");
+
+    const category = responseCategories.body[0];
 
     const response = await request(app.server)
       .post("/product")
       .send({
-        categoryId: category._id.value,
-        categoryTitle: category.props.title,
+        categoryId: category.id,
+        categoryTitle: category.title,
         title: "product test title 01",
         description:
           "Cauda advoco coruscus tristis talus abduco centum adnuo aiunt.\n" +
@@ -53,18 +55,20 @@ describe("Create Product (E2E)", () => {
   });
 
   test("should not be able to create a product twice with the same title", async () => {
-    const responseCategory = await request(app.server).post("/category").send({
-      title: "category test title for product 03",
+    await request(app.server).post("/category").send({
+      title: "category test title 01",
       imgUrl: "http://teste.com.br",
     });
 
-    const category = responseCategory.body;
+    const responseCategories = await request(app.server).get("/categories");
+
+    const category = responseCategories.body[0];
 
     await request(app.server)
       .post("/product")
       .send({
-        categoryId: category._id.value,
-        categoryTitle: category.props.title,
+        categoryId: category.id,
+        categoryTitle: category.title,
         title: "product test title 02",
         description:
           "Cauda advoco coruscus tristis talus abduco centum adnuo aiunt.\n" +
@@ -85,8 +89,8 @@ describe("Create Product (E2E)", () => {
     const response = await request(app.server)
       .post("/product")
       .send({
-        categoryId: category._id.value,
-        categoryTitle: category.props.title,
+        categoryId: category.value,
+        categoryTitle: category.title,
         title: "product test title 02",
         description:
           "Cauda advoco coruscus tristis talus abduco centum adnuo aiunt.\n" +

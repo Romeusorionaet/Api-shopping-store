@@ -25,43 +25,12 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     ]),
     stars: z.coerce.number(),
   });
-  const {
-    categoryId,
-    categoryTitle,
-    title,
-    description,
-    price,
-    imgUrlList,
-    stockQuantity,
-    minimumQuantityStock,
-    discountPercentage,
-    width,
-    height,
-    weight,
-    corsList,
-    placeOfSale,
-    stars,
-  } = createProductBodySchema.parse(request.body);
+
+  const productData = createProductBodySchema.parse(request.body);
 
   const createProductUseCase = makeCreateProductUseCase();
 
-  const result = await createProductUseCase.execute({
-    categoryId,
-    categoryTitle,
-    title,
-    description,
-    price,
-    imgUrlList,
-    stockQuantity,
-    minimumQuantityStock,
-    discountPercentage,
-    width,
-    height,
-    weight,
-    corsList,
-    placeOfSale,
-    stars,
-  });
+  const result = await createProductUseCase.execute(productData);
 
   if (result.isLeft()) {
     const err: ProductAlreadyExistsError = result.value;

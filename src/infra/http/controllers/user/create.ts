@@ -28,5 +28,5 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(400).send({ error: err.message });
   }
 
-  return reply.status(201).send(result.value.user);
+  return reply.status(201).send();
 }

@@ -9,6 +9,16 @@ export class InMemoryCategoriesRepository implements CategoryRepository {
     this.items.push(data);
   }
 
+  async findById(id: string): Promise<Category | null> {
+    const category = this.items.find((item) => item.id.toString() === id);
+
+    if (!category) {
+      return null;
+    }
+
+    return category;
+  }
+
   async findMany({ page }: PaginationParams): Promise<Category[]> {
     const perPage = 10;
 
