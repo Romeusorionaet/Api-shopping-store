@@ -13,9 +13,9 @@ export async function fetchCategories(
 
   const { page } = fetchCategoriesSchema.parse(request.query);
 
-  const getCategoryDetailsUseCase = makeFetchCategoriesUseCase();
+  const fetchCategoriesUseCase = makeFetchCategoriesUseCase();
 
-  const result = await getCategoryDetailsUseCase.execute({ page });
+  const result = await fetchCategoriesUseCase.execute({ page });
 
   if (!result.value) {
     return reply.status(200).send([]);

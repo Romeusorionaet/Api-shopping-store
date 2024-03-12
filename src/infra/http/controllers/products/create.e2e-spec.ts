@@ -27,9 +27,7 @@ describe("Create Product (E2E)", () => {
         categoryId: category.id,
         categoryTitle: category.title,
         title: "product test title 01",
-        description:
-          "Cauda advoco coruscus tristis talus abduco centum adnuo aiunt.\n" +
-          "Ullam urbanus conspergo amaritudo aureus deleniti amor ascit natus canto.",
+        description: "description product",
         price: 5368576,
         imgUrlList: ["img1", "img2", "img3", "img4"],
         stockQuantity: 84600,
