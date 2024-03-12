@@ -10,7 +10,7 @@ describe("Fetch Categories (E2E)", () => {
     await app.close();
   });
 
-  test("should be able to fetch categories", async () => {
+  test("[GET] /categories", async () => {
     await request(app.server).post("/category").send({
       title: "category title 01",
       imgUrl: "http://teste.com.br",

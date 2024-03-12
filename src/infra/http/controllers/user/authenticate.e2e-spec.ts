@@ -1,20 +1,25 @@
+import { hash } from "bcryptjs";
 import { app } from "src/app";
 import request from "supertest";
+import { UserFactory } from "test/factories/make-user";
 
 describe("Authenticate (E2E)", () => {
+  let userFactory: UserFactory;
+
   beforeAll(async () => {
     await app.ready();
+
+    userFactory = new UserFactory();
   });
 
   afterAll(async () => {
     await app.close();
   });
 
-  test("should be able to authenticate user", async () => {
-    await request(app.server).post("/user/register").send({
-      username: "romeu soares",
+  test("[POST] /user/authenticate", async () => {
+    await userFactory.makePrismaUser({
       email: "romeu@gmail.com",
-      password: "123456",
+      password: await hash("123456", 8),
     });
 
     const result = await request(app.server)

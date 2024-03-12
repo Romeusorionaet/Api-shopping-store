@@ -11,7 +11,7 @@ describe("Create Category (E2E)", () => {
     await app.close();
   });
 
-  test("should be able to create a category", async () => {
+  test("[POST] /category", async () => {
     const response = await request(app.server).post("/category").send({
       title: "category test title create 01",
       imgUrl: "http://teste.com.br",
@@ -28,7 +28,7 @@ describe("Create Category (E2E)", () => {
     expect(categoryOnDatabase).toBeTruthy();
   });
 
-  test("should not be able to create a category twice with the same title", async () => {
+  test("[POST] should not be able to create a category twice with the same title", async () => {
     await request(app.server).post("/category").send({
       title: "category test title twice 02",
       imgUrl: "http://teste.com.br",

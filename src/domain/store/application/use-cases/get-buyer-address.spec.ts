@@ -1,16 +1,16 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { InMemoryBuyerAddressRepository } from "test/repositories/in-memory-buyer-address-repository";
-import { MakeUser } from "test/factories/make-user";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { MakeBuyerAddress } from "test/factories/make-buyer-address";
 import { GetBuyerAddressUseCase } from "./get-buyer-address";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
+import { makeUser } from "test/factories/make-user";
 
 let buyerAddressRepository: InMemoryBuyerAddressRepository;
 let usersRepository: InMemoryUsersRepository;
 let sut: GetBuyerAddressUseCase;
 
-describe("Get Address", () => {
+describe("Get buyer Address", () => {
   beforeEach(() => {
     buyerAddressRepository = new InMemoryBuyerAddressRepository();
 
@@ -20,7 +20,7 @@ describe("Get Address", () => {
   });
 
   test("should be able to get buyer address by id", async () => {
-    const user = await MakeUser({}, new UniqueEntityID("user-test-id"));
+    const user = await makeUser({}, new UniqueEntityID("user-test-id"));
 
     await usersRepository.create(user);
 

@@ -11,7 +11,7 @@ describe("Create Product (E2E)", () => {
     await app.close();
   });
 
-  test("should be able to create a product", async () => {
+  test("[POST] /product", async () => {
     await request(app.server).post("/category").send({
       title: "category test title 01",
       imgUrl: "http://teste.com.br",
@@ -52,7 +52,7 @@ describe("Create Product (E2E)", () => {
     expect(productOnDatabase).toBeTruthy();
   });
 
-  test("should not be able to create a product twice with the same title", async () => {
+  test("[POST] should not be able to create a product twice with the same title", async () => {
     await request(app.server).post("/category").send({
       title: "category test title 01",
       imgUrl: "http://teste.com.br",

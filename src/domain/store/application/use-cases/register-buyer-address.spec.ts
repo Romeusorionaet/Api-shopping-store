@@ -2,9 +2,9 @@ import { expect, describe, test, beforeEach } from "vitest";
 import { RegisterBuyerAddressUseCase } from "./register-buyer-address";
 import { InMemoryBuyerAddressRepository } from "test/repositories/in-memory-buyer-address-repository";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
-import { MakeUser } from "test/factories/make-user";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { MakeBuyerAddress } from "test/factories/make-buyer-address";
+import { makeUser } from "test/factories/make-user";
 
 let buyerAddressRepository: InMemoryBuyerAddressRepository;
 let usersRepository: InMemoryUsersRepository;
@@ -23,7 +23,7 @@ describe("Buyer Address", () => {
   });
 
   test("should be able to register buyer address", async () => {
-    const user = await MakeUser(
+    const user = await makeUser(
       {},
       new UniqueEntityID("register-user-test-id"),
     );

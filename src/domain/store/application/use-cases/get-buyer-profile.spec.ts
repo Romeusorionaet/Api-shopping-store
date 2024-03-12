@@ -1,7 +1,7 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { GetBuyerProfileUseCase } from "./get-buyer-profile";
-import { MakeUser } from "test/factories/make-user";
+import { makeUser } from "test/factories/make-user";
 
 let usersRepository: InMemoryUsersRepository;
 let sut: GetBuyerProfileUseCase;
@@ -13,7 +13,7 @@ describe("Get Buyer Profile", () => {
   });
 
   test("should be able to get Buyer profile", async () => {
-    const user = await MakeUser({ username: "user example" });
+    const user = await makeUser({ username: "user example" });
 
     await usersRepository.create(user);
 
@@ -27,7 +27,7 @@ describe("Get Buyer Profile", () => {
   });
 
   test("should not be able to get uer profile with wrong id", async () => {
-    const user = await MakeUser();
+    const user = await makeUser();
 
     await usersRepository.create(user);
 

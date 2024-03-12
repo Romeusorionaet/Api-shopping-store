@@ -11,7 +11,7 @@ describe("Profile (E2E)", () => {
     await app.close();
   });
 
-  test("should be able to get buyer profile", async () => {
+  test("[GET] /user/profile", async () => {
     const { accessToken } = await createAndAuthenticateUser(app);
 
     const result = await request(app.server)

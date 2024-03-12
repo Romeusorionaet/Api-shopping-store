@@ -1,10 +1,10 @@
 import { expect, describe, test, beforeEach } from "vitest";
-import { MakeUser } from "test/factories/make-user";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { AuthenticateUserUseCase } from "./authenticate-user";
 import { FakeHasher } from "test/cryptography/fake-hasher";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
+import { makeUser } from "test/factories/make-user";
 
 let usersRepository: InMemoryUsersRepository;
 let fakeHasher: FakeHasher;
@@ -28,7 +28,7 @@ describe("Authenticate User", () => {
   });
 
   test("should be able to authenticate user", async () => {
-    const user = await MakeUser({
+    const user = await makeUser({
       email: "firstuser@gmail.com",
       password: await fakeHasher.hash("123456"),
     });
@@ -47,7 +47,7 @@ describe("Authenticate User", () => {
   });
 
   test("should not be able to authenticate user with wrong email", async () => {
-    const user = await MakeUser({
+    const user = await makeUser({
       email: "firstuser@gmail.com",
       password: await fakeHasher.hash("123456"),
     });
@@ -64,7 +64,7 @@ describe("Authenticate User", () => {
   });
 
   test("should not be able to authenticate with wrong password", async () => {
-    const user = await MakeUser({
+    const user = await makeUser({
       email: "firstuser@gmail.com",
       password: await fakeHasher.hash("123456"),
     });

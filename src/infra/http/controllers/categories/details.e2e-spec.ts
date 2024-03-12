@@ -10,7 +10,7 @@ describe("Category Details (E2E)", () => {
     await app.close();
   });
 
-  test("should be able to get a category details", async () => {
+  test("[GET] /category/details/:id", async () => {
     await request(app.server).post("/category").send({
       title: "category for test get category details id",
       imgUrl: "http://teste.com.br",
