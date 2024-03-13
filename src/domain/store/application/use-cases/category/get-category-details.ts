@@ -1,6 +1,6 @@
 import { Either, left, right } from "src/core/either";
-import { Category } from "../../enterprise/entities/category";
-import { CategoryRepository } from "../repositories/category-repository";
+import { Category } from "../../../enterprise/entities/category";
+import { CategoryRepository } from "../../repositories/category-repository";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 
 interface GetCategoryDetailsUseCaseRequest {

@@ -1,7 +1,7 @@
-import { UsersRepository } from "../repositories/users-repository";
+import { UsersRepository } from "../../repositories/users-repository";
 import { Either, left, right } from "src/core/either";
-import { BuyerAddress } from "../../enterprise/entities/buyer-address";
-import { BuyerAddressRepository } from "../repositories/buyer-address-repository";
+import { BuyerAddress } from "../../../enterprise/entities/buyer-address";
+import { BuyerAddressRepository } from "../../repositories/buyer-address-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 

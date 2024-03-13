@@ -1,8 +1,8 @@
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
-import { UsersRepository } from "../repositories/users-repository";
+import { UsersRepository } from "../../repositories/users-repository";
 import { Either, left, right } from "src/core/either";
-import { HashComparer } from "../cryptography/hash-comparer";
-import { Encrypter } from "../cryptography/encrypter";
+import { HashComparer } from "../../cryptography/hash-comparer";
+import { Encrypter } from "../../cryptography/encrypter";
 
 interface AuthenticateUserUseCaseRequest {
   email: string;

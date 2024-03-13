@@ -1,6 +1,6 @@
 import { Either, right } from "src/core/either";
-import { Category } from "../../enterprise/entities/category";
-import { CategoryRepository } from "../repositories/category-repository";
+import { Category } from "../../../enterprise/entities/category";
+import { CategoryRepository } from "../../repositories/category-repository";
 
 interface FetchCategoriesUseCaseRequest {
   page: number;

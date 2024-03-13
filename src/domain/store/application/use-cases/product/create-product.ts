@@ -1,9 +1,9 @@
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { ProductRepository } from "../../../store/application/repositories/product-repository";
-import { Product } from "../../enterprise/entities/product";
+import { ProductRepository } from "../../../../store/application/repositories/product-repository";
+import { Product } from "../../../enterprise/entities/product";
 import { Either, left, right } from "src/core/either";
 import { ModeOfSale } from "src/core/entities/mode-of-sale";
-import { ProductAlreadyExistsError } from "./errors/product-already-exists-error";
+import { ProductAlreadyExistsError } from "../errors/product-already-exists-error";
 
 interface CreateProductUseCaseRequest {
   categoryId: string;

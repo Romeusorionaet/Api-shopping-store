@@ -1,9 +1,9 @@
 import { Either, left, right } from "src/core/either";
-import { OrderRepository } from "../repositories/order-repository";
-import { Order } from "../../enterprise/entities/order";
+import { OrderRepository } from "../../repositories/order-repository";
+import { Order } from "../../../enterprise/entities/order";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { BuyerAddress } from "../../enterprise/entities/buyer-address";
-import { OrderWithEmptyAddressError } from "./errors/order-with-empty-address-error";
+import { BuyerAddress } from "../../../enterprise/entities/buyer-address";
+import { OrderWithEmptyAddressError } from "../errors/order-with-empty-address-error";
 
 interface PurchaseOrderUseCaseRequest {
   productId: string;

@@ -1,7 +1,7 @@
 import { PrismaUserRepository } from "src/infra/database/prisma/repositories/prisma-user-repository";
 import { JwtEncrypter } from "src/infra/cryptography/jwt-encrypter";
-import { AuthenticateUserUseCase } from "../authenticate-user";
 import { BcryptHash } from "src/infra/cryptography/bcrypt-hash";
+import { AuthenticateUserUseCase } from "../user/authenticate-user";
 
 export function makeAuthenticateUserUseCase() {
   const userRepository = new PrismaUserRepository();

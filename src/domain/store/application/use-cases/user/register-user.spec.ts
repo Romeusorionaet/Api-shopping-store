@@ -2,7 +2,7 @@ import { expect, describe, test, beforeEach } from "vitest";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { RegisterUserUseCase } from "./register-user";
 import { FakeHasher } from "test/cryptography/fake-hasher";
-import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
+import { UserAlreadyExistsError } from "../errors/user-already-exists-error";
 import { makeUser } from "test/factories/make-user";
 
 let usersRepository: InMemoryUsersRepository;

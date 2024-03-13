@@ -1,6 +1,6 @@
 import { Either, left, right } from "src/core/either";
-import { OrderRepository } from "../repositories/order-repository";
-import { Order } from "../../enterprise/entities/order";
+import { OrderRepository } from "../../repositories/order-repository";
+import { Order } from "../../../enterprise/entities/order";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 
 interface GetBuyerOrderUseCaseRequest {

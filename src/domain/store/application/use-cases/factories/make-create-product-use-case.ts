@@ -1,5 +1,5 @@
 import { PrismaProductRepository } from "src/infra/database/prisma/repositories/prisma-product-repository";
-import { CreateProductUseCase } from "../create-product";
+import { CreateProductUseCase } from "../product/create-product";
 
 export function makeCreateProductUseCase() {
   const productRepository = new PrismaProductRepository();

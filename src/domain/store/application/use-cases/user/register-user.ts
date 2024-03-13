@@ -1,8 +1,8 @@
-import { UsersRepository } from "../repositories/users-repository";
-import { User } from "../../enterprise/entities/user";
+import { UsersRepository } from "../../repositories/users-repository";
+import { User } from "../../../enterprise/entities/user";
 import { Either, left, right } from "src/core/either";
-import { HashGenerator } from "../cryptography/hash-generator";
-import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
+import { HashGenerator } from "../../cryptography/hash-generator";
+import { UserAlreadyExistsError } from "../errors/user-already-exists-error";
 
 interface RegisterUserUseCaseRequest {
   username: string;

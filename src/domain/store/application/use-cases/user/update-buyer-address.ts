@@ -1,6 +1,6 @@
 import { Either, left, right } from "src/core/either";
-import { BuyerAddress } from "../../enterprise/entities/buyer-address";
-import { BuyerAddressRepository } from "../repositories/buyer-address-repository";
+import { BuyerAddress } from "../../../enterprise/entities/buyer-address";
+import { BuyerAddressRepository } from "../../repositories/buyer-address-repository";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
