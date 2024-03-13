@@ -1,3 +1,4 @@
+import { PaginationParams } from "src/core/repositories/pagination-params";
 import { ProductRepository } from "src/domain/store/application/repositories/product-repository";
 import { Product } from "src/domain/store/enterprise/entities/product";
 
@@ -6,6 +7,16 @@ export class InMemoryProductsRepository implements ProductRepository {
 
   async create(data: Product): Promise<void> {
     this.items.push(data);
+  }
+
+  async findMany({ page }: PaginationParams): Promise<Product[]> {
+    const perPage = 10;
+
+    const startIndex = (page - 1) * perPage;
+    const endIndex = startIndex + perPage;
+    const products = this.items.slice(startIndex, endIndex);
+
+    return products;
   }
 
   async findById(id: string): Promise<Product | null> {

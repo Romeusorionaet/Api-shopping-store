@@ -2,6 +2,7 @@ import { ProductRepository } from "src/domain/store/application/repositories/pro
 import { Product } from "src/domain/store/enterprise/entities/product";
 import { prisma } from "../prisma";
 import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
+import { PaginationParams } from "src/core/repositories/pagination-params";
 
 export class PrismaProductRepository implements ProductRepository {
   async create(product: Product): Promise<void> {
@@ -10,6 +11,20 @@ export class PrismaProductRepository implements ProductRepository {
     await prisma.product.create({
       data,
     });
+  }
+
+  async findMany({ page }: PaginationParams): Promise<Product[]> {
+    const perPage = 10;
+
+    const products = await prisma.product.findMany({
+      take: perPage,
+      skip: (page - 1) * perPage,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return products.map(PrismaProductMapper.toDomain);
   }
 
   async findById(id: string): Promise<Product | null> {
