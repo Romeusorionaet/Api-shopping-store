@@ -3,12 +3,12 @@ import { Product } from "../../enterprise/entities/product";
 import { ProductRepository } from "../repositories/product-repository";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 
-interface FetchProductsUseCaseRequest {
+interface SearchProductsUseCaseRequest {
   query: string;
   page: number;
 }
 
-type FetchProductsUseCaseResponse = Either<
+type SearchProductsUseCaseResponse = Either<
   ResourceNotFoundError,
   {
     products: Product[];
@@ -21,7 +21,7 @@ export class SearchProductsUseCase {
   async execute({
     query,
     page,
-  }: FetchProductsUseCaseRequest): Promise<FetchProductsUseCaseResponse> {
+  }: SearchProductsUseCaseRequest): Promise<SearchProductsUseCaseResponse> {
     const products = await this.productRepository.searchMany(query, page);
 
     if (!products) {

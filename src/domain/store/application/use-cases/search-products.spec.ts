@@ -1,36 +1,37 @@
 import { describe, test, beforeEach, expect } from "vitest";
-import { SearchProductUseCase } from "./search-product";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 import { makeProduct } from "test/factories/make-product";
+import { SearchProductsUseCase } from "./search-products";
 import { makeCategory } from "test/factories/make-category";
 
 let productsRepository: InMemoryProductsRepository;
-let sut: SearchProductUseCase;
+let sut: SearchProductsUseCase;
 
 describe("Search Products", () => {
   beforeEach(() => {
     productsRepository = new InMemoryProductsRepository();
-    sut = new SearchProductUseCase(productsRepository);
+    sut = new SearchProductsUseCase(productsRepository);
   });
 
-  test("should be able to search for products", async () => {
-    const product1 = makeProduct({ title: "first product" });
-    const product2 = makeProduct({ title: "second product" });
-    const product3 = makeProduct({ title: "test different" });
+  test("should be able to search products", async () => {
+    const products1 = makeProduct({ title: "product javascript" });
+    const products2 = makeProduct({ title: "product python" });
+    const products3 = makeProduct({ title: "product java" });
 
-    await productsRepository.create(product1);
-    await productsRepository.create(product2);
-    await productsRepository.create(product3);
+    await productsRepository.create(products1);
+    await productsRepository.create(products2);
+    await productsRepository.create(products3);
 
-    const result = await sut.execute({ query: "Product", page: 1 });
+    const result = await sut.execute({ query: "java", page: 1 });
 
     expect(result.isRight()).toBe(true);
+
     if (result.isRight()) {
-      expect(result.value.product).toHaveLength(2);
+      expect(result.value.products).toHaveLength(2);
     }
   });
 
-  test("should be able to fetch paginated products search", async () => {
+  test("should be able to fetch paginated products by search", async () => {
     for (let i = 1; i <= 22; i++) {
       await productsRepository.create(makeProduct({ title: `product ${i}` }));
     }
@@ -41,8 +42,8 @@ describe("Search Products", () => {
     });
 
     if (result.isRight()) {
-      expect(result.value.product).toHaveLength(2);
-      expect(result.value.product).toEqual([
+      expect(result.value.products).toHaveLength(2);
+      expect(result.value.products).toEqual([
         expect.objectContaining({ title: "product 21" }),
         expect.objectContaining({ title: "product 22" }),
       ]);
@@ -77,7 +78,7 @@ describe("Search Products", () => {
     expect(result.isRight()).toBe(true);
 
     if (result.isRight()) {
-      expect(result.value.product).toHaveLength(2);
+      expect(result.value.products).toHaveLength(2);
     }
   });
 });

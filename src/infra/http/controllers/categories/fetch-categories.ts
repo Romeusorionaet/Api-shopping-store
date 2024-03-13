@@ -17,8 +17,11 @@ export async function fetchCategories(
 
   const result = await fetchCategoriesUseCase.execute({ page });
 
-  if (!result.value) {
-    return reply.status(200).send([]);
+  if (!result.value || result.value.categories.length === 0) {
+    return reply.status(200).send({
+      message: "No categories found.",
+      categories: [],
+    });
   }
 
   return reply.status(200).send({
