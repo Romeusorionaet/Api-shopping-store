@@ -1,15 +1,15 @@
 import { describe, test, beforeEach, expect } from "vitest";
-import { FetchProductsUseCase } from "./fetch-products";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 import { makeProduct } from "test/factories/make-product";
+import { SearchProductsUseCase } from "./search-products";
 
 let productsRepository: InMemoryProductsRepository;
-let sut: FetchProductsUseCase;
+let sut: SearchProductsUseCase;
 
 describe("Fetch Products", () => {
   beforeEach(() => {
     productsRepository = new InMemoryProductsRepository();
-    sut = new FetchProductsUseCase(productsRepository);
+    sut = new SearchProductsUseCase(productsRepository);
   });
 
   test("should be able fetch categories", async () => {

@@ -7,7 +7,7 @@ import { makeCategory } from "test/factories/make-category";
 let productsRepository: InMemoryProductsRepository;
 let sut: SearchProductUseCase;
 
-describe("Search Product", () => {
+describe("Search Products", () => {
   beforeEach(() => {
     productsRepository = new InMemoryProductsRepository();
     sut = new SearchProductUseCase(productsRepository);
@@ -30,7 +30,7 @@ describe("Search Product", () => {
     }
   });
 
-  test("should be able to fetch paginated product search", async () => {
+  test("should be able to fetch paginated products search", async () => {
     for (let i = 1; i <= 22; i++) {
       await productsRepository.create(makeProduct({ title: `product ${i}` }));
     }

@@ -40,7 +40,6 @@ export function makeProduct(
 export class ProductFactory {
   async makePrismaProduct(data: Partial<ProductProps> = {}): Promise<Product> {
     const product = makeProduct(data);
-    console.log(product);
 
     await prisma.product.create({
       data: PrismaProductMapper.toPrisma(product),

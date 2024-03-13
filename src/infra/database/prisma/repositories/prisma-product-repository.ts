@@ -40,10 +40,10 @@ export class PrismaProductRepository implements ProductRepository {
     return PrismaProductMapper.toDomain(product);
   }
 
-  async searchMany(query: string, page: number): Promise<Product[]> {
+  async searchMany(query: string, page: number): Promise<Product[] | null> {
     const queryWords = query.toLowerCase().split(" ");
 
-    const result = await prisma.product.findMany({
+    const products = await prisma.product.findMany({
       where: {
         OR: queryWords.map((word) => ({
           title: {
@@ -59,6 +59,10 @@ export class PrismaProductRepository implements ProductRepository {
       take: 20,
     });
 
-    return result.map(PrismaProductMapper.toDomain);
+    if (!products) {
+      return null;
+    }
+
+    return products.map(PrismaProductMapper.toDomain);
   }
 }

@@ -32,10 +32,10 @@ export class InMemoryProductsRepository implements ProductRepository {
     return product;
   }
 
-  async searchMany(query: string, page: number): Promise<Product[]> {
+  async searchMany(query: string, page: number): Promise<Product[] | null> {
     const queryWords = query.toLocaleLowerCase().split(" ");
 
-    return this.items
+    const products = this.items
       .filter((item) =>
         queryWords.some(
           (word) =>
@@ -45,5 +45,11 @@ export class InMemoryProductsRepository implements ProductRepository {
         ),
       )
       .slice((page - 1) * 20, page * 20);
+
+    if (!products) {
+      return null;
+    }
+
+    return products;
   }
 }
