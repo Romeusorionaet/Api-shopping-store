@@ -21,7 +21,7 @@ export async function fetchCategories(
     return reply.status(200).send([]);
   }
 
-  return reply
-    .status(200)
-    .send(result.value.categories.map(CategoryPresenter.toHTTP));
+  return reply.status(200).send({
+    categories: result.value.categories.map(CategoryPresenter.toHTTP),
+  });
 }

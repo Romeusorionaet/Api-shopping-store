@@ -1,8 +1,8 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { GetCategoryDetailsUseCase } from "./get-category-details";
-import { MakeCategory } from "test/factories/make-category";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
+import { makeCategory } from "test/factories/make-category";
 
 let categoriesRepository: InMemoryCategoriesRepository;
 let sut: GetCategoryDetailsUseCase;
@@ -14,7 +14,7 @@ describe("Get Category Details", () => {
   });
 
   test("should be able to get category details", async () => {
-    const category = MakeCategory(
+    const category = makeCategory(
       {
         title: "my category title 01",
       },

@@ -1,7 +1,7 @@
 import { describe, test, beforeEach, expect } from "vitest";
 import { FetchProductsUseCase } from "./fetch-products";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
-import { MakeProduct } from "test/factories/make-product";
+import { makeProduct } from "test/factories/make-product";
 
 let productsRepository: InMemoryProductsRepository;
 let sut: FetchProductsUseCase;
@@ -13,9 +13,9 @@ describe("Fetch Products", () => {
   });
 
   test("should be able fetch categories", async () => {
-    const products1 = MakeProduct({ title: "product javascript" });
-    const products2 = MakeProduct({ title: "product python" });
-    const products3 = MakeProduct({ title: "product java" });
+    const products1 = makeProduct({ title: "product javascript" });
+    const products2 = makeProduct({ title: "product python" });
+    const products3 = makeProduct({ title: "product java" });
 
     await productsRepository.create(products1);
     await productsRepository.create(products2);

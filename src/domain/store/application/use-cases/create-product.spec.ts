@@ -1,9 +1,9 @@
 import { describe, test, beforeEach, expect } from "vitest";
 import { CreateProductUseCase } from "./create-product";
-import { MakeProduct } from "test/factories/make-product";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { MakeCategory } from "test/factories/make-category";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
+import { makeCategory } from "test/factories/make-category";
+import { makeProduct } from "test/factories/make-product";
 
 let productsRepository: InMemoryProductsRepository;
 let sut: CreateProductUseCase;
@@ -15,12 +15,12 @@ describe("Create Product", () => {
   });
 
   test("should be able create a product", async () => {
-    const category = MakeCategory(
+    const category = makeCategory(
       { title: "category title for product 01" },
       new UniqueEntityID("category-id-01"),
     );
 
-    const product = MakeProduct({
+    const product = makeProduct({
       categoryId: category.id,
       title: "first product register 01",
     });

@@ -1,8 +1,8 @@
 import { describe, test, beforeEach, expect } from "vitest";
-import { MakeProduct } from "test/factories/make-product";
 import { SearchProductUseCase } from "./search-product";
-import { MakeCategory } from "test/factories/make-category";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
+import { makeProduct } from "test/factories/make-product";
+import { makeCategory } from "test/factories/make-category";
 
 let productsRepository: InMemoryProductsRepository;
 let sut: SearchProductUseCase;
@@ -14,9 +14,9 @@ describe("Search Product", () => {
   });
 
   test("should be able to search for products", async () => {
-    const product1 = MakeProduct({ title: "first product" });
-    const product2 = MakeProduct({ title: "second product" });
-    const product3 = MakeProduct({ title: "test different" });
+    const product1 = makeProduct({ title: "first product" });
+    const product2 = makeProduct({ title: "second product" });
+    const product3 = makeProduct({ title: "test different" });
 
     await productsRepository.create(product1);
     await productsRepository.create(product2);
@@ -32,7 +32,7 @@ describe("Search Product", () => {
 
   test("should be able to fetch paginated product search", async () => {
     for (let i = 1; i <= 22; i++) {
-      await productsRepository.create(MakeProduct({ title: `product ${i}` }));
+      await productsRepository.create(makeProduct({ title: `product ${i}` }));
     }
 
     const result = await sut.execute({
@@ -50,20 +50,20 @@ describe("Search Product", () => {
   });
 
   test("should be able to search for products by category title", async () => {
-    const firstCategory = MakeCategory({ title: "first category" });
-    const secondCategory = MakeCategory({ title: "second category" });
+    const firstCategory = makeCategory({ title: "first category" });
+    const secondCategory = makeCategory({ title: "second category" });
 
-    const firstProduct = MakeProduct({
+    const firstProduct = makeProduct({
       categoryId: firstCategory.id,
       categoryTitle: firstCategory.title,
     });
 
-    const secondProduct = MakeProduct({
+    const secondProduct = makeProduct({
       categoryId: firstCategory.id,
       categoryTitle: firstCategory.title,
     });
 
-    const thirdProduct = MakeProduct({
+    const thirdProduct = makeProduct({
       categoryId: secondCategory.id,
       categoryTitle: secondCategory.title,
     });

@@ -1,8 +1,8 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { GetProductDetailsUseCase } from "./get-product-details";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
-import { MakeProduct } from "test/factories/make-product";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
+import { makeProduct } from "test/factories/make-product";
 
 let productsRepository: InMemoryProductsRepository;
 let sut: GetProductDetailsUseCase;
@@ -14,7 +14,7 @@ describe("Get Product Details", () => {
   });
 
   test("should be able to get product details", async () => {
-    const product = MakeProduct(
+    const product = makeProduct(
       {
         categoryId: new UniqueEntityID("first-category-id"),
         title: "my product",

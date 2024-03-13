@@ -24,5 +24,5 @@ export async function fetchProducts(
 
   return reply
     .status(200)
-    .send(result.value.products.map(ProductPresenter.toHTTP));
+    .send({ products: result.value.products.map(ProductPresenter.toHTTP) });
 }

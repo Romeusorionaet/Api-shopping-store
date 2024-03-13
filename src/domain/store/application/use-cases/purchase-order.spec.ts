@@ -2,9 +2,9 @@ import { expect, describe, test, beforeEach } from "vitest";
 import { PurchaseOrderUseCase } from "./purchase-order";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { MakeProduct } from "test/factories/make-product";
 import { MakeBuyerAddress } from "test/factories/make-buyer-address";
 import { makeUser } from "test/factories/make-user";
+import { makeProduct } from "test/factories/make-product";
 
 let orderRepository: InMemoryOrdersRepository;
 let sut: PurchaseOrderUseCase;
@@ -23,7 +23,7 @@ describe("Purchase Order", () => {
       new UniqueEntityID("purchase-order-buyer-address-test-id"),
     );
 
-    const product = MakeProduct({}, new UniqueEntityID("product-test-id-01"));
+    const product = makeProduct({}, new UniqueEntityID("product-test-id-01"));
 
     const result = await sut.execute({
       buyerId: user.id.toString(),
@@ -53,7 +53,7 @@ describe("Purchase Order", () => {
   test("should not be able to create a purchase order without address buyer", async () => {
     const user = await makeUser({}, new UniqueEntityID("user-test-id-02"));
 
-    const product = MakeProduct({}, new UniqueEntityID("product-test-id-02"));
+    const product = makeProduct({}, new UniqueEntityID("product-test-id-02"));
 
     const result = await sut.execute({
       buyerId: user.id.toString(),

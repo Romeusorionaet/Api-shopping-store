@@ -1,8 +1,8 @@
 import { describe, test, beforeEach, expect } from "vitest";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { CreateCategoryUseCase } from "./create-category";
-import { MakeCategory } from "test/factories/make-category";
 import { CategoryAlreadyExistsError } from "./errors/category-already-exists-error";
+import { makeCategory } from "test/factories/make-category";
 
 let categoriesRepository: InMemoryCategoriesRepository;
 let sut: CreateCategoryUseCase;
@@ -14,7 +14,7 @@ describe("Create Category", () => {
   });
 
   test("should be able create a category", async () => {
-    const category = MakeCategory({ title: "First category test" });
+    const category = makeCategory({ title: "First category test" });
 
     const result = await sut.execute(category);
 

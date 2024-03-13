@@ -1,9 +1,14 @@
 import request from "supertest";
 import { app } from "src/app";
+import { CategoryFactory } from "test/factories/make-category";
 
 describe("Category Details (E2E)", () => {
+  let categoryFactory: CategoryFactory;
+
   beforeAll(async () => {
     await app.ready();
+
+    categoryFactory = new CategoryFactory();
   });
 
   afterAll(async () => {
@@ -11,24 +16,21 @@ describe("Category Details (E2E)", () => {
   });
 
   test("[GET] /category/details/:id", async () => {
-    await request(app.server).post("/category").send({
+    const category = await categoryFactory.makePrismaCategory({
       title: "category for test get category details id",
-      imgUrl: "http://teste.com.br",
     });
 
-    const responseCategories = await request(app.server).get("/categories");
-
-    const categoryId = responseCategories.body[0].id;
-
     const response = await request(app.server).get(
-      `/category/details/${categoryId}`,
+      `/category/details/${category.id}`,
     );
 
     expect(response.statusCode).toEqual(200);
 
     expect(response.body).toEqual(
       expect.objectContaining({
-        title: "category for test get category details id",
+        category: expect.objectContaining({
+          title: "category for test get category details id",
+        }),
       }),
     );
   });

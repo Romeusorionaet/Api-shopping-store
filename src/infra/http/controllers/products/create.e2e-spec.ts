@@ -1,10 +1,18 @@
 import request from "supertest";
 import { app } from "src/app";
 import { prisma } from "src/infra/database/prisma/prisma";
+import { ProductFactory } from "test/factories/make-product";
+import { CategoryFactory } from "test/factories/make-category";
 
 describe("Create Product (E2E)", () => {
+  let productFactory: ProductFactory;
+  let categoryFactory: CategoryFactory;
+
   beforeAll(async () => {
     await app.ready();
+
+    productFactory = new ProductFactory();
+    categoryFactory = new CategoryFactory();
   });
 
   afterAll(async () => {
@@ -12,19 +20,12 @@ describe("Create Product (E2E)", () => {
   });
 
   test("[POST] /product", async () => {
-    await request(app.server).post("/category").send({
-      title: "category test title 01",
-      imgUrl: "http://teste.com.br",
-    });
-
-    const responseCategories = await request(app.server).get("/categories");
-
-    const category = responseCategories.body[0];
+    const category = await categoryFactory.makePrismaCategory();
 
     const response = await request(app.server)
       .post("/product")
       .send({
-        categoryId: category.id,
+        categoryId: category.id.toString(),
         categoryTitle: category.title,
         title: "product test title 01",
         description: "description product",
@@ -53,41 +54,18 @@ describe("Create Product (E2E)", () => {
   });
 
   test("[POST] should not be able to create a product twice with the same title", async () => {
-    await request(app.server).post("/category").send({
-      title: "category test title 01",
-      imgUrl: "http://teste.com.br",
+    const category = await categoryFactory.makePrismaCategory();
+
+    await productFactory.makePrismaProduct({
+      categoryId: category.id,
+      categoryTitle: category.title,
+      title: "product test title 02",
     });
-
-    const responseCategories = await request(app.server).get("/categories");
-
-    const category = responseCategories.body[0];
-
-    await request(app.server)
-      .post("/product")
-      .send({
-        categoryId: category.id,
-        categoryTitle: category.title,
-        title: "product test title 02",
-        description:
-          "Cauda advoco coruscus tristis talus abduco centum adnuo aiunt.\n" +
-          "Ullam urbanus conspergo amaritudo aureus deleniti amor ascit natus canto.",
-        price: 5368576,
-        imgUrlList: ["img1", "img2", "img3", "img4"],
-        stockQuantity: 84600,
-        minimumQuantityStock: 43696,
-        discountPercentage: 41178,
-        width: 656484,
-        height: 3966472,
-        weight: 1362780,
-        corsList: ["color1", "color2", "color3", "color4"],
-        placeOfSale: "ONLINE_STORE",
-        stars: 0,
-      });
 
     const response = await request(app.server)
       .post("/product")
       .send({
-        categoryId: category.value,
+        categoryId: category.id.toString(),
         categoryTitle: category.title,
         title: "product test title 02",
         description:
@@ -95,12 +73,12 @@ describe("Create Product (E2E)", () => {
           "Ullam urbanus conspergo amaritudo aureus deleniti amor ascit natus canto.",
         price: 5368576,
         imgUrlList: ["img1", "img2", "img3", "img4"],
-        stockQuantity: 84600,
-        minimumQuantityStock: 43696,
-        discountPercentage: 41178,
-        width: 656484,
-        height: 3966472,
-        weight: 1362780,
+        stockQuantity: 600,
+        minimumQuantityStock: 43,
+        discountPercentage: 478,
+        width: 64,
+        height: 392,
+        weight: 130,
         corsList: ["color1", "color2", "color3", "color4"],
         placeOfSale: "ONLINE_STORE",
         stars: 0,

@@ -1,7 +1,7 @@
 import { describe, test, beforeEach, expect } from "vitest";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { FetchCategoriesUseCase } from "./fetch-categories";
-import { MakeCategory } from "test/factories/make-category";
+import { makeCategory } from "test/factories/make-category";
 
 let categoriesRepository: InMemoryCategoriesRepository;
 let sut: FetchCategoriesUseCase;
@@ -13,9 +13,9 @@ describe("Fetch Categories", () => {
   });
 
   test("should be able fetch categories", async () => {
-    const category1 = MakeCategory();
-    const category2 = MakeCategory();
-    const category3 = MakeCategory();
+    const category1 = makeCategory();
+    const category2 = makeCategory();
+    const category3 = makeCategory();
 
     await categoriesRepository.create(category1);
     await categoriesRepository.create(category2);
