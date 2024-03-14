@@ -5,7 +5,7 @@ import {
   BuyerAddressProps,
 } from "src/domain/store/enterprise/entities/buyer-address";
 
-export async function MakeBuyerAddress(
+export async function makeBuyerAddress(
   override: Partial<BuyerAddressProps> = {},
   id?: UniqueEntityID,
 ) {
@@ -20,7 +20,7 @@ export async function MakeBuyerAddress(
       houseNumber: faker.number.int(),
       complement: faker.lorem.sentence(4),
       phoneNumber: faker.number.int(),
-      username: faker.lorem.sentence(3),
+      username: faker.person.fullName(),
       email: "example@gmail.com",
       ...override,
     },

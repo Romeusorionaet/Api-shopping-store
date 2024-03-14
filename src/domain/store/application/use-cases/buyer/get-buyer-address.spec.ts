@@ -1,7 +1,7 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { InMemoryBuyerAddressRepository } from "test/repositories/in-memory-buyer-address-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { MakeBuyerAddress } from "test/factories/make-buyer-address";
+import { makeBuyerAddress } from "test/factories/make-buyer-address";
 import { GetBuyerAddressUseCase } from "./get-buyer-address";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { makeUser } from "test/factories/make-user";
@@ -24,12 +24,15 @@ describe("Get buyer Address", () => {
 
     await usersRepository.create(user);
 
-    const buyerAddress = await MakeBuyerAddress({ buyerId: user.id });
+    const buyerAddress = await makeBuyerAddress(
+      { buyerId: user.id },
+      new UniqueEntityID("address id 01"),
+    );
 
     await buyerAddressRepository.create(buyerAddress);
 
     const result = await sut.execute({
-      buyerId: buyerAddress.buyerId.toString(),
+      addressId: buyerAddress.id.toString(),
     });
 
     expect(result.isRight()).toBe(true);
@@ -39,7 +42,7 @@ describe("Get buyer Address", () => {
     if (result.isRight()) {
       expect(result.value.buyerAddress).toEqual(
         expect.objectContaining({
-          buyerId: new UniqueEntityID("user-test-id"),
+          id: new UniqueEntityID("address id 01"),
         }),
       );
     }

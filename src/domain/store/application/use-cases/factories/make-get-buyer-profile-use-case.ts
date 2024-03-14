@@ -1,5 +1,5 @@
 import { PrismaUserRepository } from "src/infra/database/prisma/repositories/prisma-user-repository";
-import { GetBuyerProfileUseCase } from "../user/get-buyer-profile";
+import { GetBuyerProfileUseCase } from "../buyer/get-buyer-profile";
 
 export function makeGetBuyerProfileUseCase() {
   const userRepository = new PrismaUserRepository();

@@ -2,7 +2,7 @@ import { expect, describe, test, beforeEach } from "vitest";
 import { PurchaseOrderUseCase } from "./purchase-order";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { MakeBuyerAddress } from "test/factories/make-buyer-address";
+import { makeBuyerAddress } from "test/factories/make-buyer-address";
 import { makeUser } from "test/factories/make-user";
 import { makeProduct } from "test/factories/make-product";
 
@@ -18,7 +18,7 @@ describe("Purchase Order", () => {
   test("should be able to create a purchase order", async () => {
     const user = await makeUser({}, new UniqueEntityID("user-test-id-01"));
 
-    const buyerAddress = await MakeBuyerAddress(
+    const buyerAddress = await makeBuyerAddress(
       {},
       new UniqueEntityID("purchase-order-buyer-address-test-id"),
     );

@@ -15,7 +15,7 @@ export interface BuyerAddressProps {
   username: string;
   email: string;
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt?: Date | null;
 }
 
 export class BuyerAddress extends Entity<BuyerAddressProps> {
@@ -93,5 +93,16 @@ export class BuyerAddress extends Entity<BuyerAddressProps> {
     );
 
     return buyerAddress;
+  }
+
+  update(props: Partial<BuyerAddressProps>): BuyerAddress {
+    return new BuyerAddress(
+      {
+        ...this.props,
+        ...props,
+        updatedAt: new Date(),
+      },
+      this.id,
+    );
   }
 }

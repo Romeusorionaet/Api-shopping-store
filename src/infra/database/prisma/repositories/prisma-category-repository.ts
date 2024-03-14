@@ -1,8 +1,8 @@
 import { PaginationParams } from "src/core/repositories/pagination-params";
 import { CategoryRepository } from "src/domain/store/application/repositories/category-repository";
 import { Category } from "src/domain/store/enterprise/entities/category";
-import { prisma } from "src/infra/database/prisma/prisma";
 import { PrismaCategoryMapper } from "../mappers/prisma-category-mapper";
+import { prisma } from "../prisma";
 
 export class PrismaCategoryRepository implements CategoryRepository {
   async create(category: Category): Promise<void> {

@@ -1,6 +1,6 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { MakeBuyerAddress } from "test/factories/make-buyer-address";
+import { makeBuyerAddress } from "test/factories/make-buyer-address";
 import { GetBuyerOrderUseCase } from "./get-buyer-order";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { MakeOrder } from "test/factories/make-order";
@@ -22,7 +22,7 @@ describe("Get Buyer Order", () => {
       new UniqueEntityID("user-buyer-order-test-id"),
     );
 
-    const buyerAddress = await MakeBuyerAddress(
+    const buyerAddress = await makeBuyerAddress(
       { buyerId: user.id },
       new UniqueEntityID("buyer-order-test-id"),
     );

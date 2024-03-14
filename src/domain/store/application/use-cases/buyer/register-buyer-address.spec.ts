@@ -3,7 +3,7 @@ import { RegisterBuyerAddressUseCase } from "./register-buyer-address";
 import { InMemoryBuyerAddressRepository } from "test/repositories/in-memory-buyer-address-repository";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { MakeBuyerAddress } from "test/factories/make-buyer-address";
+import { makeBuyerAddress } from "test/factories/make-buyer-address";
 import { makeUser } from "test/factories/make-user";
 
 let buyerAddressRepository: InMemoryBuyerAddressRepository;
@@ -30,7 +30,7 @@ describe("Buyer Address", () => {
 
     await usersRepository.create(user);
 
-    const buyerAddress = await MakeBuyerAddress({ buyerId: user.id });
+    const buyerAddress = await makeBuyerAddress({ buyerId: user.id });
 
     const result = await sut.execute({
       buyerId: buyerAddress.buyerId.toString(),

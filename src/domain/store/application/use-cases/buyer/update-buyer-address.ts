@@ -2,10 +2,10 @@ import { Either, left, right } from "src/core/either";
 import { BuyerAddress } from "../../../enterprise/entities/buyer-address";
 import { BuyerAddressRepository } from "../../repositories/buyer-address-repository";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
-import { UniqueEntityID } from "src/core/entities/unique-entity-id";
+import { AddressNotFoundError } from "../errors/address-not-found-error";
 
-interface UpdatedBuyerAddressUseCaseRequest {
-  buyerId: string;
+interface UpdateBuyerAddressUseCaseRequest {
+  addressId: string;
   cep: number;
   city: string;
   uf: string;
@@ -18,18 +18,18 @@ interface UpdatedBuyerAddressUseCaseRequest {
   email: string;
 }
 
-type UpdatedBuyerAddressUseCaseResponse = Either<
+type UpdateBuyerAddressUseCaseResponse = Either<
   UserNotFoundError,
   {
-    newBuyerAddress: BuyerAddress;
+    buyerAddressUpdated: BuyerAddress;
   }
 >;
 
-export class UpdatedBuyerAddressUseCase {
+export class UpdateBuyerAddressUseCase {
   constructor(private buyerAddressRepository: BuyerAddressRepository) {}
 
   async execute({
-    buyerId,
+    addressId,
     cep,
     city,
     uf,
@@ -40,15 +40,14 @@ export class UpdatedBuyerAddressUseCase {
     phoneNumber,
     username,
     email,
-  }: UpdatedBuyerAddressUseCaseRequest): Promise<UpdatedBuyerAddressUseCaseResponse> {
-    const buyerAddress = await this.buyerAddressRepository.findById(buyerId);
+  }: UpdateBuyerAddressUseCaseRequest): Promise<UpdateBuyerAddressUseCaseResponse> {
+    const buyerAddress = await this.buyerAddressRepository.findById(addressId);
 
     if (!buyerAddress) {
-      return left(new UserNotFoundError());
+      return left(new AddressNotFoundError());
     }
 
-    const newBuyerAddress = BuyerAddress.create({
-      buyerId: new UniqueEntityID(buyerAddress.id.toString()),
+    const buyerAddressUpdated = buyerAddress.update({
       cep,
       city,
       uf,
@@ -61,9 +60,8 @@ export class UpdatedBuyerAddressUseCase {
       email,
     });
 
-    await this.buyerAddressRepository.update(newBuyerAddress);
-    // Todo
+    await this.buyerAddressRepository.update(buyerAddressUpdated);
 
-    return right({ newBuyerAddress });
+    return right({ buyerAddressUpdated });
   }
 }

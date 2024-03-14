@@ -2,6 +2,7 @@ import { expect, describe, test, beforeEach } from "vitest";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { GetBuyerProfileUseCase } from "./get-buyer-profile";
 import { makeUser } from "test/factories/make-user";
+import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 
 let usersRepository: InMemoryUsersRepository;
 let sut: GetBuyerProfileUseCase;
@@ -34,5 +35,6 @@ describe("Get Buyer Profile", () => {
     const result = await sut.execute({ buyerId: "wrong-id" });
 
     expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError);
   });
 });
