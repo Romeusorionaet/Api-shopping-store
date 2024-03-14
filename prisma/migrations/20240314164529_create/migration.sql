@@ -4,6 +4,9 @@ CREATE TYPE "ModeOfSale" AS ENUM ('SELLS_ONLY_IN_THE_REGION', 'ONLINE_STORE');
 -- CreateEnum
 CREATE TYPE "OrderStatus" AS ENUM ('WAITING_FOR_PAYMENT', 'PAYMENT_CONFIRMED');
 
+-- CreateEnum
+CREATE TYPE "AddressRole" AS ENUM ('ORDER', 'BUYER');
+
 -- CreateTable
 CREATE TABLE "categories" (
     "id" TEXT NOT NULL,
@@ -91,6 +94,9 @@ CREATE TABLE "buyer_address" (
     "phone_number" INTEGER NOT NULL,
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "role" "AddressRole" NOT NULL DEFAULT 'BUYER',
     "buyerId" TEXT NOT NULL,
 
     CONSTRAINT "buyer_address_pkey" PRIMARY KEY ("id")
