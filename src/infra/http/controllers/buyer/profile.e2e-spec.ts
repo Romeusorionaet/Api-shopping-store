@@ -11,11 +11,11 @@ describe("Profile (E2E)", () => {
     await app.close();
   });
 
-  test("[GET] /user/profile", async () => {
+  test("[GET] /buyer/profile", async () => {
     const { accessToken } = await createAndAuthenticateUser(app);
 
     const result = await request(app.server)
-      .get("/user/profile")
+      .get("/buyer/profile")
       .set("Authorization", `Bearer ${accessToken}`);
 
     expect(result.statusCode).toEqual(200);
