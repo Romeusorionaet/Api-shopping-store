@@ -16,5 +16,7 @@ export async function profile(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(400).send({ error: err.message });
   }
 
-  return reply.status(200).send(BuyerPresenter.toHTTP(result.value.buyer));
+  return reply
+    .status(200)
+    .send({ profile: BuyerPresenter.toHTTP(result.value.buyer) });
 }

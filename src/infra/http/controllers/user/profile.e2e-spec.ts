@@ -19,10 +19,10 @@ describe("Profile (E2E)", () => {
       .set("Authorization", `Bearer ${accessToken}`);
 
     expect(result.statusCode).toEqual(200);
-    expect(result.body).toEqual(
-      expect.objectContaining({
+    expect(result.body).toEqual({
+      profile: expect.objectContaining({
         email: "romeusoaresdesouto@gmail.com",
       }),
-    );
+    });
   });
 });

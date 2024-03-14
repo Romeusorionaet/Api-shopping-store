@@ -105,18 +105,24 @@ model User {
   @@map("users")
 }
 
+enum AddressRole {
+  ORDER
+  BUYER
+}
+
 model BuyerAddress {
-  id           String @id @default(uuid())
+  id           String      @id @default(uuid())
   cep          Int
   city         String
   uf           String
   street       String
   neighborhood String
-  houseNumber  Int    @map("house_number")
+  houseNumber  Int         @map("house_number")
   complement   String
-  phoneNumber  Int    @map("phone_number")
+  phoneNumber  Int         @map("phone_number")
   username     String
   email        String
+  role         AddressRole @default(BUYER)
 
   buyerId String
 
