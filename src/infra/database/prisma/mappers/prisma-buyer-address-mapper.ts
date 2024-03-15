@@ -17,7 +17,6 @@ export class PrismaBuyerAddressMapper {
         phoneNumber: raw.phoneNumber,
         street: raw.street,
         uf: raw.uf,
-        role: raw.role,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
       },
@@ -41,7 +40,6 @@ export class PrismaBuyerAddressMapper {
       phoneNumber: buyerAddress.phoneNumber,
       street: buyerAddress.street,
       uf: buyerAddress.uf,
-      role: buyerAddress.role,
       createdAt: buyerAddress.createdAt,
       updatedAt: buyerAddress.updatedAt,
     };

@@ -4,6 +4,8 @@ import {
   BuyerAddress,
   BuyerAddressProps,
 } from "src/domain/store/enterprise/entities/buyer-address";
+import { prisma } from "src/infra/database/prisma/prisma";
+import { PrismaBuyerAddressMapper } from "src/infra/database/prisma/mappers/prisma-buyer-address-mapper";
 
 export async function makeBuyerAddress(
   override: Partial<BuyerAddressProps> = {},
@@ -28,4 +30,18 @@ export async function makeBuyerAddress(
   );
 
   return buyerAddress;
+}
+
+export class BuyerAddressFactory {
+  async makePrismaBuyerAddress(
+    data: Partial<BuyerAddressProps> = {},
+  ): Promise<BuyerAddress> {
+    const buyerAddress = await makeBuyerAddress(data);
+
+    await prisma.buyerAddress.create({
+      data: PrismaBuyerAddressMapper.toPrisma(buyerAddress),
+    });
+
+    return buyerAddress;
+  }
 }

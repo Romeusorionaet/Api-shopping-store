@@ -1,14 +1,14 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { UserNotFoundError } from "src/core/errors/user-not-found-error";
-import { makeCreateBuyerAddressUseCase } from "src/domain/store/application/use-cases/factories/make-create-buyer-address-use-case";
+import { AddressNotFoundError } from "src/domain/store/application/use-cases/errors/address-not-found-error";
+import { makeUpdateBuyerAddressUseCase } from "src/domain/store/application/use-cases/factories/make-update-buyer-address-use-case";
 import { z } from "zod";
 
-export async function createBuyerAddress(
+export async function updateBuyerAddress(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const createBuyerAddressBodySchema = z.object({
-    buyerId: z.string(),
+  const updateBuyerAddressBodySchema = z.object({
+    addressId: z.string(),
     cep: z.coerce.number().refine((value) => value.toString().length === 8, {
       message: "O CEP deve ter 8 dígitos",
     }),
@@ -26,17 +26,16 @@ export async function createBuyerAddress(
     username: z.string(),
     email: z.string(),
   });
+  const dataBuyerAddress = updateBuyerAddressBodySchema.parse(request.body);
 
-  const dataBuyerAddress = createBuyerAddressBodySchema.parse(request.body);
+  const updateBuyerAddressUseCase = makeUpdateBuyerAddressUseCase();
 
-  const createBuyerAddressUseCase = makeCreateBuyerAddressUseCase();
-
-  const result = await createBuyerAddressUseCase.execute(dataBuyerAddress);
+  const result = await updateBuyerAddressUseCase.execute(dataBuyerAddress);
 
   if (result.isLeft()) {
     const err = result.value;
     switch (err.constructor) {
-      case UserNotFoundError:
+      case AddressNotFoundError:
         return reply.status(400).send({
           error: err.message,
         });
