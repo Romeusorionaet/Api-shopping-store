@@ -1,28 +1,28 @@
 import { expect, describe, test, beforeEach } from "vitest";
-import { RegisterBuyerAddressUseCase } from "./register-buyer-address";
 import { InMemoryBuyerAddressRepository } from "test/repositories/in-memory-buyer-address-repository";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { makeBuyerAddress } from "test/factories/make-buyer-address";
 import { makeUser } from "test/factories/make-user";
+import { CreateBuyerAddressUseCase } from "./create-buyer-address";
 
 let buyerAddressRepository: InMemoryBuyerAddressRepository;
 let usersRepository: InMemoryUsersRepository;
-let sut: RegisterBuyerAddressUseCase;
+let sut: CreateBuyerAddressUseCase;
 
-describe("Buyer Address", () => {
+describe("Create Buyer Address", () => {
   beforeEach(() => {
     buyerAddressRepository = new InMemoryBuyerAddressRepository();
 
     usersRepository = new InMemoryUsersRepository();
 
-    sut = new RegisterBuyerAddressUseCase(
+    sut = new CreateBuyerAddressUseCase(
       buyerAddressRepository,
       usersRepository,
     );
   });
 
-  test("should be able to register buyer address", async () => {
+  test("should be able to create buyer address", async () => {
     const user = await makeUser(
       {},
       new UniqueEntityID("register-user-test-id"),

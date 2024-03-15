@@ -5,7 +5,7 @@ import { BuyerAddressRepository } from "../../repositories/buyer-address-reposit
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 
-interface RegisterBuyerAddressUseCaseRequest {
+interface CreateBuyerAddressUseCaseRequest {
   buyerId: string;
   cep: number;
   city: string;
@@ -19,14 +19,14 @@ interface RegisterBuyerAddressUseCaseRequest {
   email: string;
 }
 
-type RegisterBuyerAddressUseCaseResponse = Either<
+type CreateBuyerAddressUseCaseResponse = Either<
   UserNotFoundError,
   {
     buyerAddress: BuyerAddress;
   }
 >;
 
-export class RegisterBuyerAddressUseCase {
+export class CreateBuyerAddressUseCase {
   constructor(
     private buyerAddressRepository: BuyerAddressRepository,
     private usersRepository: UsersRepository,
@@ -44,7 +44,7 @@ export class RegisterBuyerAddressUseCase {
     phoneNumber,
     username,
     email,
-  }: RegisterBuyerAddressUseCaseRequest): Promise<RegisterBuyerAddressUseCaseResponse> {
+  }: CreateBuyerAddressUseCaseRequest): Promise<CreateBuyerAddressUseCaseResponse> {
     const buyer = await this.usersRepository.findById(buyerId);
 
     if (!buyer) {

@@ -9,7 +9,7 @@ export async function createBuyerAddress(
 ) {
   const createBuyerAddressBodySchema = z.object({
     buyerId: z.string(),
-    cep: z.number().refine((value) => value.toString().length === 8, {
+    cep: z.coerce.number().refine((value) => value.toString().length === 8, {
       message: "O CEP deve ter 8 dígitos",
     }),
     city: z.string(),
@@ -18,7 +18,11 @@ export async function createBuyerAddress(
     neighborhood: z.string(),
     houseNumber: z.coerce.number(),
     complement: z.string(),
-    phoneNumber: z.coerce.number(),
+    phoneNumber: z.coerce
+      .number()
+      .refine((value) => value.toString().length === 10, {
+        message: "O número de telefone deve ter 8 dígitos",
+      }),
     username: z.string(),
     email: z.string(),
   });
