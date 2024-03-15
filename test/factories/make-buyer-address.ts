@@ -12,14 +12,14 @@ export async function makeBuyerAddress(
   const buyerAddress = BuyerAddress.create(
     {
       buyerId: new UniqueEntityID(),
-      cep: faker.number.int(),
+      cep: 12345678,
       city: faker.lorem.sentence(2),
       uf: faker.lorem.word(2),
       street: faker.lorem.sentence(3),
       neighborhood: faker.lorem.sentence(3),
-      houseNumber: faker.number.int(),
+      houseNumber: 489,
       complement: faker.lorem.sentence(4),
-      phoneNumber: faker.number.int(),
+      phoneNumber: 1234567891,
       username: faker.person.fullName(),
       email: "example@gmail.com",
       ...override,
