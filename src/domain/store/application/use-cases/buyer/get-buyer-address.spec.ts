@@ -24,7 +24,7 @@ describe("Get buyer Address", () => {
 
     await usersRepository.create(user);
 
-    const buyerAddress = await makeBuyerAddress(
+    const buyerAddress = makeBuyerAddress(
       { buyerId: user.id },
       new UniqueEntityID("address id 01"),
     );
@@ -32,7 +32,7 @@ describe("Get buyer Address", () => {
     await buyerAddressRepository.create(buyerAddress);
 
     const result = await sut.execute({
-      buyerId: buyerAddress.id.toString(),
+      buyerId: buyerAddress.buyerId.toString(),
     });
 
     expect(result.isRight()).toBe(true);

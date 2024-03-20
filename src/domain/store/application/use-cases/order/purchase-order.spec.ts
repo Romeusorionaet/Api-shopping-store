@@ -30,6 +30,8 @@ describe("Purchase Order", () => {
       new UniqueEntityID("buyer-address-id-01"),
     );
 
+    await buyerAddressRepository.create(buyerAddress);
+
     const orderProductFirst = makeOrderProduct(
       {},
       new UniqueEntityID("order-product-id-01"),
@@ -44,8 +46,6 @@ describe("Purchase Order", () => {
 
     orderProducts.push(orderProductFirst);
     orderProducts.push(orderProductSecond);
-
-    await buyerAddressRepository.create(buyerAddress);
 
     const result = await sut.execute({
       buyerId: user.id.toString(),

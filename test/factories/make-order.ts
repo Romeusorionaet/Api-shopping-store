@@ -4,6 +4,8 @@ import { makeBuyerAddress } from "./make-buyer-address";
 import { OrderStatus } from "src/core/entities/order-status";
 import { OrderStatusTracking } from "src/core/entities/order-status-tracking";
 import { makeOrderProduct } from "./make-order-product";
+import { prisma } from "src/infra/database/prisma/prisma";
+import { PrismaOrderMapper } from "src/infra/database/prisma/mappers/prisma-order-mapper";
 
 export async function makeOrder(
   override: Partial<OrderProps> = {},
@@ -32,4 +34,16 @@ export async function makeOrder(
   );
 
   return order;
+}
+
+export class OrderFactory {
+  async makePrismaOrder(data: Partial<OrderProps> = {}): Promise<Order> {
+    const order = await makeOrder(data);
+
+    await prisma.order.create({
+      data: PrismaOrderMapper.toPrisma(order),
+    });
+
+    return order;
+  }
 }

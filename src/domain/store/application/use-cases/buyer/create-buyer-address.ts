@@ -4,6 +4,7 @@ import { BuyerAddress } from "../../../enterprise/entities/buyer-address";
 import { BuyerAddressRepository } from "../../repositories/buyer-address-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
+import { AddressAlreadyExistError } from "../errors/address-already-exist-error";
 
 interface CreateBuyerAddressUseCaseRequest {
   buyerId: string;
@@ -20,7 +21,7 @@ interface CreateBuyerAddressUseCaseRequest {
 }
 
 type CreateBuyerAddressUseCaseResponse = Either<
-  UserNotFoundError,
+  UserNotFoundError | AddressAlreadyExistError,
   {
     buyerAddress: BuyerAddress;
   }
@@ -46,6 +47,17 @@ export class CreateBuyerAddressUseCase {
     email,
   }: CreateBuyerAddressUseCaseRequest): Promise<CreateBuyerAddressUseCaseResponse> {
     const buyer = await this.usersRepository.findById(buyerId);
+
+    const verifyBuyerAddress =
+      await this.buyerAddressRepository.findByBuyerId(buyerId);
+
+    const existBuyerAddress = !!verifyBuyerAddress?.find(
+      (item) => item.buyerId.toString() === buyerId && item.orderId === null,
+    );
+
+    if (existBuyerAddress) {
+      return left(new AddressAlreadyExistError());
+    }
 
     if (!buyer) {
       return left(new UserNotFoundError());

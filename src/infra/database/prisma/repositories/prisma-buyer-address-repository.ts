@@ -32,7 +32,6 @@ export class PrismaBuyerAddressRepository implements BuyerAddressRepository {
         buyerId,
       },
     });
-    console.log(buyerAddress);
 
     if (!buyerAddress) {
       return null;

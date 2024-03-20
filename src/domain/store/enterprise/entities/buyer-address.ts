@@ -93,6 +93,7 @@ export class BuyerAddress extends Entity<BuyerAddressProps> {
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
+        orderId: props.orderId ?? null,
       },
       id,
     );

@@ -30,7 +30,7 @@ export class InMemoryBuyerAddressRepository implements BuyerAddressRepository {
 
   async findByBuyerId(buyerId: string): Promise<BuyerAddress[] | null> {
     const buyerAddress = this.items.filter(
-      (items) => items.id.toString() === buyerId,
+      (items) => items.buyerId.toString() === buyerId,
     );
 
     if (!buyerAddress) {
