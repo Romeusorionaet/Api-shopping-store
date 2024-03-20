@@ -7,7 +7,7 @@ import {
 import { prisma } from "src/infra/database/prisma/prisma";
 import { PrismaBuyerAddressMapper } from "src/infra/database/prisma/mappers/prisma-buyer-address-mapper";
 
-export async function makeBuyerAddress(
+export function makeBuyerAddress(
   override: Partial<BuyerAddressProps> = {},
   id?: UniqueEntityID,
 ) {
@@ -36,7 +36,7 @@ export class BuyerAddressFactory {
   async makePrismaBuyerAddress(
     data: Partial<BuyerAddressProps> = {},
   ): Promise<BuyerAddress> {
-    const buyerAddress = await makeBuyerAddress(data);
+    const buyerAddress = makeBuyerAddress(data);
 
     await prisma.buyerAddress.create({
       data: PrismaBuyerAddressMapper.toPrisma(buyerAddress),

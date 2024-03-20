@@ -130,7 +130,6 @@ export class Product extends Entity<ProductProps> {
       },
       id,
     );
-
     return product;
   }
 }

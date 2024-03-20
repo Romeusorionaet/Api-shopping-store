@@ -4,7 +4,7 @@ import { prisma } from "src/infra/database/prisma/prisma";
 import request from "supertest";
 
 export async function createAndAuthenticateUser(app: FastifyInstance) {
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       username: "Romeu soares de souto",
       email: "romeusoaresdesouto@gmail.com",
@@ -19,5 +19,5 @@ export async function createAndAuthenticateUser(app: FastifyInstance) {
 
   const { accessToken } = result.body;
 
-  return { accessToken };
+  return { accessToken, user };
 }

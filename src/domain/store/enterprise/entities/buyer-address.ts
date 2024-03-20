@@ -4,6 +4,7 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 export interface BuyerAddressProps {
   buyerId: UniqueEntityID;
+  orderId?: UniqueEntityID | null;
   cep: number;
   city: string;
   uf: string;
@@ -21,6 +22,10 @@ export interface BuyerAddressProps {
 export class BuyerAddress extends Entity<BuyerAddressProps> {
   get buyerId() {
     return this.props.buyerId;
+  }
+
+  get orderId() {
+    return this.props.orderId;
   }
 
   get cep() {
@@ -81,7 +86,7 @@ export class BuyerAddress extends Entity<BuyerAddressProps> {
   }
 
   static create(
-    props: Optional<BuyerAddressProps, "createdAt">,
+    props: Optional<BuyerAddressProps, "createdAt" | "orderId">,
     id?: UniqueEntityID,
   ) {
     const buyerAddress = new BuyerAddress(

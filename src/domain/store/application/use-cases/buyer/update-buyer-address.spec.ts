@@ -23,10 +23,11 @@ describe("Register User", () => {
     const user = await makeUser();
     await usersRepository.create(user);
 
-    const buyerAddress = await makeBuyerAddress(
+    const buyerAddress = makeBuyerAddress(
       { buyerId: user.id },
       new UniqueEntityID("address id 123"),
     );
+
     await buyerAddressRepository.create(buyerAddress);
 
     const result = await sut.execute({
@@ -46,7 +47,6 @@ describe("Register User", () => {
     expect(result.isRight()).toBe(true);
 
     if (result.isRight()) {
-      console.log(result.value.buyerAddressUpdated);
       expect(result.value.buyerAddressUpdated).toEqual(
         expect.objectContaining({
           id: new UniqueEntityID("address id 123"),
