@@ -9,14 +9,14 @@ export async function getBuyerAddress(
   reply: FastifyReply,
 ) {
   const getBuyerAddressParamsSchema = z.object({
-    addressId: z.string().uuid(),
+    buyerId: z.string().uuid(),
   });
 
-  const { addressId } = getBuyerAddressParamsSchema.parse(request.params);
+  const { buyerId } = getBuyerAddressParamsSchema.parse(request.params);
 
   const getBuyerAddressUseCase = makeGetBuyerAddressUseCase();
 
-  const result = await getBuyerAddressUseCase.execute({ addressId });
+  const result = await getBuyerAddressUseCase.execute({ buyerId });
 
   if (result.isLeft()) {
     const err = result.value;
@@ -31,6 +31,6 @@ export async function getBuyerAddress(
   }
 
   return reply.status(200).send({
-    buyerAddress: BuyerAddressPresenter.toHTTP(result.value.buyerAddress),
+    buyerAddress: result.value.buyerAddress.map(BuyerAddressPresenter.toHTTP),
   });
 }

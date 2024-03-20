@@ -9,5 +9,5 @@ export async function buyerRoutes(app: FastifyInstance) {
   app.get("/buyer/profile", { onRequest: [verifyJWT] }, profile);
   app.post("/buyer/create-buyer-address", createBuyerAddress);
   app.put("/buyer/update-buyer-address", updateBuyerAddress);
-  app.get("/buyer/buyer-address/:addressId", getBuyerAddress);
+  app.get("/buyer/buyer-address/:buyerId", getBuyerAddress);
 }

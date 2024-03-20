@@ -32,7 +32,7 @@ describe("Get buyer Address", () => {
     await buyerAddressRepository.create(buyerAddress);
 
     const result = await sut.execute({
-      addressId: buyerAddress.id.toString(),
+      buyerId: buyerAddress.id.toString(),
     });
 
     expect(result.isRight()).toBe(true);
@@ -41,9 +41,11 @@ describe("Get buyer Address", () => {
 
     if (result.isRight()) {
       expect(result.value.buyerAddress).toEqual(
-        expect.objectContaining({
-          id: new UniqueEntityID("address id 01"),
-        }),
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: new UniqueEntityID("address id 01"),
+          }),
+        ]),
       );
     }
   });

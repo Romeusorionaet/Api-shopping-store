@@ -26,6 +26,21 @@ export class PrismaBuyerAddressRepository implements BuyerAddressRepository {
     return PrismaBuyerAddressMapper.toDomain(buyerAddress);
   }
 
+  async findByBuyerId(buyerId: string): Promise<BuyerAddress[] | null> {
+    const buyerAddress = await prisma.buyerAddress.findMany({
+      where: {
+        buyerId,
+      },
+    });
+    console.log(buyerAddress);
+
+    if (!buyerAddress) {
+      return null;
+    }
+
+    return buyerAddress.map(PrismaBuyerAddressMapper.toDomain);
+  }
+
   async update(buyerAddress: BuyerAddress): Promise<void> {
     const data = PrismaBuyerAddressMapper.toPrisma(buyerAddress);
 

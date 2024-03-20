@@ -16,29 +16,29 @@ describe("Get buyer address (E2E)", () => {
     await app.close();
   });
 
-  test("[GET] /buyer/create-buyer-address", async () => {
+  test("[GET] /buyer/create-buyer-address/:buyerId", async () => {
     const { accessToken } = await createAndAuthenticateUser(app);
 
     const responseProfile = await request(app.server)
       .get("/buyer/profile")
       .set("Authorization", `Bearer ${accessToken}`);
 
-    const userId = responseProfile.body.profile.id;
+    const buyerId = responseProfile.body.profile.id;
 
-    const buyerAddress = await buyerAddressFactory.makePrismaBuyerAddress({
-      buyerId: userId,
+    await buyerAddressFactory.makePrismaBuyerAddress({
+      buyerId,
       city: "Canguaretama",
     });
 
-    const buyerAddressId = buyerAddress.id.toString();
-
     const result = await request(app.server).get(
-      `/buyer/buyer-address/${buyerAddressId}`,
+      `/buyer/buyer-address/${buyerId}`,
     );
 
     expect(result.statusCode).toBe(200);
     expect(result.body.buyerAddress).toEqual(
-      expect.objectContaining({ city: "Canguaretama" }),
+      expect.objectContaining([
+        expect.objectContaining({ city: "Canguaretama" }),
+      ]),
     );
   });
 });

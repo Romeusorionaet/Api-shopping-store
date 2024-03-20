@@ -4,6 +4,10 @@ import { BuyerAddress } from "src/domain/store/enterprise/entities/buyer-address
 export class InMemoryBuyerAddressRepository implements BuyerAddressRepository {
   public items: BuyerAddress[] = [];
 
+  async create(data: BuyerAddress): Promise<void> {
+    this.items.push(data);
+  }
+
   async update(buyerAddress: BuyerAddress): Promise<void> {
     const itemIndex = this.items.findIndex(
       (item) => item.id === buyerAddress.id,
@@ -24,7 +28,15 @@ export class InMemoryBuyerAddressRepository implements BuyerAddressRepository {
     return buyerAddress;
   }
 
-  async create(data: BuyerAddress): Promise<void> {
-    this.items.push(data);
+  async findByBuyerId(buyerId: string): Promise<BuyerAddress[] | null> {
+    const buyerAddress = this.items.filter(
+      (items) => items.id.toString() === buyerId,
+    );
+
+    if (!buyerAddress) {
+      return null;
+    }
+
+    return buyerAddress;
   }
 }
