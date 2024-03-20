@@ -25,6 +25,8 @@ describe("Create Product", () => {
       new UniqueEntityID("category-id-01"),
     );
 
+    await categoryRepository.create(category);
+
     const product = makeProduct({
       categoryId: category.id,
       title: "first product register 01",

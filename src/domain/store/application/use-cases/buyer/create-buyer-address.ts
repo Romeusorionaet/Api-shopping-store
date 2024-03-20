@@ -51,7 +51,7 @@ export class CreateBuyerAddressUseCase {
     const verifyBuyerAddress =
       await this.buyerAddressRepository.findByBuyerId(buyerId);
 
-    const existBuyerAddress = !!verifyBuyerAddress?.find(
+    const existBuyerAddress = verifyBuyerAddress?.some(
       (item) => item.buyerId.toString() === buyerId && item.orderId === null,
     );
 
