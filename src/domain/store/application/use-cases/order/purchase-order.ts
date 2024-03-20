@@ -32,6 +32,10 @@ export class PurchaseOrderUseCase {
   }: PurchaseOrderUseCaseRequest): Promise<PurchaseOrderUseCaseResponse> {
     const address = await this.buyerAddressRepository.findById(addressId);
 
+    // falta
+    // tratamento de erro caso não encontre buyerId
+    // tratamento de erro caso não encontre productId que vem dentro do orderProducts
+
     if (!address) {
       return left(new OrderWithEmptyAddressError());
     }

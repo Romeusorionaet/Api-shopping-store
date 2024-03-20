@@ -4,6 +4,8 @@ import { Product } from "../../../enterprise/entities/product";
 import { Either, left, right } from "src/core/either";
 import { ModeOfSale } from "src/core/entities/mode-of-sale";
 import { ProductAlreadyExistsError } from "../errors/product-already-exists-error";
+import { CategoryRepository } from "../../repositories/category-repository";
+import { TheAssignedCategoryDoesNotExistError } from "../errors/the-assigned-category-does-not-exist-error";
 
 interface CreateProductUseCaseRequest {
   categoryId: string;
@@ -24,12 +26,15 @@ interface CreateProductUseCaseRequest {
 }
 
 type CreateProductUseCaseResponse = Either<
-  ProductAlreadyExistsError,
+  ProductAlreadyExistsError | TheAssignedCategoryDoesNotExistError,
   { product: Product }
 >;
 
 export class CreateProductUseCase {
-  constructor(private productRepository: ProductRepository) {}
+  constructor(
+    private productRepository: ProductRepository,
+    private categoryRepository: CategoryRepository,
+  ) {}
 
   async execute({
     categoryId,
@@ -49,6 +54,12 @@ export class CreateProductUseCase {
     stars,
   }: CreateProductUseCaseRequest): Promise<CreateProductUseCaseResponse> {
     const existProduct = await this.productRepository.findByTitle(title);
+
+    const existCategory = await this.categoryRepository.findById(categoryId);
+
+    if (!existCategory) {
+      return left(new TheAssignedCategoryDoesNotExistError());
+    }
 
     if (existProduct) {
       return left(new ProductAlreadyExistsError(existProduct.title));
@@ -71,6 +82,7 @@ export class CreateProductUseCase {
       placeOfSale,
       stars,
     });
+
     await this.productRepository.create(product);
 
     return right({ product });

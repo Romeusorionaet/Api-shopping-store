@@ -4,14 +4,19 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 import { makeCategory } from "test/factories/make-category";
 import { makeProduct } from "test/factories/make-product";
+import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 
 let productsRepository: InMemoryProductsRepository;
+let categoryRepository: InMemoryCategoriesRepository;
 let sut: CreateProductUseCase;
 
 describe("Create Product", () => {
   beforeEach(() => {
     productsRepository = new InMemoryProductsRepository();
-    sut = new CreateProductUseCase(productsRepository);
+
+    categoryRepository = new InMemoryCategoriesRepository();
+
+    sut = new CreateProductUseCase(productsRepository, categoryRepository);
   });
 
   test("should be able create a product", async () => {

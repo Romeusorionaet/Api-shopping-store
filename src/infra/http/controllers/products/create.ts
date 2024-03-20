@@ -1,6 +1,7 @@
 import { ModeOfSale } from "@prisma/client";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ProductAlreadyExistsError } from "src/domain/store/application/use-cases/errors/product-already-exists-error";
+import { TheAssignedCategoryDoesNotExistError } from "src/domain/store/application/use-cases/errors/the-assigned-category-does-not-exist-error";
 import { makeCreateProductUseCase } from "src/domain/store/application/use-cases/factories/make-create-product-use-case";
 import { z } from "zod";
 
@@ -33,9 +34,19 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   const result = await createProductUseCase.execute(productData);
 
   if (result.isLeft()) {
-    const err: ProductAlreadyExistsError = result.value;
-
-    return reply.status(400).send({ error: err.message });
+    const err = result.value;
+    switch (err.constructor) {
+      case ProductAlreadyExistsError:
+        return reply.status(400).send({
+          error: err.message,
+        });
+      case TheAssignedCategoryDoesNotExistError:
+        return reply.status(400).send({
+          error: err.message,
+        });
+      default:
+        throw new Error(err.message);
+    }
   }
 
   return reply.status(201).send();
