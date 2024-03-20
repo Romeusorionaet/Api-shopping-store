@@ -2,14 +2,14 @@ import { Either, left, right } from "src/core/either";
 import { OrderRepository } from "../../repositories/order-repository";
 import { Order } from "../../../enterprise/entities/order";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { BuyerAddress } from "../../../enterprise/entities/buyer-address";
 import { OrderWithEmptyAddressError } from "../errors/order-with-empty-address-error";
+import { BuyerAddressRepository } from "../../repositories/buyer-address-repository";
+import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
 
 interface PurchaseOrderUseCaseRequest {
-  productId: string;
   buyerId: string;
-  buyerAddress: BuyerAddress;
-  quantity: number;
+  addressId: string;
+  orderProducts: OrderProduct[];
 }
 
 type PurchaseOrderUseCaseResponse = Either<
@@ -20,28 +20,33 @@ type PurchaseOrderUseCaseResponse = Either<
 >;
 
 export class PurchaseOrderUseCase {
-  constructor(private orderRepository: OrderRepository) {}
+  constructor(
+    private orderRepository: OrderRepository,
+    private buyerAddressRepository: BuyerAddressRepository,
+  ) {}
 
   async execute({
-    productId,
     buyerId,
-    buyerAddress,
-    quantity,
+    addressId,
+    orderProducts,
   }: PurchaseOrderUseCaseRequest): Promise<PurchaseOrderUseCaseResponse> {
-    const order = Order.create({
-      buyerId: new UniqueEntityID(buyerId),
-      productId: new UniqueEntityID(productId),
-      buyerAddress,
-      quantity,
-    });
+    const address = await this.buyerAddressRepository.findById(addressId);
 
-    const hasBuyerAddress = Object.keys(order.buyerAddress).length === 0;
-
-    if (hasBuyerAddress) {
+    if (!address) {
       return left(new OrderWithEmptyAddressError());
     }
 
+    const order = Order.create({
+      buyerId: new UniqueEntityID(buyerId),
+      buyerAddress: address,
+      orderProducts,
+    });
+
     await this.orderRepository.create(order);
+
+    const buyerAddress = address.update({ orderId: order.id });
+
+    await this.buyerAddressRepository.update(buyerAddress);
 
     return right({ order });
   }

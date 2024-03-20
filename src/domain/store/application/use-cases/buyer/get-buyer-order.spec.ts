@@ -1,9 +1,8 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { makeBuyerAddress } from "test/factories/make-buyer-address";
 import { GetBuyerOrderUseCase } from "./get-buyer-order";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
-import { MakeOrder } from "test/factories/make-order";
+import { makeOrder } from "test/factories/make-order";
 import { makeUser } from "test/factories/make-user";
 
 let ordersRepository: InMemoryOrdersRepository;
@@ -22,13 +21,7 @@ describe("Get Buyer Order", () => {
       new UniqueEntityID("user-buyer-order-test-id"),
     );
 
-    const buyerAddress = await makeBuyerAddress(
-      { buyerId: user.id },
-      new UniqueEntityID("buyer-order-test-id"),
-    );
-
-    const order = await MakeOrder({
-      buyerAddress,
+    const order = await makeOrder({
       buyerId: user.id,
     });
 
@@ -42,12 +35,6 @@ describe("Get Buyer Order", () => {
       expect(result.value.order).toEqual(
         expect.objectContaining({
           buyerId: new UniqueEntityID("user-buyer-order-test-id"),
-        }),
-      );
-
-      expect(result.value.order.buyerAddress).toEqual(
-        expect.objectContaining({
-          id: new UniqueEntityID("buyer-order-test-id"),
         }),
       );
     }
