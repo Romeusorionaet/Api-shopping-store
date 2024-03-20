@@ -129,10 +129,10 @@ model OrderProduct {
   quantity           Int
 
   productId String
-  orderId   String
+  orderId   String?
 
   product Product @relation(fields: [productId], references: [id])
-  order   Order   @relation(fields: [orderId], references: [id])
+  order   Order?  @relation(fields: [orderId], references: [id])
 
   @@map("order_products")
 }
