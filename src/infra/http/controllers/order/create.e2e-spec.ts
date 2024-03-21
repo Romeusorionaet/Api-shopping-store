@@ -25,8 +25,8 @@ describe("Create Order (E2E)", () => {
   });
 
   test("[POST] /order/create", async () => {
-    const buyer = await createAndAuthenticateUser(app);
-    const buyerId = buyer.user.id;
+    const { user, accessToken } = await createAndAuthenticateUser(app);
+    const buyerId = user.id;
 
     const buyerAddress = await buyerAddressFactory.makePrismaBuyerAddress({
       buyerId: new UniqueEntityID(buyerId),
@@ -63,11 +63,14 @@ describe("Create Order (E2E)", () => {
     orderProducts.push(orderProductFirst);
     orderProducts.push(orderProductSecond);
 
-    const response = await request(app.server).post("/order/create").send({
-      buyerId,
-      addressId: buyerAddress.id.toString(),
-      orderProducts,
-    });
+    const response = await request(app.server)
+      .post("/order/create")
+      .send({
+        buyerId,
+        addressId: buyerAddress.id.toString(),
+        orderProducts,
+      })
+      .set("Authorization", `Bearer ${accessToken}`);
 
     expect(response.statusCode).toEqual(201);
 
