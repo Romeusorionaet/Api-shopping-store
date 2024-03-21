@@ -57,7 +57,7 @@ model BuyerAddress {
   orderId String?
 
   user  User   @relation(fields: [buyerId], references: [id])
-  Order Order? @relation(fields: [orderId], references: [id])
+  Order Order? @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("buyer_address")
 }
@@ -132,7 +132,7 @@ model OrderProduct {
   orderId   String?
 
   product Product @relation(fields: [productId], references: [id])
-  order   Order?  @relation(fields: [orderId], references: [id])
+  order   Order?  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("order_products")
 }

@@ -35,7 +35,8 @@ describe("Create buyer address (E2E)", () => {
         phoneNumber: 1234567891,
         username: "romeu soares",
         email: "romeusoaresdesouto@gmail.com",
-      });
+      })
+      .set("Authorization", `Bearer ${accessToken}`);
 
     expect(result.statusCode).toBe(201);
 

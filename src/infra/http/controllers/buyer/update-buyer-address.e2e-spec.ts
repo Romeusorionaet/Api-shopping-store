@@ -46,7 +46,8 @@ describe("Update buyer address (E2E)", () => {
         phoneNumber: buyerAddress.phoneNumber,
         username: buyerAddress.username,
         email: buyerAddress.email,
-      });
+      })
+      .set("Authorization", `Bearer ${accessToken}`);
 
     expect(result.statusCode).toBe(201);
 

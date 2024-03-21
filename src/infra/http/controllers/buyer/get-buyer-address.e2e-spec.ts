@@ -30,9 +30,9 @@ describe("Get buyer address (E2E)", () => {
       city: "Canguaretama",
     });
 
-    const result = await request(app.server).get(
-      `/buyer/buyer-address/${buyerId}`,
-    );
+    const result = await request(app.server)
+      .get(`/buyer/buyer-address/${buyerId}`)
+      .set("Authorization", `Bearer ${accessToken}`);
 
     expect(result.statusCode).toBe(200);
     expect(result.body.buyerAddress).toEqual(
