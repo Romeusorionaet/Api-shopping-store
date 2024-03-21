@@ -16,9 +16,16 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   const result = await createCategoryUseCase.execute(categoryData);
 
   if (result.isLeft()) {
-    const err: CategoryAlreadyExistsError = result.value;
+    const err = result.value;
+    switch (err.constructor) {
+      case CategoryAlreadyExistsError:
+        return reply.status(400).send({
+          error: err.message,
+        });
 
-    return reply.status(400).send({ error: err.message });
+      default:
+        throw new Error(err.message);
+    }
   }
 
   return reply.status(201).send();

@@ -3,7 +3,7 @@ import { UserAlreadyExistsError } from "src/domain/store/application/use-cases/e
 import { makeRegisterUserUseCase } from "src/domain/store/application/use-cases/factories/make-register-user-use-case";
 import { z } from "zod";
 
-export async function create(request: FastifyRequest, reply: FastifyReply) {
+export async function register(request: FastifyRequest, reply: FastifyReply) {
   const createRegisterUserBodySchema = z.object({
     username: z.string(),
     email: z.string().email(),
@@ -23,9 +23,16 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   });
 
   if (result.isLeft()) {
-    const err: UserAlreadyExistsError = result.value;
+    const err = result.value;
+    switch (err.constructor) {
+      case UserAlreadyExistsError:
+        return reply.status(400).send({
+          error: err.message,
+        });
 
-    return reply.status(400).send({ error: err.message });
+      default:
+        throw new Error(err.message);
+    }
   }
 
   return reply.status(201).send();

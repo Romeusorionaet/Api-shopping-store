@@ -5,6 +5,8 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { OrderWithEmptyAddressError } from "../errors/order-with-empty-address-error";
 import { BuyerAddressRepository } from "../../repositories/buyer-address-repository";
 import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
+import { UsersRepository } from "../../repositories/users-repository";
+import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 
 interface PurchaseOrderUseCaseRequest {
   buyerId: string;
@@ -13,7 +15,7 @@ interface PurchaseOrderUseCaseRequest {
 }
 
 type PurchaseOrderUseCaseResponse = Either<
-  OrderWithEmptyAddressError,
+  OrderWithEmptyAddressError | UserNotFoundError,
   {
     order: Order;
   }
@@ -23,6 +25,7 @@ export class PurchaseOrderUseCase {
   constructor(
     private orderRepository: OrderRepository,
     private buyerAddressRepository: BuyerAddressRepository,
+    private userRepository: UsersRepository,
   ) {}
 
   async execute({
@@ -32,9 +35,11 @@ export class PurchaseOrderUseCase {
   }: PurchaseOrderUseCaseRequest): Promise<PurchaseOrderUseCaseResponse> {
     const address = await this.buyerAddressRepository.findById(addressId);
 
-    // falta
-    // tratamento de erro caso não encontre buyerId
-    // tratamento de erro caso não encontre productId que vem dentro do orderProducts
+    const buyer = await this.userRepository.findById(buyerId);
+
+    if (!buyer) {
+      return left(new UserNotFoundError());
+    }
 
     if (!address) {
       return left(new OrderWithEmptyAddressError());

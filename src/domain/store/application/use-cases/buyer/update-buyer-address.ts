@@ -1,7 +1,6 @@
 import { Either, left, right } from "src/core/either";
 import { BuyerAddress } from "../../../enterprise/entities/buyer-address";
 import { BuyerAddressRepository } from "../../repositories/buyer-address-repository";
-import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 import { AddressNotFoundError } from "../errors/address-not-found-error";
 
 interface UpdateBuyerAddressUseCaseRequest {
@@ -19,7 +18,7 @@ interface UpdateBuyerAddressUseCaseRequest {
 }
 
 type UpdateBuyerAddressUseCaseResponse = Either<
-  UserNotFoundError,
+  AddressNotFoundError,
   {
     buyerAddressUpdated: BuyerAddress;
   }

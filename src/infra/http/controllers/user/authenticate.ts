@@ -24,9 +24,16 @@ export async function authenticate(
   });
 
   if (result.isLeft()) {
-    const err: InvalidCredentialsError = result.value;
+    const err = result.value;
+    switch (err.constructor) {
+      case InvalidCredentialsError:
+        return reply.status(400).send({
+          error: err.message,
+        });
 
-    return reply.status(400).send({ error: err.message });
+      default:
+        throw new Error(err.message);
+    }
   }
 
   return reply.status(201).send(result.value);

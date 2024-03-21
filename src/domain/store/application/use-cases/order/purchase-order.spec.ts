@@ -8,9 +8,11 @@ import { makeBuyerAddress } from "test/factories/make-buyer-address";
 import { OrderStatusTracking } from "src/core/entities/order-status-tracking";
 import { OrderStatus } from "src/core/entities/order-status";
 import { makeOrderProduct } from "test/factories/make-order-product";
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 
 let orderRepository: InMemoryOrdersRepository;
 let buyerAddressRepository: InMemoryBuyerAddressRepository;
+let usersRepository: InMemoryUsersRepository;
 let sut: PurchaseOrderUseCase;
 
 describe("Purchase Order", () => {
@@ -19,14 +21,22 @@ describe("Purchase Order", () => {
 
     buyerAddressRepository = new InMemoryBuyerAddressRepository();
 
-    sut = new PurchaseOrderUseCase(orderRepository, buyerAddressRepository);
+    usersRepository = new InMemoryUsersRepository();
+
+    sut = new PurchaseOrderUseCase(
+      orderRepository,
+      buyerAddressRepository,
+      usersRepository,
+    );
   });
 
   test("should be able to create a purchase order", async () => {
     const user = await makeUser({}, new UniqueEntityID("user-test-id-01"));
 
+    await usersRepository.create(user);
+
     const buyerAddress = makeBuyerAddress(
-      {},
+      { buyerId: user.id },
       new UniqueEntityID("buyer-address-id-01"),
     );
 

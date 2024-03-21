@@ -17,9 +17,16 @@ export async function search(request: FastifyRequest, reply: FastifyReply) {
   const result = await fetchProductsUseCase.execute({ query, page });
 
   if (result.isLeft()) {
-    const err: ResourceNotFoundError = result.value;
+    const err = result.value;
+    switch (err.constructor) {
+      case ResourceNotFoundError:
+        return reply.status(400).send({
+          error: err.message,
+        });
 
-    return reply.status(400).send({ error: err.message });
+      default:
+        throw new Error(err.message);
+    }
   }
 
   return reply
