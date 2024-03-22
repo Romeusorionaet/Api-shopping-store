@@ -52,4 +52,23 @@ export class PrismaCategoryRepository implements CategoryRepository {
 
     return PrismaCategoryMapper.toDomain(category);
   }
+
+  async update(category: Category): Promise<void> {
+    const data = PrismaCategoryMapper.toPrisma(category);
+
+    await prisma.category.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    });
+  }
+
+  async remove(id: string): Promise<void> {
+    await prisma.category.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }

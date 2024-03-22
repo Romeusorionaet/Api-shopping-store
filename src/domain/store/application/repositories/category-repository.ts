@@ -6,4 +6,6 @@ export interface CategoryRepository {
   findMany(page: PaginationParams): Promise<Category[]>;
   findByTitle(title: string): Promise<Category | null>;
   findById(id: string): Promise<Category | null>;
+  update(category: Category): Promise<void>;
+  remove(id: string): Promise<void>;
 }

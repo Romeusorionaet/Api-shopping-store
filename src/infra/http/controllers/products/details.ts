@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { ProductPresenter } from "../../presenters/product-presenter";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 import { z } from "zod";
-import { makeGetProductDetailsUseCase } from "src/domain/store/application/use-cases/factories/make-get-product-details";
+import { makeGetProductDetailsUseCase } from "src/domain/store/application/use-cases/factories/make-get-product-details-use-case";
 
 export async function details(request: FastifyRequest, reply: FastifyReply) {
   const getProductDetailsParamsSchema = z.object({

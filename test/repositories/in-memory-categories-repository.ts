@@ -44,4 +44,18 @@ export class InMemoryCategoriesRepository implements CategoryRepository {
 
     return category;
   }
+
+  async update(category: Category): Promise<void> {
+    const existingCategory = this.items.find((item) => item.id === category.id);
+
+    if (existingCategory) {
+      Object.assign(existingCategory, category);
+    } else {
+      throw new Error("Categoria não encontrada");
+    }
+  }
+
+  async remove(id: string): Promise<void> {
+    this.items = this.items.filter((item) => item.id.toString() !== id);
+  }
 }

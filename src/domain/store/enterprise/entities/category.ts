@@ -69,4 +69,15 @@ export class Category extends Entity<CategoryProps> {
 
     return product;
   }
+
+  update(props: Partial<CategoryProps>): Category {
+    return new Category(
+      {
+        ...this.props,
+        ...props,
+        updatedAt: new Date(),
+      },
+      this.id,
+    );
+  }
 }
