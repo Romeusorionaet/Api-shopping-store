@@ -1,8 +1,8 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
-import { makeGetBuyerAddressUseCase } from "src/domain/store/application/use-cases/factories/make-get-buyer-address-use-case";
 import { BuyerAddressPresenter } from "../../presenters/buyer-address";
 import { z } from "zod";
+import { makeGetBuyerAddressUseCase } from "src/domain/store/application/use-cases/buyer/factory/make-get-buyer-address-use-case";
 
 export async function getBuyerAddress(
   request: FastifyRequest,

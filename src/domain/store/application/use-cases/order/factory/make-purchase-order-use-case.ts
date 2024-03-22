@@ -1,9 +1,9 @@
 import { PrismaOrderRepository } from "src/infra/database/prisma/repositories/prisma-order-repository";
-import { PurchaseOrderUseCase } from "../order/purchase-order";
 import { PrismaBuyerAddressRepository } from "src/infra/database/prisma/repositories/prisma-buyer-address-repository";
 import { PrismaUserRepository } from "src/infra/database/prisma/repositories/prisma-user-repository";
+import { PurchaseOrderUseCase } from "../purchase-order";
 
-export function makeCreateOrderUseCase() {
+export function makePurchaseOrderUseCase() {
   const orderRepository = new PrismaOrderRepository();
   const buyerAddressRepository = new PrismaBuyerAddressRepository();
   const usersRepository = new PrismaUserRepository();

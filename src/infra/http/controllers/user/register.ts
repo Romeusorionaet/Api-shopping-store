@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UserAlreadyExistsError } from "src/domain/store/application/use-cases/errors/user-already-exists-error";
-import { makeRegisterUserUseCase } from "src/domain/store/application/use-cases/factories/make-register-user-use-case";
+import { makeRegisterUserUseCase } from "src/domain/store/application/use-cases/user/factory/make-register-user-use-case";
 import { z } from "zod";
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {

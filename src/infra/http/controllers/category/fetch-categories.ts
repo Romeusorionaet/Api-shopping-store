@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { CategoryPresenter } from "../../presenters/category-presenter";
-import { makeFetchCategoriesUseCase } from "src/domain/store/application/use-cases/factories/make-fetch-categories-use-case";
 import { z } from "zod";
+import { makeFetchCategoriesUseCase } from "src/domain/store/application/use-cases/category/factory/make-fetch-categories-use-case";
 
 export async function fetchCategories(
   request: FastifyRequest,

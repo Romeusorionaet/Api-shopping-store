@@ -1,9 +1,9 @@
 import { PrismaCategoryRepository } from "src/infra/database/prisma/repositories/prisma-category-repository";
-import { FetchCategoriesUseCase } from "../category/fetch-categories";
+import { UpdateCategoryUseCase } from "../update-category";
 
-export function makeFetchCategoriesUseCase() {
+export function makeUpdateCategoryUseCase() {
   const categoryRepository = new PrismaCategoryRepository();
-  const useCase = new FetchCategoriesUseCase(categoryRepository);
+  const useCase = new UpdateCategoryUseCase(categoryRepository);
 
   return useCase;
 }

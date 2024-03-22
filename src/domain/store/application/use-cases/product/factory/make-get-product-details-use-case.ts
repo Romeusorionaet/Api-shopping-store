@@ -1,5 +1,5 @@
 import { PrismaProductRepository } from "src/infra/database/prisma/repositories/prisma-product-repository";
-import { GetProductDetailsUseCase } from "../product/get-product-details";
+import { GetProductDetailsUseCase } from "../get-product-details";
 
 export function makeGetProductDetailsUseCase() {
   const productRepository = new PrismaProductRepository();

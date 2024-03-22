@@ -2,7 +2,7 @@ import { ModeOfSale } from "@prisma/client";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ProductAlreadyExistsError } from "src/domain/store/application/use-cases/errors/product-already-exists-error";
 import { TheAssignedCategoryDoesNotExistError } from "src/domain/store/application/use-cases/errors/the-assigned-category-does-not-exist-error";
-import { makeCreateProductUseCase } from "src/domain/store/application/use-cases/factories/make-create-product-use-case";
+import { makeCreateProductUseCase } from "src/domain/store/application/use-cases/product/factory/make-create-product-use-case";
 import { z } from "zod";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {

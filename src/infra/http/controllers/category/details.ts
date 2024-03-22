@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { CategoryPresenter } from "../../presenters/category-presenter";
-import { makeGetCategoryDetailsUseCase } from "src/domain/store/application/use-cases/factories/make-get-category-details-use-case";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
+import { makeGetCategoryDetailsUseCase } from "src/domain/store/application/use-cases/category/factory/make-get-category-details-use-case";
 import { z } from "zod";
 
 export async function details(request: FastifyRequest, reply: FastifyReply) {

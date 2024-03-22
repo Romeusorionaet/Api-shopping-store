@@ -1,6 +1,6 @@
 import { PrismaBuyerAddressRepository } from "src/infra/database/prisma/repositories/prisma-buyer-address-repository";
 import { PrismaUserRepository } from "src/infra/database/prisma/repositories/prisma-user-repository";
-import { CreateBuyerAddressUseCase } from "../buyer/create-buyer-address";
+import { CreateBuyerAddressUseCase } from "../create-buyer-address";
 
 export function makeCreateBuyerAddressUseCase() {
   const buyerAddressRepository = new PrismaBuyerAddressRepository();

@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 import { OrderWithEmptyAddressError } from "src/domain/store/application/use-cases/errors/order-with-empty-address-error";
-import { makeCreateOrderUseCase } from "src/domain/store/application/use-cases/factories/make-order-use-case";
+import { makePurchaseOrderUseCase } from "src/domain/store/application/use-cases/order/factory/make-purchase-order-use-case";
 import { z } from "zod";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
@@ -15,7 +15,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     request.body,
   );
 
-  const createOrderUseCase = makeCreateOrderUseCase();
+  const createOrderUseCase = makePurchaseOrderUseCase();
 
   const result = await createOrderUseCase.execute({
     buyerId,

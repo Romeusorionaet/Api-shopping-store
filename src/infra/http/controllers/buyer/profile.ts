@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 import { BuyerPresenter } from "../../presenters/buyer-presenter";
-import { makeGetBuyerProfileUseCase } from "src/domain/store/application/use-cases/factories/make-get-buyer-profile-use-case";
+import { makeGetBuyerProfileUseCase } from "src/domain/store/application/use-cases/buyer/factory/make-get-buyer-profile-use-case";
 
 export async function profile(request: FastifyRequest, reply: FastifyReply) {
   const getBuyerProfileUseCase = makeGetBuyerProfileUseCase();

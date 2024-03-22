@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
-import { makeRemoveCategoryUseCase } from "src/domain/store/application/use-cases/factories/make-delete-category-use-case";
+import { makeRemoveCategoryUseCase } from "src/domain/store/application/use-cases/category/factory/make-delete-category-use-case";
 import { z } from "zod";
 
 export async function remove(request: FastifyRequest, reply: FastifyReply) {

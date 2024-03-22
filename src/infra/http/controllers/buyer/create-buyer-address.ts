@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
+import { makeCreateBuyerAddressUseCase } from "src/domain/store/application/use-cases/buyer/factory/make-create-buyer-address-use-case";
 import { AddressAlreadyExistError } from "src/domain/store/application/use-cases/errors/address-already-exist-error";
-import { makeCreateBuyerAddressUseCase } from "src/domain/store/application/use-cases/factories/make-create-buyer-address-use-case";
 import { z } from "zod";
 
 export async function createBuyerAddress(

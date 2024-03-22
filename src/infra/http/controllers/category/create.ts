@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
+import { makeCreateCategoryUseCase } from "src/domain/store/application/use-cases/category/factory/make-create-category-use-case";
 import { CategoryAlreadyExistsError } from "src/domain/store/application/use-cases/errors/category-already-exists-error";
-import { makeCreateCategoryUseCase } from "src/domain/store/application/use-cases/factories/make-create-category-use-case";
 import { z } from "zod";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {

@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
+import { makeUpdateBuyerAddressUseCase } from "src/domain/store/application/use-cases/buyer/factory/make-update-buyer-address-use-case";
 import { AddressNotFoundError } from "src/domain/store/application/use-cases/errors/address-not-found-error";
-import { makeUpdateBuyerAddressUseCase } from "src/domain/store/application/use-cases/factories/make-update-buyer-address-use-case";
 import { z } from "zod";
 
 export async function updateBuyerAddress(
