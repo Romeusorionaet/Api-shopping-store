@@ -7,4 +7,5 @@ export interface ProductRepository {
   findByTitle(title: string): Promise<Product | null>;
   findMany(page: PaginationParams): Promise<Product[]>;
   searchMany(query: string, page: number): Promise<Product[] | null>;
+  update(data: Product): Promise<void>;
 }

@@ -63,4 +63,14 @@ export class InMemoryProductsRepository implements ProductRepository {
 
     return products;
   }
+
+  async update(data: Product): Promise<void> {
+    const existingProduct = this.items.find((item) => item.id === data.id);
+
+    if (existingProduct) {
+      Object.assign(existingProduct, data);
+    } else {
+      throw new Error("Produto não encontrado");
+    }
+  }
 }

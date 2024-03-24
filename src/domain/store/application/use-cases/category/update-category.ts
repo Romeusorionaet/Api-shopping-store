@@ -3,13 +3,13 @@ import { Category } from "../../../enterprise/entities/category";
 import { CategoryRepository } from "../../repositories/category-repository";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 
-interface UpdateCategoryDetailsUseCaseRequest {
+interface UpdateCategoryUseCaseRequest {
   id: string;
   title: string;
   imgUrl: string;
 }
 
-type UpdateCategoryDetailsUseCaseResponse = Either<
+type UpdateCategoryUseCaseResponse = Either<
   ResourceNotFoundError,
   {
     categoryUpdated: Category;
@@ -23,7 +23,7 @@ export class UpdateCategoryUseCase {
     id,
     title,
     imgUrl,
-  }: UpdateCategoryDetailsUseCaseRequest): Promise<UpdateCategoryDetailsUseCaseResponse> {
+  }: UpdateCategoryUseCaseRequest): Promise<UpdateCategoryUseCaseResponse> {
     const category = await this.categoryRepository.findById(id);
 
     if (!category) {

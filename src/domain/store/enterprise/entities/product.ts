@@ -132,4 +132,15 @@ export class Product extends Entity<ProductProps> {
     );
     return product;
   }
+
+  update(props: Partial<ProductProps>): Product {
+    return new Product(
+      {
+        ...this.props,
+        ...props,
+        updatedAt: new Date(),
+      },
+      this.id,
+    );
+  }
 }

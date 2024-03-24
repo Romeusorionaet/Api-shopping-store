@@ -80,4 +80,15 @@ export class PrismaProductRepository implements ProductRepository {
 
     return products.map(PrismaProductMapper.toDomain);
   }
+
+  async update(data: Product): Promise<void> {
+    const product = PrismaProductMapper.toPrisma(data);
+
+    await prisma.product.update({
+      where: {
+        id: product.id,
+      },
+      data: product,
+    });
+  }
 }
