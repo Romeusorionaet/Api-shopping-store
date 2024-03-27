@@ -24,11 +24,11 @@ describe("Register User", () => {
     await usersRepository.create(user);
 
     const buyerAddress = makeBuyerAddress(
-      { buyerId: user.id },
+      { buyerId: user.id, orderId: new UniqueEntityID() },
       new UniqueEntityID("address id 123"),
     );
 
-    await buyerAddressRepository.create(buyerAddress);
+    buyerAddressRepository.items.push(buyerAddress);
 
     const result = await sut.execute({
       addressId: buyerAddress.id.toString(),

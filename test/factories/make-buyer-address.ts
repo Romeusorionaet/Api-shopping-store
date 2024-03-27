@@ -24,6 +24,8 @@ export function makeBuyerAddress(
       phoneNumber: 1234567891,
       username: faker.person.fullName(),
       email: "example@gmail.com",
+      createdAt: new Date(),
+      updatedAt: new Date(),
       ...override,
     },
     id,

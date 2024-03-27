@@ -4,10 +4,6 @@ import { BuyerAddress } from "src/domain/store/enterprise/entities/buyer-address
 export class InMemoryBuyerAddressRepository implements BuyerAddressRepository {
   public items: BuyerAddress[] = [];
 
-  async create(data: BuyerAddress): Promise<void> {
-    this.items.push(data);
-  }
-
   async update(buyerAddress: BuyerAddress): Promise<void> {
     const itemIndex = this.items.findIndex(
       (item) => item.id === buyerAddress.id,

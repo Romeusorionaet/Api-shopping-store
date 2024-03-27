@@ -106,7 +106,6 @@ export class BuyerAddress extends Entity<BuyerAddressProps> {
       {
         ...this.props,
         ...props,
-        updatedAt: new Date(),
       },
       this.id,
     );

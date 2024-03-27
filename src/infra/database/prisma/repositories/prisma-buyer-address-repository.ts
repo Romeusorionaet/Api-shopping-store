@@ -4,14 +4,6 @@ import { prisma } from "../prisma";
 import { PrismaBuyerAddressMapper } from "../mappers/prisma-buyer-address-mapper";
 
 export class PrismaBuyerAddressRepository implements BuyerAddressRepository {
-  async create(buyerAddress: BuyerAddress): Promise<void> {
-    const data = PrismaBuyerAddressMapper.toPrisma(buyerAddress);
-
-    await prisma.buyerAddress.create({
-      data,
-    });
-  }
-
   async findById(addressId: string): Promise<BuyerAddress | null> {
     const buyerAddress = await prisma.buyerAddress.findUnique({
       where: {

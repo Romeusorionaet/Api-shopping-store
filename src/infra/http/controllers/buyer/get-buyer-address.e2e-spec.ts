@@ -1,4 +1,5 @@
 import { app } from "src/app";
+import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import request from "supertest";
 import { BuyerAddressFactory } from "test/factories/make-buyer-address";
 import { createAndAuthenticateUser } from "test/factories/make-create-and-authenticate-user";
@@ -17,16 +18,12 @@ describe("Get buyer address (E2E)", () => {
   });
 
   test("[GET] /buyer/create-buyer-address/:buyerId", async () => {
-    const { accessToken } = await createAndAuthenticateUser(app);
+    const { accessToken, user } = await createAndAuthenticateUser(app);
 
-    const responseProfile = await request(app.server)
-      .get("/buyer/profile")
-      .set("Authorization", `Bearer ${accessToken}`);
-
-    const buyerId = responseProfile.body.profile.id;
+    const buyerId = user.id;
 
     await buyerAddressFactory.makePrismaBuyerAddress({
-      buyerId,
+      buyerId: new UniqueEntityID(buyerId),
       city: "Canguaretama",
     });
 

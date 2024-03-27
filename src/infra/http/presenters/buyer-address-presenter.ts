@@ -4,6 +4,8 @@ export class BuyerAddressPresenter {
   static toHTTP(BuyerAddress: BuyerAddress) {
     return {
       id: BuyerAddress.id.toString(),
+      buyerId: BuyerAddress.buyerId.toString(),
+      orderId: BuyerAddress.orderId?.toString(),
       cep: BuyerAddress.cep,
       city: BuyerAddress.city,
       uf: BuyerAddress.uf,
