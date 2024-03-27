@@ -1,33 +1,28 @@
-import { Prisma, Order as PrismaOrder } from "@prisma/client";
+import {
+  Prisma,
+  Order as PrismaOrder,
+  BuyerAddress as PrismaBuyerAddress,
+  OrderProduct as PrismaOrderProduct,
+} from "@prisma/client";
+
 import { OrderStatus } from "src/core/entities/order-status";
 import { OrderStatusTracking } from "src/core/entities/order-status-tracking";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { Order } from "src/domain/store/enterprise/entities/order";
-import { prisma } from "../prisma";
 import { PrismaBuyerAddressMapper } from "./prisma-buyer-address-mapper";
 import { PrismaOrderProductMapper } from "./prisma-order-product-mapper";
 
+interface PrismaOrderWithRelations extends PrismaOrder {
+  buyerAddress: PrismaBuyerAddress[];
+  orderProducts: PrismaOrderProduct[];
+}
+
 export class PrismaOrderMapper {
-  static async toDomain(raw: PrismaOrder): Promise<Order> {
-    const orderWithRelations = await prisma.order.findUnique({
-      where: { id: raw.id },
-      include: {
-        buyerAddress: true,
-        orderProducts: true,
-      },
-    });
-
-    if (
-      !orderWithRelations?.buyerAddress ||
-      !orderWithRelations?.orderProducts
-    ) {
-      throw new Error("Relations Not Found.");
-    }
-
-    const address = orderWithRelations.buyerAddress[0];
+  static async toDomain(raw: PrismaOrderWithRelations): Promise<Order> {
+    const address = raw.buyerAddress[0];
     const buyerAddress = PrismaBuyerAddressMapper.toDomain(address);
 
-    const orderProducts = orderWithRelations.orderProducts.map(
+    const orderProducts = raw.orderProducts.map(
       PrismaOrderProductMapper.toDomain,
     );
 

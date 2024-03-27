@@ -3,6 +3,7 @@ import { Order } from "src/domain/store/enterprise/entities/order";
 import { prisma } from "../prisma";
 import { PrismaOrderMapper } from "../mappers/prisma-order-mapper";
 import { PrismaOrderProductMapper } from "../mappers/prisma-order-product-mapper";
+import { PrismaBuyerAddressMapper } from "../mappers/prisma-buyer-address-mapper";
 
 export class PrismaOrderRepository implements OrderRepository {
   async create(order: Order): Promise<void> {
@@ -11,6 +12,9 @@ export class PrismaOrderRepository implements OrderRepository {
     const dataOrderProducts = order.orderProducts.map(
       PrismaOrderProductMapper.toPrisma,
     );
+    const dataBuyerAddress = PrismaBuyerAddressMapper.toPrisma(
+      order.buyerAddress,
+    );
 
     await prisma.order.create({
       data: {
@@ -18,6 +22,11 @@ export class PrismaOrderRepository implements OrderRepository {
         buyerId: dataOrder.buyerId,
         createdAt: dataOrder.createdAt,
         updatedAt: dataOrder.updatedAt,
+        buyerAddress: {
+          createMany: {
+            data: dataBuyerAddress,
+          },
+        },
         orderProducts: {
           createMany: {
             data: dataOrderProducts,
@@ -27,17 +36,20 @@ export class PrismaOrderRepository implements OrderRepository {
     });
   }
 
-  async findById(buyerId: string): Promise<Order | null> {
-    const order = await prisma.order.findFirst({
+  async findByBuyerId(buyerId: string): Promise<Order[]> {
+    const orders = await prisma.order.findMany({
       where: {
         buyerId,
       },
+      include: {
+        buyerAddress: true,
+        orderProducts: true,
+      },
     });
 
-    if (!order) {
-      return null;
-    }
-
-    return PrismaOrderMapper.toDomain(order);
+    const mappedOrders = await Promise.all(
+      orders.map(PrismaOrderMapper.toDomain),
+    );
+    return mappedOrders;
   }
 }

@@ -1,31 +1,26 @@
-import { Either, left, right } from "src/core/either";
+import { Either, right } from "src/core/either";
 import { OrderRepository } from "../../repositories/order-repository";
 import { Order } from "../../../enterprise/entities/order";
-import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 
 interface GetBuyerOrderUseCaseRequest {
   buyerId: string;
 }
 
 type GetBuyerOrderUseCaseResponse = Either<
-  ResourceNotFoundError,
+  null,
   {
-    order: Order;
+    orders: Order[];
   }
 >;
 
-export class GetBuyerOrderUseCase {
+export class GetBuyerOrdersUseCase {
   constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     buyerId,
   }: GetBuyerOrderUseCaseRequest): Promise<GetBuyerOrderUseCaseResponse> {
-    const order = await this.orderRepository.findById(buyerId);
+    const orders = await this.orderRepository.findByBuyerId(buyerId);
 
-    if (!order) {
-      return left(new ResourceNotFoundError());
-    }
-
-    return right({ order });
+    return right({ orders });
   }
 }

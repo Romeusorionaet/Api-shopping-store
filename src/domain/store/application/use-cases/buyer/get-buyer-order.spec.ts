@@ -1,21 +1,21 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { GetBuyerOrderUseCase } from "./get-buyer-order";
+import { GetBuyerOrdersUseCase } from "./get-buyer-orders";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { makeOrder } from "test/factories/make-order";
 import { makeUser } from "test/factories/make-user";
 
 let ordersRepository: InMemoryOrdersRepository;
-let sut: GetBuyerOrderUseCase;
+let sut: GetBuyerOrdersUseCase;
 
-describe("Get Buyer Order", () => {
+describe("Get Buyer Orders", () => {
   beforeEach(() => {
     ordersRepository = new InMemoryOrdersRepository();
 
-    sut = new GetBuyerOrderUseCase(ordersRepository);
+    sut = new GetBuyerOrdersUseCase(ordersRepository);
   });
 
-  test("should be able to get a buyer order by id", async () => {
+  test("should be able to get a buyer orders by buyerId", async () => {
     const user = await makeUser(
       {},
       new UniqueEntityID("user-buyer-order-test-id"),
@@ -32,11 +32,11 @@ describe("Get Buyer Order", () => {
     expect(result.isRight()).toBe(true);
 
     if (result.isRight()) {
-      expect(result.value.order).toEqual(
+      expect(result.value.orders).toEqual([
         expect.objectContaining({
           buyerId: new UniqueEntityID("user-buyer-order-test-id"),
         }),
-      );
+      ]);
     }
   });
 });

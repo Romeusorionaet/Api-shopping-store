@@ -8,15 +8,11 @@ export class InMemoryOrdersRepository implements OrderRepository {
     this.items.push(order);
   }
 
-  async findById(buyerId: string): Promise<Order | null> {
-    const order = this.items.find(
+  async findByBuyerId(buyerId: string): Promise<Order[]> {
+    const orders = this.items.filter(
       (item) => item.buyerId.toString() === buyerId,
     );
 
-    if (!order) {
-      return null;
-    }
-
-    return order;
+    return orders;
   }
 }

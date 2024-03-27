@@ -7,11 +7,11 @@ import { z } from "zod";
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   const createOrderBodySchema = z.object({
     buyerId: z.string().uuid(),
-    addressId: z.string().uuid(),
+    userAddress: z.any(),
     orderProducts: z.any(),
   });
 
-  const { buyerId, addressId, orderProducts } = createOrderBodySchema.parse(
+  const { buyerId, userAddress, orderProducts } = createOrderBodySchema.parse(
     request.body,
   );
 
@@ -19,7 +19,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 
   const result = await createOrderUseCase.execute({
     buyerId,
-    addressId,
+    userAddress,
     orderProducts,
   });
 

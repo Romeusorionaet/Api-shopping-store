@@ -3,15 +3,15 @@ import { PurchaseOrderUseCase } from "./purchase-order";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { makeUser } from "test/factories/make-user";
-import { InMemoryBuyerAddressRepository } from "test/repositories/in-memory-buyer-address-repository";
-import { makeBuyerAddress } from "test/factories/make-buyer-address";
 import { OrderStatusTracking } from "src/core/entities/order-status-tracking";
 import { OrderStatus } from "src/core/entities/order-status";
 import { makeOrderProduct } from "test/factories/make-order-product";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
+import { InMemoryUsersAddressRepository } from "test/repositories/in-memory-users-address-repository";
+import { makeUserAddress } from "test/factories/make-user-address";
 
 let orderRepository: InMemoryOrdersRepository;
-let buyerAddressRepository: InMemoryBuyerAddressRepository;
+let userAddressRepository: InMemoryUsersAddressRepository;
 let usersRepository: InMemoryUsersRepository;
 let sut: PurchaseOrderUseCase;
 
@@ -19,13 +19,13 @@ describe("Purchase Order", () => {
   beforeEach(() => {
     orderRepository = new InMemoryOrdersRepository();
 
-    buyerAddressRepository = new InMemoryBuyerAddressRepository();
+    userAddressRepository = new InMemoryUsersAddressRepository();
 
     usersRepository = new InMemoryUsersRepository();
 
     sut = new PurchaseOrderUseCase(
       orderRepository,
-      buyerAddressRepository,
+      userAddressRepository,
       usersRepository,
     );
   });
@@ -35,12 +35,13 @@ describe("Purchase Order", () => {
 
     await usersRepository.create(user);
 
-    const buyerAddress = makeBuyerAddress(
-      { buyerId: user.id },
-      new UniqueEntityID("buyer-address-id-01"),
-    );
+    const userAddress = makeUserAddress({
+      userId: user.id,
+      city: "Canguaretama",
+      email: "romeu@gmail.com",
+    });
 
-    await buyerAddressRepository.create(buyerAddress);
+    await userAddressRepository.create(userAddress);
 
     const orderProductFirst = makeOrderProduct(
       {},
@@ -59,7 +60,7 @@ describe("Purchase Order", () => {
 
     const result = await sut.execute({
       buyerId: user.id.toString(),
-      addressId: buyerAddress.id.toString(),
+      userAddress,
       orderProducts,
     });
 
@@ -70,7 +71,8 @@ describe("Purchase Order", () => {
         expect.objectContaining({
           buyerId: new UniqueEntityID("user-test-id-01"),
           buyerAddress: expect.objectContaining({
-            id: new UniqueEntityID("buyer-address-id-01"),
+            city: "Canguaretama",
+            email: "romeu@gmail.com",
           }),
           orderProducts: expect.arrayContaining([
             expect.objectContaining({

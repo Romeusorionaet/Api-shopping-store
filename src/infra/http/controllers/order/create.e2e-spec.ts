@@ -2,20 +2,20 @@ import request from "supertest";
 import { app } from "src/app";
 import { prisma } from "src/infra/database/prisma/prisma";
 import { createAndAuthenticateUser } from "test/factories/make-create-and-authenticate-user";
-import { BuyerAddressFactory } from "test/factories/make-buyer-address";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { ProductFactory } from "test/factories/make-product";
 import { CategoryFactory } from "test/factories/make-category";
+import { UserAddressFactory } from "test/factories/make-user-address";
 
 describe("Create Order (E2E)", () => {
-  let buyerAddressFactory: BuyerAddressFactory;
+  let userAddressFactory: UserAddressFactory;
   let productFactory: ProductFactory;
   let categoryFactory: CategoryFactory;
 
   beforeAll(async () => {
     await app.ready();
 
-    buyerAddressFactory = new BuyerAddressFactory();
+    userAddressFactory = new UserAddressFactory();
     productFactory = new ProductFactory();
     categoryFactory = new CategoryFactory();
   });
@@ -28,9 +28,24 @@ describe("Create Order (E2E)", () => {
     const { user, accessToken } = await createAndAuthenticateUser(app);
     const buyerId = user.id;
 
-    const buyerAddress = await buyerAddressFactory.makePrismaBuyerAddress({
-      buyerId: new UniqueEntityID(buyerId),
+    const userAddress = await userAddressFactory.makePrismaUserAddress({
+      userId: new UniqueEntityID(buyerId),
+      city: "Canguaretama",
     });
+
+    const dataUserAddress = {
+      userId: userAddress.userId.toString(),
+      cep: userAddress.cep,
+      city: userAddress.city,
+      uf: userAddress.uf,
+      street: userAddress.street,
+      neighborhood: userAddress.neighborhood,
+      houseNumber: userAddress.houseNumber,
+      complement: userAddress.complement,
+      phoneNumber: userAddress.phoneNumber,
+      username: userAddress.username,
+      email: userAddress.email,
+    };
 
     const category = await categoryFactory.makePrismaCategory({ title: "LG" });
 
@@ -63,18 +78,27 @@ describe("Create Order (E2E)", () => {
     orderProducts.push(orderProductFirst);
     orderProducts.push(orderProductSecond);
 
+    await request(app.server)
+      .post("/order/create")
+      .send({
+        buyerId,
+        userAddress: dataUserAddress,
+        orderProducts,
+      })
+      .set("Authorization", `Bearer ${accessToken}`);
+
     const response = await request(app.server)
       .post("/order/create")
       .send({
         buyerId,
-        addressId: buyerAddress.id.toString(),
+        userAddress: dataUserAddress,
         orderProducts,
       })
       .set("Authorization", `Bearer ${accessToken}`);
 
     expect(response.statusCode).toEqual(201);
 
-    const orderOnDatabase = await prisma.order.findFirst({
+    const orderOnDatabase = await prisma.order.findMany({
       where: {
         buyerId,
       },
@@ -89,5 +113,21 @@ describe("Create Order (E2E)", () => {
     });
 
     expect(orderOnDatabase).toBeTruthy();
+    expect(orderOnDatabase[0].buyerAddress).toEqual([
+      expect.objectContaining({
+        city: "Canguaretama",
+      }),
+    ]);
+    expect(orderOnDatabase[0].orderProducts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          product: expect.objectContaining({ title: "tablet" }),
+        }),
+
+        expect.objectContaining({
+          product: expect.objectContaining({ title: "notebook" }),
+        }),
+      ]),
+    );
   });
 });
