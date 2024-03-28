@@ -7,6 +7,8 @@ export class JwtEncrypter implements Encrypter {
     const token = app.jwt.sign(payload);
     jwt.decode(token, { complete: true });
 
-    return app.jwt.sign(payload, { expiresIn: "10m" });
+    const accessToken = app.jwt.sign(payload, { expiresIn: "50s" });
+
+    return accessToken;
   }
 }

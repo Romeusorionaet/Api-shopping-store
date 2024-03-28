@@ -20,6 +20,15 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
+CREATE TABLE "refresh_tokens" (
+    "id" TEXT NOT NULL,
+    "expires" INTEGER NOT NULL,
+    "user_id" TEXT NOT NULL,
+
+    CONSTRAINT "refresh_tokens_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "user_address" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
@@ -130,6 +139,9 @@ CREATE UNIQUE INDEX "categories_title_key" ON "categories"("title");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "products_title_key" ON "products"("title");
+
+-- AddForeignKey
+ALTER TABLE "refresh_tokens" ADD CONSTRAINT "refresh_tokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "products" ADD CONSTRAINT "products_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

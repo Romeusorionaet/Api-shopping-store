@@ -2,6 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { makeAuthenticateUserUseCase } from "src/domain/store/application/use-cases/user/factory/make-authenticate-user-use-case";
 import { z } from "zod";
+import { RefreshTokenPresenter } from "../../presenters/refresh-token-presenter";
 
 export async function authenticate(
   request: FastifyRequest,
@@ -16,9 +17,9 @@ export async function authenticate(
     request.body,
   );
 
-  const registerUserUseCase = makeAuthenticateUserUseCase();
+  const authenticateUserUseCase = makeAuthenticateUserUseCase();
 
-  const result = await registerUserUseCase.execute({
+  const result = await authenticateUserUseCase.execute({
     email,
     password,
   });
@@ -36,5 +37,8 @@ export async function authenticate(
     }
   }
 
-  return reply.status(201).send(result.value);
+  return reply.status(201).send({
+    accessToken: result.value.accessToken,
+    refreshToken: RefreshTokenPresenter.toHTTP(result.value.refreshToken),
+  });
 }

@@ -1,8 +1,10 @@
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
-import { UsersRepository } from "../../repositories/users-repository";
 import { Either, left, right } from "src/core/either";
 import { HashComparer } from "../../cryptography/hash-comparer";
 import { Encrypter } from "../../cryptography/encrypter";
+import { UsersRepository } from "../../repositories/users-repository";
+import { RefreshTokensRepository } from "../../repositories/refresh-token-repository";
+import { RefreshToken } from "src/domain/store/enterprise/entities/refresh-token";
 
 interface AuthenticateUserUseCaseRequest {
   email: string;
@@ -13,6 +15,7 @@ type AuthenticateUserUseCaseResponse = Either<
   InvalidCredentialsError,
   {
     accessToken: string;
+    refreshToken: RefreshToken;
   }
 >;
 
@@ -21,6 +24,7 @@ export class AuthenticateUserUseCase {
     private usersRepository: UsersRepository,
     private hashComparer: HashComparer,
     private encrypter: Encrypter,
+    private refreshTokensRepository: RefreshTokensRepository,
   ) {}
 
   async execute({
@@ -46,8 +50,15 @@ export class AuthenticateUserUseCase {
       sub: user.id.toString(),
     });
 
+    await this.refreshTokensRepository.deleteMany(user.id.toString());
+
+    const refreshToken = await this.refreshTokensRepository.create(
+      user.id.toString(),
+    );
+
     return right({
       accessToken,
+      refreshToken,
     });
   }
 }
