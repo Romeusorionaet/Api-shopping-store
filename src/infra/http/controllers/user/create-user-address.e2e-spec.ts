@@ -1,11 +1,16 @@
 import { app } from "src/app";
 import { prisma } from "src/infra/database/prisma/prisma";
 import request from "supertest";
-import { createAndAuthenticateUser } from "test/factories/make-create-and-authenticate-user";
+import { CreateAndAuthenticateUserWithTokensFactory } from "test/factories/make-create-and-authenticate-user";
 
 describe("Create user address (E2E)", () => {
+  let createAndAuthenticateUserWithTokensFactory: CreateAndAuthenticateUserWithTokensFactory;
+
   beforeAll(async () => {
     await app.ready();
+
+    createAndAuthenticateUserWithTokensFactory =
+      new CreateAndAuthenticateUserWithTokensFactory();
   });
 
   afterAll(async () => {
@@ -13,7 +18,10 @@ describe("Create user address (E2E)", () => {
   });
 
   test("[POST] /user/create-user-address", async () => {
-    const { accessToken, user } = await createAndAuthenticateUser(app);
+    const { accessToken, user } =
+      await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
+        app,
+      );
 
     const userId = user.id;
 

@@ -3,7 +3,7 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import request from "supertest";
 import { makeBuyerAddress } from "test/factories/make-buyer-address";
 import { CategoryFactory } from "test/factories/make-category";
-import { createAndAuthenticateUser } from "test/factories/make-create-and-authenticate-user";
+import { CreateAndAuthenticateUserWithTokensFactory } from "test/factories/make-create-and-authenticate-user";
 import { OrderFactory } from "test/factories/make-order";
 import { makeOrderProduct } from "test/factories/make-order-product";
 import { ProductFactory } from "test/factories/make-product";
@@ -14,6 +14,7 @@ describe("Get buyer orders (E2E)", () => {
   let orderFactory: OrderFactory;
   let categoryFactory: CategoryFactory;
   let productFactory: ProductFactory;
+  let createAndAuthenticateUserWithTokensFactory: CreateAndAuthenticateUserWithTokensFactory;
 
   beforeAll(async () => {
     await app.ready();
@@ -22,6 +23,8 @@ describe("Get buyer orders (E2E)", () => {
     orderFactory = new OrderFactory();
     productFactory = new ProductFactory();
     categoryFactory = new CategoryFactory();
+    createAndAuthenticateUserWithTokensFactory =
+      new CreateAndAuthenticateUserWithTokensFactory();
   });
 
   afterAll(async () => {
@@ -29,7 +32,10 @@ describe("Get buyer orders (E2E)", () => {
   });
 
   test("[GET] /buyer/orders", async () => {
-    const { accessToken, user } = await createAndAuthenticateUser(app);
+    const { accessToken, user } =
+      await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
+        app,
+      );
 
     const buyerId = user.id;
 

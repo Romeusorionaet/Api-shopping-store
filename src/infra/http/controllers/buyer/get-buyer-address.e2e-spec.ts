@@ -2,15 +2,18 @@ import { app } from "src/app";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import request from "supertest";
 import { BuyerAddressFactory } from "test/factories/make-buyer-address";
-import { createAndAuthenticateUser } from "test/factories/make-create-and-authenticate-user";
+import { CreateAndAuthenticateUserWithTokensFactory } from "test/factories/make-create-and-authenticate-user";
 
 describe("Get buyer address (E2E)", () => {
   let buyerAddressFactory: BuyerAddressFactory;
+  let createAndAuthenticateUserWithTokensFactory: CreateAndAuthenticateUserWithTokensFactory;
 
   beforeAll(async () => {
     await app.ready();
 
     buyerAddressFactory = new BuyerAddressFactory();
+    createAndAuthenticateUserWithTokensFactory =
+      new CreateAndAuthenticateUserWithTokensFactory();
   });
 
   afterAll(async () => {
@@ -18,7 +21,10 @@ describe("Get buyer address (E2E)", () => {
   });
 
   test("[GET] /buyer/create-buyer-address/:buyerId", async () => {
-    const { accessToken, user } = await createAndAuthenticateUser(app);
+    const { accessToken, user } =
+      await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
+        app,
+      );
 
     const buyerId = user.id;
 

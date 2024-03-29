@@ -2,15 +2,18 @@ import { app } from "src/app";
 import { prisma } from "src/infra/database/prisma/prisma";
 import request from "supertest";
 import { BuyerAddressFactory } from "test/factories/make-buyer-address";
-import { createAndAuthenticateUser } from "test/factories/make-create-and-authenticate-user";
+import { CreateAndAuthenticateUserWithTokensFactory } from "test/factories/make-create-and-authenticate-user";
 
 describe("Update buyer address (E2E)", () => {
   let buyerAddressFactory: BuyerAddressFactory;
+  let createAndAuthenticateUserWithTokensFactory: CreateAndAuthenticateUserWithTokensFactory;
 
   beforeAll(async () => {
     await app.ready();
 
     buyerAddressFactory = new BuyerAddressFactory();
+    createAndAuthenticateUserWithTokensFactory =
+      new CreateAndAuthenticateUserWithTokensFactory();
   });
 
   afterAll(async () => {
@@ -18,7 +21,10 @@ describe("Update buyer address (E2E)", () => {
   });
 
   test("[PUT] /buyer/update-buyer-address", async () => {
-    const { accessToken } = await createAndAuthenticateUser(app);
+    const { accessToken } =
+      await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
+        app,
+      );
 
     const responseProfile = await request(app.server)
       .get("/buyer/profile")

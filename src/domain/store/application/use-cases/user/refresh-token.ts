@@ -46,9 +46,14 @@ export class RefreshTokenUseCase {
         refreshToken.userId.toString(),
       );
 
-      const newRefreshToken = await this.refreshTokensRepository.create(
-        refreshToken.userId.toString(),
-      );
+      const expires = dayjs().add(1, "m").unix();
+
+      const newRefreshToken = RefreshToken.create({
+        userId: refreshToken.userId,
+        expires,
+      });
+
+      this.refreshTokensRepository.create(newRefreshToken);
 
       return right({ accessToken, newRefreshToken });
     }

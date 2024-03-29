@@ -5,6 +5,7 @@ import { Encrypter } from "../../cryptography/encrypter";
 import { UsersRepository } from "../../repositories/users-repository";
 import { RefreshTokensRepository } from "../../repositories/refresh-token-repository";
 import { RefreshToken } from "src/domain/store/enterprise/entities/refresh-token";
+import dayjs from "dayjs";
 
 interface AuthenticateUserUseCaseRequest {
   email: string;
@@ -52,9 +53,14 @@ export class AuthenticateUserUseCase {
 
     await this.refreshTokensRepository.deleteMany(user.id.toString());
 
-    const refreshToken = await this.refreshTokensRepository.create(
-      user.id.toString(),
-    );
+    const expires = dayjs().add(1, "m").unix();
+
+    const refreshToken = RefreshToken.create({
+      userId: user.id,
+      expires,
+    });
+
+    await this.refreshTokensRepository.create(refreshToken);
 
     return right({
       accessToken,

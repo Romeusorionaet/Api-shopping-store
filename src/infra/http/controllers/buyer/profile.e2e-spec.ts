@@ -1,10 +1,15 @@
 import { app } from "src/app";
 import request from "supertest";
-import { createAndAuthenticateUser } from "test/factories/make-create-and-authenticate-user";
+import { CreateAndAuthenticateUserWithTokensFactory } from "test/factories/make-create-and-authenticate-user";
 
 describe("Profile (E2E)", () => {
+  let createAndAuthenticateUserWithTokensFactory: CreateAndAuthenticateUserWithTokensFactory;
+
   beforeAll(async () => {
     await app.ready();
+
+    createAndAuthenticateUserWithTokensFactory =
+      new CreateAndAuthenticateUserWithTokensFactory();
   });
 
   afterAll(async () => {
@@ -12,7 +17,10 @@ describe("Profile (E2E)", () => {
   });
 
   test("[GET] /buyer/profile", async () => {
-    const { accessToken } = await createAndAuthenticateUser(app);
+    const { accessToken } =
+      await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
+        app,
+      );
 
     const result = await request(app.server)
       .get("/buyer/profile")
