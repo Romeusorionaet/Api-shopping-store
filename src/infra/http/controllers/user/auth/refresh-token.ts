@@ -35,6 +35,6 @@ export async function refreshToken(
     accessToken: result.value.accessToken,
     newRefreshToken: result.value.newRefreshToken
       ? RefreshTokenPresenter.toHTTP(result.value.newRefreshToken)
-      : undefined,
+      : null,
   });
 }
