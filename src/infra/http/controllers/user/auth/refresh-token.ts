@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { InvalidTokenError } from "src/domain/store/application/use-cases/errors/invalid-token-error";
 import { makeRefreshTokenUseCase } from "src/domain/store/application/use-cases/user/factory/make-refresh-token-use-case";
 import { z } from "zod";
-import { RefreshTokenPresenter } from "../../presenters/refresh-token-presenter";
+import { RefreshTokenPresenter } from "../../../presenters/refresh-token-presenter";
 
 export async function refreshToken(
   request: FastifyRequest,

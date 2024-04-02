@@ -1,6 +1,6 @@
 import { JwtEncrypter } from "src/infra/cryptography/jwt-encrypter";
-import { RefreshTokenUseCase } from "../refresh-token";
 import { PrismaRefreshTokenRepository } from "src/infra/database/prisma/repositories/prisma-refresh-token-repository";
+import { RefreshTokenUseCase } from "../auth/refresh-token";
 
 export function makeRefreshTokenUseCase() {
   const refreshTokenRepository = new PrismaRefreshTokenRepository();
