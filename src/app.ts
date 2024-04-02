@@ -6,9 +6,10 @@ import fastifyCookie from "@fastify/cookie";
 import { categoriesRoutes } from "./infra/http/controllers/category/routes";
 import { productsRoutes } from "./infra/http/controllers/products/routes";
 import CORS from "@fastify/cors";
-import { userRoutes } from "./infra/http/controllers/user/routes";
 import { buyerRoutes } from "./infra/http/controllers/buyer/routes";
 import { orderRoutes } from "./infra/http/controllers/order/routes";
+import { authRoutes } from "./infra/http/controllers/user/auth/routes";
+import { userRoutes } from "./infra/http/controllers/user/routes";
 
 export const app = fastify();
 
@@ -32,6 +33,7 @@ app.register(productsRoutes);
 app.register(userRoutes);
 app.register(buyerRoutes);
 app.register(orderRoutes);
+app.register(authRoutes);
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

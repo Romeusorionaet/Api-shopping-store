@@ -31,10 +31,12 @@ export class CreateAndAuthenticateUserWithTokensFactory {
       },
     });
 
-    const result = await request(app.server).post("/user/authenticate").send({
-      email: "romeusoaresdesouto@gmail.com",
-      password: "123456",
-    });
+    const result = await request(app.server)
+      .post("/auth/user/authenticate")
+      .send({
+        email: "romeusoaresdesouto@gmail.com",
+        password: "123456",
+      });
 
     const { accessToken, refreshToken } = result.body;
 

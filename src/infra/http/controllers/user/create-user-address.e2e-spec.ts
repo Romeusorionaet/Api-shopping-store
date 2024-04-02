@@ -17,7 +17,7 @@ describe("Create user address (E2E)", () => {
     await app.close();
   });
 
-  test("[POST] /user/create-user-address", async () => {
+  test("[POST] /user/create-address", async () => {
     const { accessToken, user } =
       await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
         app,
@@ -26,7 +26,7 @@ describe("Create user address (E2E)", () => {
     const userId = user.id;
 
     const result = await request(app.server)
-      .post("/user/create-user-address")
+      .post("/user/create-address")
       .send({
         userId: userId.toString(),
         cep: 12345678,

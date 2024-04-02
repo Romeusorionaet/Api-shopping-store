@@ -1,14 +1,8 @@
 import { FastifyInstance } from "fastify";
-import { authenticate } from "./authenticate";
-import { register } from "./register";
 import { createUserAddress } from "./create-user-address";
 import { getUserAddress } from "./get-user-address";
-import { refreshToken } from "./refresh-token";
 
 export async function userRoutes(app: FastifyInstance) {
-  app.post("/user/register", register);
-  app.post("/user/authenticate", authenticate);
-  app.post("/user/create-user-address", createUserAddress);
-  app.get("/user/user-address/:userId", getUserAddress);
-  app.post("/user/refresh-token", refreshToken);
+  app.post("/user/create-address", createUserAddress);
+  app.get("/user/get-address/:userId", getUserAddress);
 }

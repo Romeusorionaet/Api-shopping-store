@@ -16,14 +16,14 @@ describe("Authenticate (E2E)", () => {
     await app.close();
   });
 
-  test("[POST] /user/authenticate", async () => {
+  test("[POST] /auth/user/authenticate", async () => {
     await userFactory.makePrismaUser({
       email: "romeu@gmail.com",
       password: await hash("123456", 8),
     });
 
     const result = await request(app.server)
-      .post("/user/authenticate")
+      .post("/auth/user/authenticate")
       .send({ email: "romeu@gmail.com", password: "123456" });
 
     expect(result.statusCode).toEqual(201);

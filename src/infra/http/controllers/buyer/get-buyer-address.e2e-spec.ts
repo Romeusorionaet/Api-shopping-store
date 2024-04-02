@@ -20,7 +20,7 @@ describe("Get buyer address (E2E)", () => {
     await app.close();
   });
 
-  test("[GET] /buyer/create-buyer-address/:buyerId", async () => {
+  test("[GET] /buyer/buyer-address/:buyerId", async () => {
     const { accessToken, user } =
       await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
         app,
@@ -32,6 +32,7 @@ describe("Get buyer address (E2E)", () => {
       buyerId: new UniqueEntityID(buyerId),
       city: "Canguaretama",
     });
+    console.log(accessToken, "====e2e");
 
     const result = await request(app.server)
       .get(`/buyer/buyer-address/${buyerId}`)

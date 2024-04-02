@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { makeAuthenticateUserUseCase } from "src/domain/store/application/use-cases/user/factory/make-authenticate-user-use-case";
 import { z } from "zod";
-import { RefreshTokenPresenter } from "../../presenters/refresh-token-presenter";
+import { RefreshTokenPresenter } from "../../../presenters/refresh-token-presenter";
 
 export async function authenticate(
   request: FastifyRequest,
