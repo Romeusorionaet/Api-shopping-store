@@ -7,12 +7,10 @@ import { OrderProduct } from "src/domain/store/enterprise/entities/order-product
 import { UsersRepository } from "../../repositories/users-repository";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 import { BuyerAddress } from "src/domain/store/enterprise/entities/buyer-address";
-import { UserAddress } from "src/domain/store/enterprise/entities/user-address";
 import { UserAddressRepository } from "../../repositories/user-address-repository";
 
 interface PurchaseOrderUseCaseRequest {
   buyerId: string;
-  userAddress: UserAddress;
   orderProducts: OrderProduct[];
 }
 
@@ -32,7 +30,6 @@ export class PurchaseOrderUseCase {
 
   async execute({
     buyerId,
-    userAddress,
     orderProducts,
   }: PurchaseOrderUseCaseRequest): Promise<PurchaseOrderUseCaseResponse> {
     const address = await this.userAddressRepository.findByUserId(buyerId);
@@ -46,14 +43,15 @@ export class PurchaseOrderUseCase {
     if (!address) {
       return left(new OrderWithEmptyAddressError());
     }
+
     const buyerAddress = BuyerAddress.create({
-      buyerId: userAddress.userId,
+      buyerId: address.userId,
       username: address.username,
-      cep: userAddress.cep,
-      city: userAddress.city,
-      complement: userAddress.complement,
-      email: userAddress.email,
-      houseNumber: userAddress.houseNumber,
+      cep: address.cep,
+      city: address.city,
+      complement: address.complement,
+      email: address.email,
+      houseNumber: address.houseNumber,
       neighborhood: address.neighborhood,
       phoneNumber: address.phoneNumber,
       street: address.street,

@@ -34,24 +34,10 @@ describe("Create Order (E2E)", () => {
       );
     const buyerId = user.id;
 
-    const userAddress = await userAddressFactory.makePrismaUserAddress({
+    await userAddressFactory.makePrismaUserAddress({
       userId: new UniqueEntityID(buyerId),
       city: "Canguaretama",
     });
-
-    const dataUserAddress = {
-      userId: userAddress.userId.toString(),
-      cep: userAddress.cep,
-      city: userAddress.city,
-      uf: userAddress.uf,
-      street: userAddress.street,
-      neighborhood: userAddress.neighborhood,
-      houseNumber: userAddress.houseNumber,
-      complement: userAddress.complement,
-      phoneNumber: userAddress.phoneNumber,
-      username: userAddress.username,
-      email: userAddress.email,
-    };
 
     const category = await categoryFactory.makePrismaCategory({ title: "LG" });
 
@@ -88,7 +74,6 @@ describe("Create Order (E2E)", () => {
       .post("/order/create")
       .send({
         buyerId,
-        userAddress: dataUserAddress,
         orderProducts,
       })
       .set("Authorization", `Bearer ${accessToken}`);
@@ -97,7 +82,6 @@ describe("Create Order (E2E)", () => {
       .post("/order/create")
       .send({
         buyerId,
-        userAddress: dataUserAddress,
         orderProducts,
       })
       .set("Authorization", `Bearer ${accessToken}`);

@@ -60,7 +60,6 @@ describe("Purchase Order", () => {
 
     const result = await sut.execute({
       buyerId: user.id.toString(),
-      userAddress,
       orderProducts,
     });
 
