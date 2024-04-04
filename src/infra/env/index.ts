@@ -9,6 +9,9 @@ const envSchema = z.object({
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET_ID: z.string(),
   GOOGLE_CLIENT_REDIRECT_URL: z.string(),
+  EFI_CLIENT_KEY_ID: z.string(),
+  EFI_SECRET_KEY: z.string(),
+  EFI_CERTIFICATE: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);
