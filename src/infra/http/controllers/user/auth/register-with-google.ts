@@ -4,9 +4,9 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { makeRegisterUserWithGoogleUseCase } from "src/domain/store/application/use-cases/user/factory/make-register-user-with-google-use-case";
 import { makeAuthenticateUserWithGoogleUseCase } from "src/domain/store/application/use-cases/user/factory/make-authenticate-user-with-google-use-case";
-import { getGoogleOAuthTokens } from "src/infra/http/service/get-google-oauthTokens";
-import { getGoogleUser } from "src/infra/http/service/get-google-user";
-import { RefreshTokenPresenter } from "src/infra/http/presenters/refresh-token-presenter";
+import { RefreshTokenWithGooglePresenter } from "src/infra/http/presenters/refresh-token-with-google-presenter";
+import { getGoogleOAuthTokens } from "src/infra/service/gateway-tokens/oauth-google/get-google-oauthTokens";
+import { getGoogleUser } from "src/infra/service/gateway-tokens/oauth-google/get-google-user";
 
 interface DecodedAccessToken extends JwtPayload {
   exp?: number;
@@ -62,7 +62,7 @@ export async function registerWithGoogle(
     }
 
     const { id: refreshToken, expires: refreshTokenExpires } =
-      RefreshTokenPresenter.toHTTP(result.value.refreshToken);
+      RefreshTokenWithGooglePresenter.toHTTP(result.value.refreshToken);
 
     const accessTokenForDecode = result.value.accessToken;
 
