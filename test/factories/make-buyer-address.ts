@@ -21,7 +21,7 @@ export function makeBuyerAddress(
       neighborhood: faker.lorem.sentence(3),
       houseNumber: 489,
       complement: faker.lorem.sentence(4),
-      phoneNumber: 1234567891,
+      phoneNumber: "1234567891",
       username: faker.person.fullName(),
       email: "example@gmail.com",
       createdAt: new Date(),

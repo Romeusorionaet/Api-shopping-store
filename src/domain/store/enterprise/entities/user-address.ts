@@ -10,7 +10,7 @@ export interface UserAddressProps {
   neighborhood: string;
   houseNumber: number;
   complement: string;
-  phoneNumber: number;
+  phoneNumber: string;
   username: string;
   email: string;
 }

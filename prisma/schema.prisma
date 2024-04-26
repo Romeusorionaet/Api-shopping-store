@@ -60,7 +60,7 @@ model UserAddress {
   neighborhood String
   houseNumber  Int       @map("house_number")
   complement   String
-  phoneNumber  Int       @map("phone_number")
+  phoneNumber  String    @map("phone_number")
   username     String
   email        String
   updatedAt    DateTime? @default(now()) @updatedAt @map("updated_at")
@@ -138,7 +138,7 @@ model BuyerAddress {
   neighborhood String
   houseNumber  Int       @map("house_number")
   complement   String
-  phoneNumber  Int       @map("phone_number")
+  phoneNumber  String    @map("phone_number")
   username     String
   email        String
   updatedAt    DateTime? @default(now()) @updatedAt @map("updated_at")

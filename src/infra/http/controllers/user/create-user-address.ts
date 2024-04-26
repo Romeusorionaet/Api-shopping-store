@@ -19,11 +19,7 @@ export async function createUserAddress(
     neighborhood: z.string(),
     houseNumber: z.coerce.number(),
     complement: z.string(),
-    phoneNumber: z.coerce
-      .number()
-      .refine((value) => value.toString().length === 10, {
-        message: "Número de telefone inválido",
-      }),
+    phoneNumber: z.string(),
     username: z.string(),
     email: z.string(),
   });

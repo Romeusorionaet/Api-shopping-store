@@ -36,7 +36,7 @@ describe("Create user address (E2E)", () => {
         neighborhood: "iee vrerg erg ",
         houseNumber: 489,
         complement: "e rger g eor gregerger erg",
-        phoneNumber: 1234567891,
+        phoneNumber: "1234567891",
         username: "romeu soares",
         email: "romeusoaresdesouto@gmail.com",
       })

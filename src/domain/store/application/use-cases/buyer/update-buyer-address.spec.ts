@@ -39,7 +39,7 @@ describe("Register User", () => {
       neighborhood: "new neighborhood",
       houseNumber: 123,
       complement: "new complement",
-      phoneNumber: 12345678,
+      phoneNumber: "84981127596",
       username: "new username",
       email: "new email",
     });
@@ -57,7 +57,7 @@ describe("Register User", () => {
           neighborhood: "new neighborhood",
           houseNumber: 123,
           complement: "new complement",
-          phoneNumber: 12345678,
+          phoneNumber: "84981127596",
           username: "new username",
           email: "new email",
         }),
