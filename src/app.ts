@@ -10,6 +10,7 @@ import { buyerRoutes } from "./infra/http/controllers/buyer/routes";
 import { orderRoutes } from "./infra/http/controllers/order/routes";
 import { authRoutes } from "./infra/http/controllers/user/auth/routes";
 import { userRoutes } from "./infra/http/controllers/user/routes";
+import { webhookRoutes } from "./infra/http/controllers/webhooks/routes";
 
 export const app = fastify();
 
@@ -31,9 +32,11 @@ app.register(fastifyCookie);
 app.register(categoriesRoutes);
 app.register(productsRoutes);
 app.register(userRoutes);
-app.register(buyerRoutes);
 app.register(orderRoutes);
+app.register(buyerRoutes);
 app.register(authRoutes);
+
+app.register(webhookRoutes);
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

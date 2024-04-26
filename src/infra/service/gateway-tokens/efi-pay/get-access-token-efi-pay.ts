@@ -16,14 +16,15 @@ export async function getAccessTokenEfiPay() {
         "Content-Type": "application/json",
       },
       httpsAgent: new https.Agent({
-        pfx: configEfiPay.cert_path,
+        pfx: configEfiPay.cert,
         passphrase: "",
       }),
     });
 
     return response.data.access_token;
-  } catch (error) {
-    throw new Error("Erro ao obter o token de acesso: " + error);
+  } catch (err) {
+    console.log(err.message, "===");
+    throw new Error("Erro ao obter o token de acesso: " + err);
   }
 }
 
