@@ -10,7 +10,8 @@ import { buyerRoutes } from "./infra/http/controllers/buyer/routes";
 import { orderRoutes } from "./infra/http/controllers/order/routes";
 import { authRoutes } from "./infra/http/controllers/user/auth/routes";
 import { userRoutes } from "./infra/http/controllers/user/routes";
-import { webhookRoutes } from "./infra/http/controllers/webhooks/routes";
+import { webhookRoutes } from "./infra/http/controllers/webhook/routes";
+import rawBody from "fastify-raw-body";
 
 export const app = fastify();
 
@@ -29,13 +30,21 @@ app.register(JWT, {
 
 app.register(fastifyCookie);
 
+app.register(rawBody, {
+  field: "rawBody",
+  global: false,
+  encoding: "utf8",
+  runFirst: true,
+  routes: [],
+  jsonContentTypes: [],
+});
+
 app.register(categoriesRoutes);
 app.register(productsRoutes);
 app.register(userRoutes);
 app.register(orderRoutes);
 app.register(buyerRoutes);
 app.register(authRoutes);
-
 app.register(webhookRoutes);
 
 app.setErrorHandler((error, _, reply) => {

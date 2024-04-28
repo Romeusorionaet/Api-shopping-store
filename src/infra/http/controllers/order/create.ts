@@ -1,29 +1,42 @@
 import { FastifyRequest, FastifyReply } from "fastify";
+import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 import { OrderWithEmptyAddressError } from "src/domain/store/application/use-cases/errors/order-with-empty-address-error";
 import { makePurchaseOrderUseCase } from "src/domain/store/application/use-cases/order/factory/make-purchase-order-use-case";
-import { stripe } from "src/infra/service/setup-stripe/stripe";
+import { initializeStripe } from "src/infra/service/setup-stripe/stripe";
 import { z } from "zod";
 
-interface ProductsProps {
-  id: string;
-  name: string;
-  imageUrl: string;
-  price: string;
-  defaultPriceId: string;
+interface OrderProductProps {
+  productId: UniqueEntityID;
+  title: string;
+  description: string;
+  basePrice: number;
+  discountPercentage: number;
   quantity: number;
 }
+
+const uuidType = z.string().refine((value) => {
+  return value;
+});
+
+const createOrderBodySchema = z.object({
+  buyerId: z.string(),
+  orderProducts: z.array(
+    z.object({
+      productId: uuidType.transform((value) => new UniqueEntityID(value)),
+      title: z.string(),
+      description: z.string(),
+      basePrice: z.coerce.number(),
+      discountPercentage: z.coerce.number(),
+      quantity: z.coerce.number(),
+    }),
+  ),
+});
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   if (request.method !== "POST") {
     return reply.status(405).send({ error: "Method not allowed" });
   }
-
-  const createOrderBodySchema = z.object({
-    buyerId: z.string().uuid(),
-    orderProducts: z.any(),
-    // totalPrice: z.number(),
-  });
 
   const { buyerId, orderProducts } = createOrderBodySchema.parse(request.body);
 
@@ -52,20 +65,40 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     }
   }
 
+  const orderId = result.value.order.id.toString();
+
   const successUrl = `https://google.com/success?session_id={CHECKOUT_SESSION_ID}`;
   const cancelUrl = `https://facebook.com/`;
 
-  const transformItems = orderProducts.map((item: ProductsProps) => ({
-    price: item.defaultPriceId,
-    quantity: item.quantity,
-  }));
-
   try {
+    const stripe = initializeStripe();
+
     const checkoutSession = await stripe.checkout.sessions.create({
-      line_items: transformItems,
+      payment_method_types: ["card"],
       mode: "payment",
       success_url: successUrl,
       cancel_url: cancelUrl,
+      metadata: {
+        orderId,
+      },
+      line_items: orderProducts.map((product: OrderProductProps) => {
+        const totalDiscount =
+          Number(product.basePrice) * (product.discountPercentage / 100);
+        const totalPrice = Number(product.basePrice) - totalDiscount;
+        const totalPriceInCents = Math.round(totalPrice * 100);
+
+        return {
+          price_data: {
+            currency: "brl",
+            product_data: {
+              name: product.title,
+              description: product.description,
+            },
+            unit_amount: totalPriceInCents,
+          },
+          quantity: product.quantity,
+        };
+      }),
     });
 
     const successUrlWithSessionId = successUrl.replace(

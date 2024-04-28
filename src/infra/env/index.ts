@@ -11,6 +11,7 @@ const envSchema = z.object({
   GOOGLE_CLIENT_REDIRECT_URL: z.string(),
   STRIPE_PUBLIC_KEY: z.string(),
   STRIPE_SECRET_KEY: z.string(),
+  STRIPE_WEBHOOK_SECRET_KEY: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

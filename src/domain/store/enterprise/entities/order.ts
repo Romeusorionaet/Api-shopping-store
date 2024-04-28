@@ -4,7 +4,7 @@ import { Entity } from "src/core/entities/entity";
 import { BuyerAddress } from "./buyer-address";
 import { OrderStatusTracking } from "src/core/entities/order-status-tracking";
 import { OrderStatus } from "src/core/entities/order-status";
-import { OrderProduct } from "./order-product";
+import { OrderProductProps } from "./order-product";
 import dayjs from "dayjs";
 
 export interface OrderProps {
@@ -13,7 +13,7 @@ export interface OrderProps {
   orderStatusTracking?: OrderStatusTracking | null;
   status?: OrderStatus | null;
   buyerAddress: BuyerAddress;
-  orderProducts: OrderProduct[];
+  orderProducts: OrderProductProps[];
   createdAt: Date;
   updatedAt?: Date | null;
 }
