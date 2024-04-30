@@ -4,16 +4,16 @@ import { Entity } from "src/core/entities/entity";
 import { BuyerAddress } from "./buyer-address";
 import { OrderStatusTracking } from "src/core/entities/order-status-tracking";
 import { OrderStatus } from "src/core/entities/order-status";
-import { OrderProductProps } from "./order-product";
+import { OrderProduct } from "./order-product";
 import dayjs from "dayjs";
 
 export interface OrderProps {
   buyerId: UniqueEntityID;
-  trackingCode?: string | null;
-  orderStatusTracking?: OrderStatusTracking | null;
-  status?: OrderStatus | null;
+  trackingCode: string;
+  orderStatusTracking: OrderStatusTracking;
+  status: OrderStatus;
   buyerAddress: BuyerAddress;
-  orderProducts: OrderProductProps[];
+  orderProducts: OrderProduct[];
   createdAt: Date;
   updatedAt?: Date | null;
 }
@@ -33,6 +33,10 @@ export class Order extends Entity<OrderProps> {
 
   get status() {
     return this.props.status;
+  }
+
+  set status(value: OrderStatus) {
+    this.props.status = value;
   }
 
   get buyerAddress() {
@@ -74,5 +78,16 @@ export class Order extends Entity<OrderProps> {
       id,
     );
     return order;
+  }
+
+  update(props: Partial<OrderProps>): Order {
+    return new Order(
+      {
+        ...this.props,
+        ...props,
+        updatedAt: new Date(),
+      },
+      this.id,
+    );
   }
 }

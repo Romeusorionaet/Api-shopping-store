@@ -20,7 +20,7 @@ const uuidType = z.string().refine((value) => {
 });
 
 const createOrderBodySchema = z.object({
-  buyerId: z.string(),
+  buyerId: z.string().uuid(),
   orderProducts: z.array(
     z.object({
       productId: uuidType.transform((value) => new UniqueEntityID(value)),
@@ -29,11 +29,14 @@ const createOrderBodySchema = z.object({
       basePrice: z.coerce.number(),
       discountPercentage: z.coerce.number(),
       quantity: z.coerce.number(),
+      // adicionar o "color"
     }),
   ),
 });
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
+  // preciso refatorar
+
   if (request.method !== "POST") {
     return reply.status(405).send({ error: "Method not allowed" });
   }
@@ -81,6 +84,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
       metadata: {
         orderId,
       },
+
       line_items: orderProducts.map((product: OrderProductProps) => {
         const totalDiscount =
           Number(product.basePrice) * (product.discountPercentage / 100);

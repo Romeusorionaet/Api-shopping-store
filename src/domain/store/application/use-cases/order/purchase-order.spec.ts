@@ -9,15 +9,19 @@ import { makeOrderProduct } from "test/factories/make-order-product";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { InMemoryUsersAddressRepository } from "test/repositories/in-memory-users-address-repository";
 import { makeUserAddress } from "test/factories/make-user-address";
+import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 
 let orderRepository: InMemoryOrdersRepository;
 let userAddressRepository: InMemoryUsersAddressRepository;
 let usersRepository: InMemoryUsersRepository;
+let productRepository: InMemoryProductsRepository;
 let sut: PurchaseOrderUseCase;
 
 describe("Purchase Order", () => {
   beforeEach(() => {
-    orderRepository = new InMemoryOrdersRepository();
+    productRepository = new InMemoryProductsRepository();
+
+    orderRepository = new InMemoryOrdersRepository(productRepository);
 
     userAddressRepository = new InMemoryUsersAddressRepository();
 
@@ -43,15 +47,13 @@ describe("Purchase Order", () => {
 
     await userAddressRepository.create(userAddress);
 
-    const orderProductFirst = makeOrderProduct(
-      {},
-      new UniqueEntityID("order-product-id-01"),
-    );
+    const orderProductFirst = makeOrderProduct({
+      productId: new UniqueEntityID("test-product-id-01"),
+    });
 
-    const orderProductSecond = makeOrderProduct(
-      {},
-      new UniqueEntityID("order-product-id-02"),
-    );
+    const orderProductSecond = makeOrderProduct({
+      productId: new UniqueEntityID("test-product-id-02"),
+    });
 
     const orderProducts = [];
 
@@ -75,10 +77,10 @@ describe("Purchase Order", () => {
           }),
           orderProducts: expect.arrayContaining([
             expect.objectContaining({
-              id: new UniqueEntityID("order-product-id-01"),
+              productId: new UniqueEntityID("test-product-id-01"),
             }),
             expect.objectContaining({
-              id: new UniqueEntityID("order-product-id-02"),
+              productId: new UniqueEntityID("test-product-id-02"),
             }),
           ]),
           status: OrderStatus.WAITING_FOR_PAYMENT,

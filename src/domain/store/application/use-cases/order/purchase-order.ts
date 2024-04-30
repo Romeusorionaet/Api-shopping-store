@@ -3,7 +3,10 @@ import { OrderRepository } from "../../repositories/order-repository";
 import { Order } from "../../../enterprise/entities/order";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { OrderWithEmptyAddressError } from "../errors/order-with-empty-address-error";
-import { OrderProductProps } from "src/domain/store/enterprise/entities/order-product";
+import {
+  OrderProduct,
+  OrderProductProps,
+} from "src/domain/store/enterprise/entities/order-product";
 import { UsersRepository } from "../../repositories/users-repository";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 import { BuyerAddress } from "src/domain/store/enterprise/entities/buyer-address";
@@ -32,6 +35,7 @@ export class PurchaseOrderUseCase {
     buyerId,
     orderProducts,
   }: PurchaseOrderUseCaseRequest): Promise<PurchaseOrderUseCaseResponse> {
+    // precios verificar se a quantidade do produto é !== 0
     const address = await this.userAddressRepository.findByUserId(buyerId);
 
     const buyer = await this.userRepository.findById(buyerId);
@@ -58,10 +62,19 @@ export class PurchaseOrderUseCase {
       uf: address.uf,
     });
 
+    const newOrderProducts = orderProducts.map((product) => {
+      return OrderProduct.create({
+        productId: product.productId,
+        basePrice: product.basePrice,
+        discountPercentage: product.discountPercentage,
+        quantity: product.quantity,
+      });
+    });
+
     const order = Order.create({
       buyerId: new UniqueEntityID(buyerId),
       buyerAddress,
-      orderProducts,
+      orderProducts: newOrderProducts,
     });
 
     await this.orderRepository.create(order);

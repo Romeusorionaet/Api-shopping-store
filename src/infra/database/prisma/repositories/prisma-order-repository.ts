@@ -4,8 +4,46 @@ import { prisma } from "../prisma";
 import { PrismaOrderMapper } from "../mappers/prisma-order-mapper";
 import { PrismaOrderProductMapper } from "../mappers/prisma-order-product-mapper";
 import { PrismaBuyerAddressMapper } from "../mappers/prisma-buyer-address-mapper";
+import { OrderStatus } from "@prisma/client";
+import { PrismaProductRepository } from "./prisma-product-repository";
 
 export class PrismaOrderRepository implements OrderRepository {
+  constructor(private productRepository: PrismaProductRepository) {}
+
+  async findById(id: string): Promise<Order | null> {
+    const order = await prisma.order.findUnique({
+      where: { id },
+      include: {
+        orderProducts: true,
+        buyerAddress: true,
+      },
+    });
+
+    if (!order) {
+      return null;
+    }
+
+    return PrismaOrderMapper.toDomain(order);
+  }
+
+  async confirmPayment(orderId: string): Promise<void> {
+    const order = await prisma.order.update({
+      where: { id: orderId },
+      data: {
+        status: OrderStatus.PAYMENT_CONFIRMED,
+      },
+      include: {
+        orderProducts: true,
+      },
+    });
+
+    const orderProducts = order.orderProducts.map(
+      PrismaOrderProductMapper.toDomain,
+    );
+
+    this.productRepository.decrementStockQuantity(orderProducts);
+  }
+
   async create(order: Order): Promise<void> {
     const dataOrder = PrismaOrderMapper.toPrisma(order);
 
@@ -50,6 +88,7 @@ export class PrismaOrderRepository implements OrderRepository {
     const mappedOrders = await Promise.all(
       orders.map(PrismaOrderMapper.toDomain),
     );
+
     return mappedOrders;
   }
 }

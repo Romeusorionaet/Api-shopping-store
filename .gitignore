@@ -3,6 +3,7 @@ build
 coverage
 .env*
 *.md
+dist
 
 # certs
 certs

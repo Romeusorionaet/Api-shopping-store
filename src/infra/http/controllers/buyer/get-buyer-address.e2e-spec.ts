@@ -32,7 +32,6 @@ describe("Get buyer address (E2E)", () => {
       buyerId: new UniqueEntityID(buyerId),
       city: "Canguaretama",
     });
-    console.log(accessToken, "====e2e");
 
     const result = await request(app.server)
       .get(`/buyer/buyer-address/${buyerId}`)

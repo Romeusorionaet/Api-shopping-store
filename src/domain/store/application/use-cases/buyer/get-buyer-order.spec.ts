@@ -4,13 +4,17 @@ import { GetBuyerOrdersUseCase } from "./get-buyer-orders";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { makeOrder } from "test/factories/make-order";
 import { makeUser } from "test/factories/make-user";
+import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 
 let ordersRepository: InMemoryOrdersRepository;
+let productRepository: InMemoryProductsRepository;
 let sut: GetBuyerOrdersUseCase;
 
 describe("Get Buyer Orders", () => {
   beforeEach(() => {
-    ordersRepository = new InMemoryOrdersRepository();
+    productRepository = new InMemoryProductsRepository();
+
+    ordersRepository = new InMemoryOrdersRepository(productRepository);
 
     sut = new GetBuyerOrdersUseCase(ordersRepository);
   });

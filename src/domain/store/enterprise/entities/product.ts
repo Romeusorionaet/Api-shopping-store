@@ -59,6 +59,10 @@ export class Product extends Entity<ProductProps> {
     return this.props.stockQuantity;
   }
 
+  set stockQuantity(value: number) {
+    this.props.stockQuantity = value;
+  }
+
   get minimumQuantityStock() {
     return this.props.minimumQuantityStock;
   }

@@ -44,18 +44,22 @@ describe("Create Order (E2E)", () => {
     const productFirst = await productFactory.makePrismaProduct({
       title: "tablet",
       categoryId: category.id,
+      stockQuantity: 10,
     });
 
     const productSeconde = await productFactory.makePrismaProduct({
       title: "notebook",
       categoryId: category.id,
+      stockQuantity: 10,
     });
 
     const orderProductFirst = {
       productId: productFirst.id.toString(),
       discountPercentage: 15,
       basePrice: 200,
-      quantity: 2,
+      quantity: 5,
+      title: "tablet",
+      description: "lorem description for product test e2e",
     };
 
     const orderProductSecond = {
@@ -63,20 +67,14 @@ describe("Create Order (E2E)", () => {
       discountPercentage: 15,
       basePrice: 200,
       quantity: 2,
+      title: "notebook",
+      description: "lorem description for product test e2e",
     };
 
     const orderProducts = [];
 
     orderProducts.push(orderProductFirst);
     orderProducts.push(orderProductSecond);
-
-    await request(app.server)
-      .post("/order/create")
-      .send({
-        buyerId,
-        orderProducts,
-      })
-      .set("Authorization", `Bearer ${accessToken}`);
 
     const response = await request(app.server)
       .post("/order/create")
@@ -87,6 +85,12 @@ describe("Create Order (E2E)", () => {
       .set("Authorization", `Bearer ${accessToken}`);
 
     expect(response.statusCode).toEqual(201);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        checkoutUrl: expect.any(String),
+        successUrlWithSessionId: expect.any(String),
+      }),
+    );
 
     const orderOnDatabase = await prisma.order.findMany({
       where: {

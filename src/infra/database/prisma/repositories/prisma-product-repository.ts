@@ -3,8 +3,27 @@ import { Product } from "src/domain/store/enterprise/entities/product";
 import { prisma } from "../prisma";
 import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
 import { PaginationParams } from "src/core/repositories/pagination-params";
+import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
 
 export class PrismaProductRepository implements ProductRepository {
+  async decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void> {
+    for (const productSold of orderProducts) {
+      const productId = productSold.productId;
+      const quantitySold = productSold.quantity;
+
+      await prisma.product.update({
+        where: {
+          id: productId.toString(),
+        },
+        data: {
+          stockQuantity: {
+            decrement: quantitySold,
+          },
+        },
+      });
+    }
+  }
+
   async create(product: Product): Promise<void> {
     const data = PrismaProductMapper.toPrisma(product);
 
