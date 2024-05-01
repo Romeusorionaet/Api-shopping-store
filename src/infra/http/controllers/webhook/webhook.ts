@@ -36,20 +36,9 @@ export async function webhook(request: FastifyRequest, reply: FastifyReply) {
     if (constructorEvent.type === "checkout.session.completed") {
       const session = constructorEvent.data.object as any;
 
-      const retrievedSession = await stripe.checkout.sessions.retrieve(
-        session.id,
-        {
-          expand: ["line_items"],
-        },
-      );
-
-      const orderId = retrievedSession.metadata?.orderId;
-
-      if (!orderId) {
-        reply
-          .status(401)
-          .send({ message: "There was a problem with the checkout process." });
-      }
+      await stripe.checkout.sessions.retrieve(session.id, {
+        expand: ["line_items"],
+      });
 
       const confirmOrderPayment = makeConfirmOderPaymentUseCase();
 
