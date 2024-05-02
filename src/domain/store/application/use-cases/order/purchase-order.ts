@@ -11,6 +11,10 @@ import { UsersRepository } from "../../repositories/users-repository";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 import { BuyerAddress } from "src/domain/store/enterprise/entities/buyer-address";
 import { UserAddressRepository } from "../../repositories/user-address-repository";
+import { ProductRepository } from "../../repositories/product-repository";
+import { ProductNotFoundError } from "../errors/product-not-found-error";
+import { ProductIsOutOfStockError } from "../errors/product-is-out-of-stock-error";
+import { InsufficientProductInventoryError } from "../errors/insufficient-product-Inventory.error";
 
 interface PurchaseOrderUseCaseRequest {
   buyerId: string;
@@ -18,7 +22,10 @@ interface PurchaseOrderUseCaseRequest {
 }
 
 type PurchaseOrderUseCaseResponse = Either<
-  OrderWithEmptyAddressError | UserNotFoundError,
+  | OrderWithEmptyAddressError
+  | UserNotFoundError
+  | ProductNotFoundError
+  | ProductIsOutOfStockError,
   {
     order: Order;
   }
@@ -29,13 +36,46 @@ export class PurchaseOrderUseCase {
     private orderRepository: OrderRepository,
     private userAddressRepository: UserAddressRepository,
     private userRepository: UsersRepository,
+    private productRepository: ProductRepository,
   ) {}
 
   async execute({
     buyerId,
     orderProducts,
   }: PurchaseOrderUseCaseRequest): Promise<PurchaseOrderUseCaseResponse> {
-    // precios verificar se a quantidade do produto é !== 0
+    const outOfStockProducts = [];
+    const insufficientProductInventory = [];
+
+    for (const orderProduct of orderProducts) {
+      const product = await this.productRepository.findById(
+        orderProduct.productId.toString(),
+      );
+
+      if (!product) {
+        return left(new ProductNotFoundError());
+      }
+
+      if (product.stockQuantity < orderProduct.quantity) {
+        insufficientProductInventory.push(product.title);
+      }
+
+      if (product.stockQuantity <= 0) {
+        outOfStockProducts.push(product.title);
+      }
+    }
+
+    if (outOfStockProducts.length > 0) {
+      return left(new ProductIsOutOfStockError(outOfStockProducts.join(", ")));
+    }
+
+    if (insufficientProductInventory.length > 0) {
+      return left(
+        new InsufficientProductInventoryError(
+          insufficientProductInventory.join(", "),
+        ),
+      );
+    }
+
     const address = await this.userAddressRepository.findByUserId(buyerId);
 
     const buyer = await this.userRepository.findById(buyerId);

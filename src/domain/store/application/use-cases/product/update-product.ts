@@ -1,8 +1,8 @@
 import { Either, left, right } from "src/core/either";
 import { Product } from "../../../enterprise/entities/product";
-import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 import { ProductRepository } from "../../repositories/product-repository";
 import { ModeOfSale } from "src/core/entities/mode-of-sale";
+import { ProductNotFoundError } from "../errors/product-not-found-error";
 
 interface UpdateProductUseCaseRequest {
   productId: string;
@@ -21,7 +21,7 @@ interface UpdateProductUseCaseRequest {
 }
 
 type UpdateProductUseCaseResponse = Either<
-  ResourceNotFoundError,
+  ProductNotFoundError,
   {
     productUpdated: Product;
   }
@@ -48,7 +48,7 @@ export class UpdateProductUseCase {
     const product = await this.productRepository.findById(productId);
 
     if (!product) {
-      return left(new ResourceNotFoundError());
+      return left(new ProductNotFoundError());
     }
 
     const productUpdated = product.update({

@@ -37,9 +37,6 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     const err = result.value;
     switch (err.constructor) {
       case ProductAlreadyExistsError:
-        return reply.status(400).send({
-          error: err.message,
-        });
       case TheAssignedCategoryDoesNotExistError:
         return reply.status(400).send({
           error: err.message,

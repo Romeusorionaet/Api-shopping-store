@@ -1,8 +1,8 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ProductPresenter } from "../../presenters/product-presenter";
-import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 import { z } from "zod";
 import { makeSearchProductsUseCase } from "src/domain/store/application/use-cases/product/factory/make-search-products-use-case";
+import { ProductNotFoundError } from "src/domain/store/application/use-cases/errors/product-not-found-error";
 
 export async function search(request: FastifyRequest, reply: FastifyReply) {
   const fetchProductsSchema = z.object({
@@ -19,7 +19,7 @@ export async function search(request: FastifyRequest, reply: FastifyReply) {
   if (result.isLeft()) {
     const err = result.value;
     switch (err.constructor) {
-      case ResourceNotFoundError:
+      case ProductNotFoundError:
         return reply.status(400).send({
           error: err.message,
         });

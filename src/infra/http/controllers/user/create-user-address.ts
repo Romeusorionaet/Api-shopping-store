@@ -34,9 +34,6 @@ export async function createUserAddress(
     const err = result.value;
     switch (err.constructor) {
       case UserNotFoundError:
-        return reply.status(400).send({
-          error: err.message,
-        });
       case AddressAlreadyExistError:
         return reply.status(400).send({
           error: err.message,

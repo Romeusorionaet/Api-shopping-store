@@ -1,7 +1,7 @@
 import { Either, left, right } from "src/core/either";
 import { Product } from "../../../enterprise/entities/product";
 import { ProductRepository } from "../../repositories/product-repository";
-import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
+import { ProductNotFoundError } from "../errors/product-not-found-error";
 
 interface SearchProductsUseCaseRequest {
   query: string;
@@ -9,7 +9,7 @@ interface SearchProductsUseCaseRequest {
 }
 
 type SearchProductsUseCaseResponse = Either<
-  ResourceNotFoundError,
+  ProductNotFoundError,
   {
     products: Product[];
   }
@@ -25,7 +25,7 @@ export class SearchProductsUseCase {
     const products = await this.productRepository.searchMany(query, page);
 
     if (!products) {
-      return left(new ResourceNotFoundError());
+      return left(new ProductNotFoundError());
     }
 
     return right({ products });

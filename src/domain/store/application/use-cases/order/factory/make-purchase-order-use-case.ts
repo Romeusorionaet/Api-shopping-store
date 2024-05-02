@@ -14,6 +14,7 @@ export function makePurchaseOrderUseCase() {
     orderRepository,
     userAddressRepository,
     usersRepository,
+    productRepository,
   );
 
   return useCase;

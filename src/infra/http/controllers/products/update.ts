@@ -1,6 +1,6 @@
 import { ModeOfSale } from "@prisma/client";
 import { FastifyRequest, FastifyReply } from "fastify";
-import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
+import { ProductNotFoundError } from "src/domain/store/application/use-cases/errors/product-not-found-error";
 import { makeUpdateProductUseCase } from "src/domain/store/application/use-cases/product/factory/make-update-product-use-case";
 import { z } from "zod";
 
@@ -33,7 +33,7 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
   if (result.isLeft()) {
     const err = result.value;
     switch (err.constructor) {
-      case ResourceNotFoundError:
+      case ProductNotFoundError:
         return reply.status(400).send({
           error: err.message,
         });

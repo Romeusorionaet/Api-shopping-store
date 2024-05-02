@@ -31,6 +31,7 @@ describe("Purchase Order", () => {
       orderRepository,
       userAddressRepository,
       usersRepository,
+      productRepository,
     );
   });
 

@@ -90,6 +90,5 @@ describe("Confirm Order Payment", () => {
     const result = await sut.execute({ orderId: order.id.toString() });
 
     expect(result.isRight()).toEqual(true);
-    console.log(productRepository.items);
   });
 });
