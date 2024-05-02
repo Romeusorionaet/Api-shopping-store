@@ -1,9 +1,6 @@
 import { Prisma, OrderProduct as PrismaOrderProduct } from "@prisma/client";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import {
-  OrderProduct,
-  OrderProductProps,
-} from "src/domain/store/enterprise/entities/order-product";
+import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
 
 export class PrismaOrderProductMapper {
   static toDomain(raw: PrismaOrderProduct): OrderProduct {
@@ -13,19 +10,22 @@ export class PrismaOrderProductMapper {
         basePrice: Number(raw.basePrice),
         discountPercentage: raw.discountPercentage,
         quantity: raw.quantity,
+        productColor: raw.productColor,
       },
       new UniqueEntityID(raw.id),
     );
   }
 
   static toPrisma(
-    orderProduct: OrderProductProps,
+    orderProduct: OrderProduct,
   ): Prisma.OrderProductUncheckedCreateInput {
     return {
+      id: orderProduct.id.toString(),
       productId: orderProduct.productId.toString(),
       basePrice: orderProduct.basePrice,
       discountPercentage: orderProduct.discountPercentage,
       quantity: orderProduct.quantity,
+      productColor: orderProduct.productColor,
     };
   }
 }

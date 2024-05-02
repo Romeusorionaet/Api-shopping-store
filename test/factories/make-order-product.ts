@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import {
   OrderProduct,
@@ -14,6 +15,7 @@ export function makeOrderProduct(
       discountPercentage: 15,
       basePrice: 200,
       quantity: 2,
+      productColor: faker.color.human(),
       ...override,
     },
     id,

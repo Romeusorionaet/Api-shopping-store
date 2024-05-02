@@ -1,11 +1,13 @@
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { Entity } from "src/core/entities/entity";
+import { Optional } from "src/core/@types/optional";
 
 export interface OrderProductProps {
   productId: UniqueEntityID;
   discountPercentage: number;
   basePrice: number;
   quantity: number;
+  productColor?: string | null;
 }
 
 export class OrderProduct extends Entity<OrderProductProps> {
@@ -25,10 +27,18 @@ export class OrderProduct extends Entity<OrderProductProps> {
     return this.props.quantity;
   }
 
-  static create(props: OrderProductProps, id?: UniqueEntityID) {
+  get productColor() {
+    return this.props.productColor;
+  }
+
+  static create(
+    props: Optional<OrderProductProps, "productColor">,
+    id?: UniqueEntityID,
+  ) {
     const orderProduct = new OrderProduct(
       {
         ...props,
+        productColor: props.productColor || "default",
       },
       id,
     );

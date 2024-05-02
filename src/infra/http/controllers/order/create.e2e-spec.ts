@@ -60,6 +60,7 @@ describe("Create Order (E2E)", () => {
       quantity: 5,
       title: "tablet",
       description: "lorem description for product test e2e",
+      productColor: "green",
     };
 
     const orderProductSecond = {
@@ -69,6 +70,7 @@ describe("Create Order (E2E)", () => {
       quantity: 2,
       title: "notebook",
       description: "lorem description for product test e2e",
+      productColor: "blue",
     };
 
     const orderProducts = [];

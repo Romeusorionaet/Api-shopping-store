@@ -158,6 +158,7 @@ model OrderProduct {
   basePrice          Decimal @map("base_price") @db.Decimal(8, 2)
   discountPercentage Int     @default(0) @map("discount_percentage")
   quantity           Int
+  productColor       String? @map("product_color")
 
   productId String
   orderId   String?

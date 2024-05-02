@@ -69,19 +69,27 @@ describe("Get buyer orders (E2E)", () => {
       categoryTitle: category.title,
     });
 
-    const orderProductFirst = makeOrderProduct({
-      productId: product.id,
-      basePrice: 150,
-    });
-    const orderProductSecond = makeOrderProduct({
-      productId: product.id,
-      basePrice: 150,
-    });
+    const orderProductFirst = makeOrderProduct(
+      {
+        productId: product.id,
+        basePrice: 150,
+      },
+      new UniqueEntityID("order-product-id-01"),
+    );
 
-    const orderProducts = [];
+    const orderProductSecond = makeOrderProduct(
+      {
+        productId: product.id,
+        basePrice: 150,
+      },
+      new UniqueEntityID("order-product-id-02"),
+    );
 
-    orderProducts.push(orderProductFirst);
-    orderProducts.push(orderProductSecond);
+    const orderProductsFirst = [];
+    const orderProductsSecond = [];
+
+    orderProductsFirst.push(orderProductFirst);
+    orderProductsSecond.push(orderProductSecond);
 
     const buyerAddressFirst = createBuyerAddress();
     const buyerAddressSecond = createBuyerAddress();
@@ -90,13 +98,13 @@ describe("Get buyer orders (E2E)", () => {
       orderFactory.makePrismaOrder({
         buyerId: new UniqueEntityID(buyerId),
         buyerAddress: buyerAddressFirst,
-        orderProducts,
+        orderProducts: orderProductsFirst,
       }),
 
       orderFactory.makePrismaOrder({
         buyerId: new UniqueEntityID(buyerId),
         buyerAddress: buyerAddressSecond,
-        orderProducts,
+        orderProducts: orderProductsSecond,
       }),
     ]);
 

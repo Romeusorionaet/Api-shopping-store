@@ -48,7 +48,6 @@ export class OrderFactory {
     const dataOrder = PrismaOrderMapper.toPrisma(order);
 
     const buyerAddress = PrismaBuyerAddressMapper.toPrisma(order.buyerAddress);
-
     const orderProducts = order.orderProducts.map(
       PrismaOrderProductMapper.toPrisma,
     );

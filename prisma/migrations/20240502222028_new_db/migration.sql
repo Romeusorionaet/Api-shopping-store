@@ -125,6 +125,7 @@ CREATE TABLE "order_products" (
     "base_price" DECIMAL(8,2) NOT NULL,
     "discount_percentage" INTEGER NOT NULL DEFAULT 0,
     "quantity" INTEGER NOT NULL,
+    "product_color" TEXT DEFAULT 'any_color',
     "productId" TEXT NOT NULL,
     "orderId" TEXT,
 

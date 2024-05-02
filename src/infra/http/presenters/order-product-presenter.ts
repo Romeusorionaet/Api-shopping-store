@@ -8,6 +8,7 @@ export class OrderProductPresenter {
       basePrice: orderProduct.basePrice,
       discountPercentage: orderProduct.discountPercentage,
       quantity: orderProduct.quantity,
+      productColor: orderProduct.productColor,
     };
   }
 }

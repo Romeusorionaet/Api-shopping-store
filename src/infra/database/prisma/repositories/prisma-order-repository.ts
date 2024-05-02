@@ -50,6 +50,7 @@ export class PrismaOrderRepository implements OrderRepository {
     const dataOrderProducts = order.orderProducts.map(
       PrismaOrderProductMapper.toPrisma,
     );
+
     const dataBuyerAddress = PrismaBuyerAddressMapper.toPrisma(
       order.buyerAddress,
     );

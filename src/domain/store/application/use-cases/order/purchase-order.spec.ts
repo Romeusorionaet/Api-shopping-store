@@ -10,6 +10,7 @@ import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repos
 import { InMemoryUsersAddressRepository } from "test/repositories/in-memory-users-address-repository";
 import { makeUserAddress } from "test/factories/make-user-address";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
+import { makeProduct } from "test/factories/make-product";
 
 let orderRepository: InMemoryOrdersRepository;
 let userAddressRepository: InMemoryUsersAddressRepository;
@@ -48,12 +49,25 @@ describe("Purchase Order", () => {
 
     await userAddressRepository.create(userAddress);
 
+    const productFirst = makeProduct(
+      { title: "Notebook" },
+      new UniqueEntityID("test-product-notebook-id-01"),
+    );
+
+    const productSecond = makeProduct(
+      { title: "Cell Phone" },
+      new UniqueEntityID("test-product-cell-phone-id-02"),
+    );
+
+    productRepository.items.push(productFirst);
+    productRepository.items.push(productSecond);
+
     const orderProductFirst = makeOrderProduct({
-      productId: new UniqueEntityID("test-product-id-01"),
+      productId: productFirst.id,
     });
 
     const orderProductSecond = makeOrderProduct({
-      productId: new UniqueEntityID("test-product-id-02"),
+      productId: productSecond.id,
     });
 
     const orderProducts = [];
@@ -78,10 +92,10 @@ describe("Purchase Order", () => {
           }),
           orderProducts: expect.arrayContaining([
             expect.objectContaining({
-              productId: new UniqueEntityID("test-product-id-01"),
+              productId: new UniqueEntityID("test-product-notebook-id-01"),
             }),
             expect.objectContaining({
-              productId: new UniqueEntityID("test-product-id-02"),
+              productId: new UniqueEntityID("test-product-cell-phone-id-02"),
             }),
           ]),
           status: OrderStatus.WAITING_FOR_PAYMENT,
