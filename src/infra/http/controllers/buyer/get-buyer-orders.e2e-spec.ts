@@ -110,6 +110,7 @@ describe("Get buyer orders (E2E)", () => {
       expect.arrayContaining([expect.objectContaining({ buyerId })]),
     );
 
+    expect(result.body.orders).toHaveLength(2);
     expect(result.body.orders[0]).toEqual(
       expect.objectContaining({
         buyerAddress: expect.objectContaining({

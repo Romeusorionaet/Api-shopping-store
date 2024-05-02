@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { OrderNotFoundError } from "src/domain/store/application/use-cases/errors/order-not-found-error";
 import { makeConfirmOderPaymentUseCase } from "src/domain/store/application/use-cases/order/factory/make-confirm-order-payment-use-case";
 import { initializeStripe } from "src/infra/service/setup-stripe/stripe";
-import { stripeConstructorEventWebhook } from "src/infra/service/setup-stripe/stripe-constructor-event-webhook";
+import { StripeConstructorEvent } from "src/infra/service/setup-stripe/stripe-constructor-event";
 
 const stripe = initializeStripe();
 
@@ -20,7 +20,9 @@ export async function webhook(request: FastifyRequest, reply: FastifyReply) {
   let constructorEvent;
 
   try {
-    const { event } = stripeConstructorEventWebhook({
+    const stripeConstructorEvent = new StripeConstructorEvent();
+
+    const event = stripeConstructorEvent.webhook({
       data: request.rawBody,
       signature,
     });

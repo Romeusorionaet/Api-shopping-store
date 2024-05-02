@@ -85,6 +85,7 @@ describe("Create Order (E2E)", () => {
       .set("Authorization", `Bearer ${accessToken}`);
 
     expect(response.statusCode).toEqual(201);
+
     expect(response.body).toEqual(
       expect.objectContaining({
         checkoutUrl: expect.any(String),
