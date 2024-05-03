@@ -6,7 +6,7 @@ import { z } from "zod";
 
 export async function update(request: FastifyRequest, reply: FastifyReply) {
   const updateProductBodySchema = z.object({
-    productId: z.string().uuid(),
+    id: z.string().uuid(),
     title: z.string(),
     description: z.string(),
     price: z.coerce.number(),

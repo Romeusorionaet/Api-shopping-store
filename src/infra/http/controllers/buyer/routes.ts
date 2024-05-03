@@ -10,6 +10,6 @@ export async function buyerRoutes(app: FastifyInstance) {
 
   app.get("/buyer/profile", profile);
   app.put("/buyer/update-buyer-address", updateBuyerAddress);
-  app.get("/buyer/buyer-address/:buyerId", getBuyerAddress);
+  app.get("/buyer/address/:buyerId", getBuyerAddress);
   app.get("/buyer/orders/:buyerId", getBuyerOrders);
 }

@@ -4,7 +4,7 @@ import { BuyerAddressRepository } from "../../repositories/buyer-address-reposit
 import { AddressNotFoundError } from "../errors/address-not-found-error";
 
 interface UpdateBuyerAddressUseCaseRequest {
-  addressId: string;
+  id: string;
   cep: number;
   city: string;
   uf: string;
@@ -28,7 +28,7 @@ export class UpdateBuyerAddressUseCase {
   constructor(private buyerAddressRepository: BuyerAddressRepository) {}
 
   async execute({
-    addressId,
+    id,
     cep,
     city,
     uf,
@@ -40,7 +40,7 @@ export class UpdateBuyerAddressUseCase {
     username,
     email,
   }: UpdateBuyerAddressUseCaseRequest): Promise<UpdateBuyerAddressUseCaseResponse> {
-    const buyerAddress = await this.buyerAddressRepository.findById(addressId);
+    const buyerAddress = await this.buyerAddressRepository.findById(id);
 
     if (!buyerAddress) {
       return left(new AddressNotFoundError());

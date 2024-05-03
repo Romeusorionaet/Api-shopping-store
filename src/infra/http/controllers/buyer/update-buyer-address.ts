@@ -8,7 +8,7 @@ export async function updateBuyerAddress(
   reply: FastifyReply,
 ) {
   const updateBuyerAddressBodySchema = z.object({
-    addressId: z.string(),
+    id: z.string(),
     cep: z.coerce.number().refine((value) => value.toString().length === 8, {
       message: "O CEP deve ter 8 dígitos",
     }),

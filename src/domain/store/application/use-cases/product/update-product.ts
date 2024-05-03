@@ -5,7 +5,7 @@ import { ModeOfSale } from "src/core/entities/mode-of-sale";
 import { ProductNotFoundError } from "../errors/product-not-found-error";
 
 interface UpdateProductUseCaseRequest {
-  productId: string;
+  id: string;
   title: string;
   description: string;
   price: number;
@@ -31,7 +31,7 @@ export class UpdateProductUseCase {
   constructor(private productRepository: ProductRepository) {}
 
   async execute({
-    productId,
+    id,
     title,
     description,
     price,
@@ -45,7 +45,7 @@ export class UpdateProductUseCase {
     weight,
     placeOfSale,
   }: UpdateProductUseCaseRequest): Promise<UpdateProductUseCaseResponse> {
-    const product = await this.productRepository.findById(productId);
+    const product = await this.productRepository.findById(id);
 
     if (!product) {
       return left(new ProductNotFoundError());

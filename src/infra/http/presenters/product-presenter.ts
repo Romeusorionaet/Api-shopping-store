@@ -20,6 +20,7 @@ export class ProductPresenter {
       placeOfSale: product.placeOfSale,
       stars: product.stars,
       createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
     };
   }
 }

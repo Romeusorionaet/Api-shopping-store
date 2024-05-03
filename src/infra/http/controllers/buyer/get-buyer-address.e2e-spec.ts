@@ -20,7 +20,7 @@ describe("Get buyer address (E2E)", () => {
     await app.close();
   });
 
-  test("[GET] /buyer/buyer-address/:buyerId", async () => {
+  test("[GET] /buyer/address/:buyerId", async () => {
     const { accessToken, user } =
       await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
         app,
