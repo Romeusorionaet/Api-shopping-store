@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src",
+    "build": "tsup src --external supertest",
     "start": "node dist/server.js",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
