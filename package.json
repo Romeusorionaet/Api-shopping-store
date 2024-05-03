@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "build": "tsup src",
+    "start": "node dist/server.js",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:cov": "vitest run --coverage",
@@ -33,6 +35,7 @@
     "jsonwebtoken": "9.0.2",
     "prisma": "5.10.2",
     "stripe": "14.1.0",
+    "tsup": "8.0.2",
     "zod": "3.22.4"
   },
   "devDependencies": {
