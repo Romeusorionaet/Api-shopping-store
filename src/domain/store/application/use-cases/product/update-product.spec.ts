@@ -37,7 +37,7 @@ describe("Create Product", () => {
     await productsRepository.create(product);
 
     const result = await sut.execute({
-      productId: product.id.toString(),
+      id: product.id.toString(),
       title: "product register 01 updated",
       description: "description for product updated",
       price: 150,

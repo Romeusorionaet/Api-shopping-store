@@ -41,7 +41,7 @@ describe("Update buyer address (E2E)", () => {
     const result = await request(app.server)
       .put("/buyer/update-buyer-address")
       .send({
-        addressId: buyerAddress.id.toString(),
+        id: buyerAddress.id.toString(),
         city: "Rio de Janeiro",
         complement: "Morro do sufoco",
         cep: 12345678,

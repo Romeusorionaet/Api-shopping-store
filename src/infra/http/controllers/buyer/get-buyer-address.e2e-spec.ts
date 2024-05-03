@@ -34,7 +34,7 @@ describe("Get buyer address (E2E)", () => {
     });
 
     const result = await request(app.server)
-      .get(`/buyer/buyer-address/${buyerId}`)
+      .get(`/buyer/address/${buyerId}`)
       .set("Authorization", `Bearer ${accessToken}`);
 
     expect(result.statusCode).toBe(200);

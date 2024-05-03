@@ -31,7 +31,7 @@ describe("Register User", () => {
     buyerAddressRepository.items.push(buyerAddress);
 
     const result = await sut.execute({
-      addressId: buyerAddress.id.toString(),
+      id: buyerAddress.id.toString(),
       cep: 12345678,
       city: "new city",
       uf: "ab",

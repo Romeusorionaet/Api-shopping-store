@@ -30,7 +30,7 @@ describe("Update Product (E2E)", () => {
     });
 
     const response = await request(app.server).put("/product/update").send({
-      productId: product.id.toString(),
+      id: product.id.toString(),
       title: "product 01 updated",
       description: "description for product updated",
       price: 150,
