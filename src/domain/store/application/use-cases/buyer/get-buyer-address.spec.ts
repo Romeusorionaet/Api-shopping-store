@@ -1,4 +1,3 @@
-import { expect, describe, test, beforeEach } from "vitest";
 import { InMemoryBuyerAddressRepository } from "test/repositories/in-memory-buyer-address-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { makeBuyerAddress } from "test/factories/make-buyer-address";

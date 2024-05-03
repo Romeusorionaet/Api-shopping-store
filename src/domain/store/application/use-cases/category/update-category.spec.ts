@@ -1,4 +1,3 @@
-import { expect, describe, test, beforeEach } from "vitest";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { makeCategory } from "test/factories/make-category";

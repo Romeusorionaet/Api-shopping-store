@@ -1,4 +1,3 @@
-import { describe, test, beforeEach, expect } from "vitest";
 import { CreateProductUseCase } from "./create-product";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";

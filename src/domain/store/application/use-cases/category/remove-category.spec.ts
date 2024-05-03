@@ -1,4 +1,3 @@
-import { expect, describe, test, beforeEach } from "vitest";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { makeCategory } from "test/factories/make-category";
 import { RemoveCategoryUseCase } from "./remove-category";

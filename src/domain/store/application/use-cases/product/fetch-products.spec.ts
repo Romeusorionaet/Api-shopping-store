@@ -1,4 +1,3 @@
-import { describe, test, beforeEach, expect } from "vitest";
 import { FetchProductsUseCase } from "./fetch-products";
 import { makeProduct } from "test/factories/make-product";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";

@@ -1,4 +1,3 @@
-import { expect, describe, test, beforeEach } from "vitest";
 import { UpdateBuyerAddressUseCase } from "./update-buyer-address";
 import { InMemoryBuyerAddressRepository } from "test/repositories/in-memory-buyer-address-repository";
 import { makeBuyerAddress } from "test/factories/make-buyer-address";

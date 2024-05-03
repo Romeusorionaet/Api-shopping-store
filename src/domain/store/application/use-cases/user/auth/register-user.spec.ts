@@ -1,4 +1,3 @@
-import { expect, describe, test, beforeEach } from "vitest";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { RegisterUserUseCase } from "./register-user";
 import { FakeHasher } from "test/cryptography/fake-hasher";

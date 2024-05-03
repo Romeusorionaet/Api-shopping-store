@@ -1,4 +1,3 @@
-import { expect, describe, test, beforeEach } from "vitest";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
 import { makeUser } from "test/factories/make-user";
 import { InMemoryRefreshTokenRepository } from "test/repositories/in-memory-refresh-tokens-repository";

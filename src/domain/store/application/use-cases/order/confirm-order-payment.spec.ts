@@ -1,4 +1,3 @@
-import { expect, describe, test, beforeEach } from "vitest";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { OrderStatus } from "src/core/entities/order-status";

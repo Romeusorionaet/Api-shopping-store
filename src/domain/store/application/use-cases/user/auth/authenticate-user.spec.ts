@@ -1,4 +1,3 @@
-import { expect, describe, test, beforeEach } from "vitest";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { AuthenticateUserUseCase } from "./authenticate-user";
 import { FakeHasher } from "test/cryptography/fake-hasher";

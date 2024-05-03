@@ -1,4 +1,3 @@
-import { expect, describe, test, beforeEach } from "vitest";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { makeUser } from "test/factories/make-user";
