@@ -7,6 +7,7 @@ import { makeAuthenticateUserWithGoogleUseCase } from "src/domain/store/applicat
 import { RefreshTokenWithGooglePresenter } from "src/infra/http/presenters/refresh-token-with-google-presenter";
 import { getGoogleOAuthTokens } from "src/infra/service/gateway-tokens/oauth-google/get-google-oauthTokens";
 import { getGoogleUser } from "src/infra/service/gateway-tokens/oauth-google/get-google-user";
+import { env } from "src/infra/env";
 
 interface DecodedAccessToken extends JwtPayload {
   exp?: number;
@@ -24,7 +25,6 @@ export async function registerWithGoogle(
 
   try {
     const { id_token, access_token } = await getGoogleOAuthTokens({ code });
-
     const googleUser = await getGoogleUser({ id_token, access_token });
 
     if (!googleUser.verified_email) {
@@ -76,7 +76,7 @@ export async function registerWithGoogle(
         : undefined,
       httpOnly: true,
       secure: true,
-      domain: "localhost",
+      domain: env.DOMAIN_NAME_PARAM_TOKEN,
       path: "/",
     });
 
@@ -84,11 +84,11 @@ export async function registerWithGoogle(
       expires: new Date(refreshTokenExpires * 1000),
       httpOnly: true,
       secure: true,
-      domain: "localhost",
+      domain: env.DOMAIN_NAME_PARAM_TOKEN,
       path: "/",
     });
 
-    return reply.redirect("http://localhost:3000");
+    return reply.redirect(env.SHOPPING_STORE_URL_WEB);
   } catch (error) {
     return reply.status(500).send("Failed to process Google OAuth login");
   }
