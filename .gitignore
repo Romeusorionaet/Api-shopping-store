@@ -2,8 +2,10 @@ node_modules
 build
 coverage
 .env
+.env.test
 *.md
 dist
+data
 
 # certs
 certs
