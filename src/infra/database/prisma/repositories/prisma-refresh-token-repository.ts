@@ -29,6 +29,7 @@ export class PrismaRefreshTokenRepository implements RefreshTokensRepository {
   }
 
   async deleteMany(userId: string): Promise<void> {
+    // delete cache for logout user in frontend
     await prisma.refreshToken.deleteMany({
       where: {
         userId,

@@ -1,19 +1,19 @@
 import { UserAddress } from "src/domain/store/enterprise/entities/user-address";
 
 export class UserAddressPresenter {
-  static toHTTP(UserAddress: UserAddress) {
+  static toHTTP(userAddress: UserAddress) {
     return {
-      id: UserAddress.id.toString(),
-      cep: UserAddress.cep,
-      city: UserAddress.city,
-      uf: UserAddress.uf,
-      street: UserAddress.street,
-      neighborhood: UserAddress.neighborhood,
-      houseNumber: UserAddress.houseNumber,
-      complement: UserAddress.complement,
-      phoneNumber: UserAddress.phoneNumber,
-      username: UserAddress.username,
-      email: UserAddress.email,
+      id: userAddress.id.toString(),
+      cep: userAddress.cep,
+      city: userAddress.city,
+      uf: userAddress.uf,
+      street: userAddress.street,
+      neighborhood: userAddress.neighborhood,
+      houseNumber: userAddress.houseNumber,
+      complement: userAddress.complement,
+      phoneNumber: userAddress.phoneNumber,
+      username: userAddress.username,
+      email: userAddress.email,
     };
   }
 }

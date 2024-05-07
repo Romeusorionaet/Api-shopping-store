@@ -1,4 +1,5 @@
 import { app } from "src/app";
+import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { prisma } from "src/infra/database/prisma/prisma";
 import request from "supertest";
 import { BuyerAddressFactory } from "test/factories/make-buyer-address";
@@ -21,19 +22,13 @@ describe("Update buyer address (E2E)", () => {
   });
 
   test("[PUT] /buyer/update-buyer-address", async () => {
-    const { accessToken } =
+    const { accessToken, user } =
       await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
         app,
       );
 
-    const responseProfile = await request(app.server)
-      .get("/buyer/profile")
-      .set("Authorization", `Bearer ${accessToken}`);
-
-    const userId = responseProfile.body.profile.id;
-
     const buyerAddress = await buyerAddressFactory.makePrismaBuyerAddress({
-      buyerId: userId,
+      buyerId: new UniqueEntityID(user.id),
       city: "São Paulo",
       complement: "Beco passa nada",
     });
