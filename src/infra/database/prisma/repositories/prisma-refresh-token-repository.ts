@@ -2,8 +2,11 @@ import { RefreshToken } from "src/domain/store/enterprise/entities/refresh-token
 import { prisma } from "../prisma";
 import { PrismaRefreshTokenMapper } from "../mappers/prisma-refresh-token-mapper";
 import { RefreshTokensRepository } from "src/domain/store/application/repositories/refresh-token-repository";
+import { CacheRepository } from "src/infra/cache/cache-repository";
 
 export class PrismaRefreshTokenRepository implements RefreshTokensRepository {
+  constructor(private cacheRepository: CacheRepository) {}
+
   async create(refreshToken: RefreshToken): Promise<RefreshToken> {
     const data = PrismaRefreshTokenMapper.toPrisma(refreshToken);
 
@@ -29,7 +32,8 @@ export class PrismaRefreshTokenRepository implements RefreshTokensRepository {
   }
 
   async deleteMany(userId: string): Promise<void> {
-    // delete cache for logout user in frontend
+    await this.cacheRepository.delete(`user:${userId}:profile`);
+
     await prisma.refreshToken.deleteMany({
       where: {
         userId,

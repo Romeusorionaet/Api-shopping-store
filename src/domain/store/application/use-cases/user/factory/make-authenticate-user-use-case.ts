@@ -12,7 +12,9 @@ export function makeAuthenticateUserUseCase() {
   const userRepository = new PrismaUserRepository(cacheRepository);
   const bcrypt = new BcryptHash();
   const jwtEncrypter = new JwtEncrypter();
-  const refreshTokensRepository = new PrismaRefreshTokenRepository();
+  const refreshTokensRepository = new PrismaRefreshTokenRepository(
+    cacheRepository,
+  );
 
   const useCase = new AuthenticateUserUseCase(
     userRepository,

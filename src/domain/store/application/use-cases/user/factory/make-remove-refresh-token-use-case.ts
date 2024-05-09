@@ -5,9 +5,11 @@ import { RedisCacheRepository } from "src/infra/cache/redis/redis-cache-reposito
 import { RedisService } from "src/infra/cache/redis/redis-service";
 
 export function makeRemoveRefreshTokenUseCase() {
-  const refreshTokenRepository = new PrismaRefreshTokenRepository();
   const redis = new RedisService();
   const cacheRepository = new RedisCacheRepository(redis);
+  const refreshTokenRepository = new PrismaRefreshTokenRepository(
+    cacheRepository,
+  );
   const userRepository = new PrismaUserRepository(cacheRepository);
 
   const useCase = new RemoveRefreshTokenUseCase(

@@ -16,15 +16,16 @@ import rawBody from "fastify-raw-body";
 export const app = fastify();
 
 app.register(CORS, {
-  origin: "*",
+  origin: env.SHOPPING_STORE_URL_WEB,
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 });
 
 app.register(JWT, {
   secret: env.JWT_PRIVATE_KEY,
   cookie: {
-    cookieName: "refreshToken",
-    signed: false,
+    cookieName: "",
+    signed: true,
   },
 });
 

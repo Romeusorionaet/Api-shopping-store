@@ -53,7 +53,7 @@ export class AuthenticateUserUseCase {
 
     await this.refreshTokensRepository.deleteMany(user.id.toString());
 
-    const expires = dayjs().add(1, "m").unix();
+    const expires = dayjs().add(25, "m").unix();
 
     const refreshToken = RefreshToken.create({
       userId: user.id,

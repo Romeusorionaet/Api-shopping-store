@@ -10,7 +10,7 @@ import { getGoogleUser } from "src/infra/service/gateway-tokens/oauth-google/get
 import { env } from "src/infra/env";
 
 interface DecodedAccessToken extends JwtPayload {
-  exp?: number;
+  exp: number;
 }
 
 export async function registerWithGoogle(
@@ -25,6 +25,7 @@ export async function registerWithGoogle(
 
   try {
     const { id_token, access_token } = await getGoogleOAuthTokens({ code });
+
     const googleUser = await getGoogleUser({ id_token, access_token });
 
     if (!googleUser.verified_email) {
@@ -68,23 +69,23 @@ export async function registerWithGoogle(
 
     const decodedToken = jwt.decode(accessTokenForDecode) as DecodedAccessToken;
 
-    const accessTokenExpires = decodedToken?.exp;
+    const accessTokenExpires = decodedToken.exp;
 
-    reply.cookie("accessToken", result.value.accessToken, {
-      expires: accessTokenExpires
-        ? new Date(accessTokenExpires * 1000)
-        : undefined,
+    reply.cookie("@shopping-store/AT.2.0", result.value.accessToken, {
+      expires: new Date(accessTokenExpires * 1000),
       httpOnly: true,
       secure: true,
-      domain: env.DOMAIN_NAME_PARAM_TOKEN,
+      sameSite: "none",
+      domain: "shopping-store-kappa.vercel.app",
       path: "/",
     });
 
-    reply.cookie("refreshToken", refreshToken, {
+    reply.cookie("@shopping-store/RT.2.0", refreshToken, {
       expires: new Date(refreshTokenExpires * 1000),
       httpOnly: true,
       secure: true,
-      domain: env.DOMAIN_NAME_PARAM_TOKEN,
+      sameSite: "none",
+      domain: "shopping-store-kappa.vercel.app",
       path: "/",
     });
 

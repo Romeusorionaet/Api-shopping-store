@@ -46,7 +46,7 @@ export class RefreshTokenUseCase {
         refreshToken.userId.toString(),
       );
 
-      const expires = dayjs().add(1, "m").unix();
+      const expires = dayjs().add(25, "m").unix();
 
       const newRefreshToken = RefreshToken.create({
         userId: refreshToken.userId,

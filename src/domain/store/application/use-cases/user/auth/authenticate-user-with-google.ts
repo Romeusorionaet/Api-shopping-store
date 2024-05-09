@@ -33,7 +33,7 @@ export class AuthenticateUserWithGoogleUseCase {
 
     await this.refreshTokensRepository.deleteMany(userId);
 
-    const expires = dayjs().add(1, "m").unix();
+    const expires = dayjs().add(25, "m").unix();
 
     const refreshToken = RefreshToken.create({
       userId: new UniqueEntityID(userId),
