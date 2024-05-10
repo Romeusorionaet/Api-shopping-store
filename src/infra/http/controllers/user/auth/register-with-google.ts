@@ -21,12 +21,16 @@ export async function registerWithGoogle(
   }>,
   reply: FastifyReply,
 ) {
+  console.log("===route====");
   const code = request.query.code;
 
+  console.log("=1==success===", code, "===success===");
   try {
     const { id_token, access_token } = await getGoogleOAuthTokens({ code });
+    console.log("=2==success===", id_token, access_token, "===success===");
 
     const googleUser = await getGoogleUser({ id_token, access_token });
+    console.log("=3==success===", googleUser, "===success===");
 
     if (!googleUser.verified_email) {
       return reply.status(403).send("Google account is not verified");
@@ -40,6 +44,8 @@ export async function registerWithGoogle(
         username: googleUser.given_name,
       });
 
+    console.log("=4==success===", resultRegisterWithGoogle, "===success===");
+
     const user = resultRegisterWithGoogle.user;
 
     const authenticateUserWithGoogleUseCase =
@@ -48,6 +54,8 @@ export async function registerWithGoogle(
     const result = await authenticateUserWithGoogleUseCase.execute({
       userId: user.id.toString(),
     });
+
+    console.log("=5==success===", result, "===success===");
 
     if (result.isLeft()) {
       const err = result.value;
@@ -90,7 +98,8 @@ export async function registerWithGoogle(
     });
 
     return reply.redirect(env.SHOPPING_STORE_URL_WEB);
-  } catch (error) {
+  } catch (err) {
+    console.log(err, "=====err=====end");
     return reply.status(500).send("Failed to process Google OAuth login");
   }
 }
