@@ -9,7 +9,7 @@ export async function refreshToken(
   reply: FastifyReply,
 ) {
   const createRefreshTokenBodySchema = z.object({
-    refreshId: z.string(),
+    refreshId: z.string().uuid(),
   });
 
   const { refreshId } = createRefreshTokenBodySchema.parse(request.body);
