@@ -16,7 +16,6 @@ export async function authenticate(
   const { email, password } = createAuthenticateUserBodySchema.parse(
     request.body,
   );
-
   const authenticateUserUseCase = makeAuthenticateUserUseCase();
 
   const result = await authenticateUserUseCase.execute({
@@ -37,6 +36,7 @@ export async function authenticate(
     }
   }
 
+  // é para ser enviado para o cookie no frontend. Ainda vou mudar
   return reply.status(201).send({
     accessToken: result.value.accessToken,
     refreshToken: RefreshTokenPresenter.toHTTP(result.value.refreshToken),

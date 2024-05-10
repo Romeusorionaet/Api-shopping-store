@@ -61,6 +61,7 @@ export async function registerWithGoogle(
       const err = result.value;
       switch (err.constructor) {
         case InvalidCredentialsError:
+          console.log("==6==switch de erro", err);
           return reply.status(400).send({
             error: err.message,
           });
