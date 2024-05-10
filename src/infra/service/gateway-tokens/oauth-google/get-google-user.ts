@@ -25,9 +25,10 @@ export async function getGoogleUser({
         },
       },
     );
+    console.log(res.data, "=====res");
+
     return res.data;
-  } catch (error: any) {
-    console.error(error, "Error fetching Google user");
-    throw new Error(error.message);
+  } catch (err: any) {
+    throw new Error(err.message);
   }
 }

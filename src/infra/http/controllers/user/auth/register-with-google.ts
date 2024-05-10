@@ -99,7 +99,7 @@ export async function registerWithGoogle(
 
     return reply.redirect(env.SHOPPING_STORE_URL_WEB);
   } catch (err) {
-    console.log(err, "=====err=====end");
+    console.log(err.message, "=====err=====end");
     return reply.status(500).send("Failed to process Google OAuth login");
   }
 }
