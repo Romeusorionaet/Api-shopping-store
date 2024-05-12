@@ -40,8 +40,6 @@ export async function registerWithGoogle(
         username: googleUser.given_name,
       });
 
-    console.log("=4==success===", resultRegisterWithGoogle, "===success===");
-
     const user = resultRegisterWithGoogle.user;
 
     const authenticateUserWithGoogleUseCase =
@@ -50,8 +48,6 @@ export async function registerWithGoogle(
     const result = await authenticateUserWithGoogleUseCase.execute({
       userId: user.id.toString(),
     });
-
-    console.log("=5==success===", result, "===success===");
 
     if (result.isLeft()) {
       const err = result.value;
@@ -80,7 +76,6 @@ export async function registerWithGoogle(
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      domain: "shopping-store-kappa.vercel.app",
       path: "/",
     });
 
@@ -89,13 +84,11 @@ export async function registerWithGoogle(
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      domain: "shopping-store-kappa.vercel.app",
       path: "/",
     });
 
     return reply.redirect(env.SHOPPING_STORE_URL_WEB);
   } catch (err: any) {
-    console.log(err.message, "=====err=====end");
     return reply.status(500).send("Failed to process Google OAuth login");
   }
 }

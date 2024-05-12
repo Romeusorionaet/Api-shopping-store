@@ -18,8 +18,6 @@ export class RegisterUserWithGoogleUseCase {
     email,
     username,
   }: RegisterUserWithGoogleUseCaseRequest): Promise<RegisterUserWithGoogleUseCaseResponse> {
-    console.log("=1=usecase==", email, username, "==usecase==");
-
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
@@ -31,11 +29,8 @@ export class RegisterUserWithGoogleUseCase {
 
       await this.usersRepository.create(user);
 
-      console.log("=2=usecase==", user, "==usecase==");
-
       return { user };
     }
-    console.log("=2=usecase==", user, "==usecase==");
 
     return { user };
   }
