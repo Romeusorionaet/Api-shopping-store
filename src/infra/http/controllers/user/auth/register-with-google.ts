@@ -25,17 +25,18 @@ export async function registerWithGoogle(
   const code = request.query.code;
 
   console.log("=1==success===", code, "===success===");
+
+  const { id_token, access_token } = await getGoogleOAuthTokens({ code });
+  console.log("=2==success===", id_token, access_token, "===success===");
+
+  const googleUser = await getGoogleUser({ id_token, access_token });
+  console.log("=3==success===", googleUser, "===success===");
+
+  if (!googleUser.verified_email) {
+    return reply.status(403).send("Google account is not verified");
+  }
+
   try {
-    const { id_token, access_token } = await getGoogleOAuthTokens({ code });
-    console.log("=2==success===", id_token, access_token, "===success===");
-
-    const googleUser = await getGoogleUser({ id_token, access_token });
-    console.log("=3==success===", googleUser, "===success===");
-
-    if (!googleUser.verified_email) {
-      return reply.status(403).send("Google account is not verified");
-    }
-
     const registerUserWithGoogleUseCase = makeRegisterUserWithGoogleUseCase();
 
     const resultRegisterWithGoogle =

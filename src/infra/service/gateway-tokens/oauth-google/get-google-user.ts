@@ -17,6 +17,7 @@ export async function getGoogleUser({
   access_token,
 }: any): Promise<GoogleUserResult> {
   try {
+    console.log("=entrou no getGoogleUser");
     const res = await axios.get<GoogleUserResult>(
       `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
       {

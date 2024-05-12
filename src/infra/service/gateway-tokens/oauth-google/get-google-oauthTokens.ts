@@ -26,6 +26,8 @@ export async function getGoogleOAuthTokens({
   };
 
   try {
+    console.log("=entrou no getGoogleOAuthTokens");
+
     const res = await axios.post<GoogleTokensResult>(
       url,
       qs.stringify(values),
