@@ -27,8 +27,6 @@ export class AuthenticateUserWithGoogleUseCase {
   async execute({
     userId,
   }: AuthenticateUserWithGoogleUseCaseRequest): Promise<AuthenticateUserWithGoogleUseCaseResponse> {
-    console.log("==3=usecase", userId, "==usecase");
-
     const accessToken = await this.encrypter.encrypt({
       sub: userId,
     });
@@ -43,8 +41,6 @@ export class AuthenticateUserWithGoogleUseCase {
     });
 
     await this.refreshTokensRepository.create(refreshToken);
-
-    console.log("==4=usecase", accessToken, refreshToken, "==usecase");
 
     return right({
       accessToken,

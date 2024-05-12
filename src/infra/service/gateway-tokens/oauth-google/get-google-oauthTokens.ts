@@ -26,8 +26,6 @@ export async function getGoogleOAuthTokens({
   };
 
   try {
-    console.log("=entrou no getGoogleOAuthTokens");
-
     const res = await axios.post<GoogleTokensResult>(
       url,
       qs.stringify(values),
@@ -38,9 +36,7 @@ export async function getGoogleOAuthTokens({
       },
     );
     return res.data;
-  } catch (error: any) {
-    console.error(error.response.data.error);
-    console.error(error, "Failed to fetch Google Oauth Tokens");
-    throw new Error(error.message);
+  } catch (err) {
+    throw new Error("Failed to fetch Google Oauth Tokens.");
   }
 }

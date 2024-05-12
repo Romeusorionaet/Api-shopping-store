@@ -17,7 +17,6 @@ export async function getGoogleUser({
   access_token,
 }: any): Promise<GoogleUserResult> {
   try {
-    console.log("=entrou no getGoogleUser");
     const res = await axios.get<GoogleUserResult>(
       `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
       {
@@ -26,10 +25,9 @@ export async function getGoogleUser({
         },
       },
     );
-    console.log(res.data, "=====res");
 
     return res.data;
-  } catch (err: any) {
-    throw new Error(err.message);
+  } catch (err) {
+    throw new Error("Failed to fetch user data from Google.");
   }
 }

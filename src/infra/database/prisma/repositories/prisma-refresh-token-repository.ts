@@ -9,13 +9,10 @@ export class PrismaRefreshTokenRepository implements RefreshTokensRepository {
 
   async create(refreshToken: RefreshToken): Promise<RefreshToken> {
     const data = PrismaRefreshTokenMapper.toPrisma(refreshToken);
-    console.log("=entrou no refreshToken", data);
 
     await prisma.refreshToken.create({
       data,
     });
-
-    console.log("=saiu do refreshToken", refreshToken);
 
     return refreshToken;
   }

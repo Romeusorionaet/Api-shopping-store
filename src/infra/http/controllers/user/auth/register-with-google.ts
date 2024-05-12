@@ -21,16 +21,11 @@ export async function registerWithGoogle(
   }>,
   reply: FastifyReply,
 ) {
-  console.log("===route====");
   const code = request.query.code;
 
-  console.log("=1==success===", code, "===success===");
-
   const { id_token, access_token } = await getGoogleOAuthTokens({ code });
-  console.log("=2==success===", id_token, access_token, "===success===");
 
   const googleUser = await getGoogleUser({ id_token, access_token });
-  console.log("=3==success===", googleUser, "===success===");
 
   if (!googleUser.verified_email) {
     return reply.status(403).send("Google account is not verified");
@@ -62,7 +57,6 @@ export async function registerWithGoogle(
       const err = result.value;
       switch (err.constructor) {
         case InvalidCredentialsError:
-          console.log("==6==switch de erro", err);
           return reply.status(400).send({
             error: err.message,
           });
