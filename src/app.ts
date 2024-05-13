@@ -32,7 +32,7 @@ app.register(fastifyCookie, {
     secure: true,
     sameSite: "strict",
     domain: "localhost",
-    // signed: false,
+    signed: false,
     path: "/",
   },
 });
