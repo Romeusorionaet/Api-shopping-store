@@ -2,7 +2,6 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { makeAuthenticateUserUseCase } from "src/domain/store/application/use-cases/user/factory/make-authenticate-user-use-case";
 import { z } from "zod";
-import { RefreshTokenPresenter } from "../../../presenters/refresh-token-presenter";
 
 export async function authenticate(
   request: FastifyRequest,
@@ -39,6 +38,6 @@ export async function authenticate(
   // é para ser enviado para o cookie no frontend. Ainda vou mudar
   return reply.status(201).send({
     accessToken: result.value.accessToken,
-    refreshToken: RefreshTokenPresenter.toHTTP(result.value.refreshToken),
+    refreshToken: result.value.refreshToken,
   });
 }

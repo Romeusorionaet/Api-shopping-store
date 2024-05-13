@@ -8,7 +8,7 @@ export async function profile(request: FastifyRequest, reply: FastifyReply) {
   const getProfileSchema = z.object({
     sub: z.string().uuid(),
   });
-
+  console.log("=====009");
   const { sub: id } = getProfileSchema.parse(request.user);
 
   const getBuyerProfileUseCase = makeGetBuyerProfileUseCase();

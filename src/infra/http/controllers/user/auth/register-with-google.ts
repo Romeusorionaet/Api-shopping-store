@@ -4,7 +4,6 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { makeRegisterUserWithGoogleUseCase } from "src/domain/store/application/use-cases/user/factory/make-register-user-with-google-use-case";
 import { makeAuthenticateUserWithGoogleUseCase } from "src/domain/store/application/use-cases/user/factory/make-authenticate-user-with-google-use-case";
-import { RefreshTokenWithGooglePresenter } from "src/infra/http/presenters/refresh-token-with-google-presenter";
 import { getGoogleOAuthTokens } from "src/infra/service/gateway-tokens/oauth-google/get-google-oauthTokens";
 import { getGoogleUser } from "src/infra/service/gateway-tokens/oauth-google/get-google-user";
 import { env } from "src/infra/env";
@@ -62,35 +61,30 @@ export async function registerWithGoogle(
       }
     }
 
-    const { id: refreshToken, expires: refreshTokenExpires } =
-      RefreshTokenWithGooglePresenter.toHTTP(result.value.refreshToken);
-
     const accessTokenForDecode = result.value.accessToken;
+    const decodedAccessToken = jwt.decode(
+      accessTokenForDecode,
+    ) as DecodedAccessToken;
+    const accessTokenExpires = decodedAccessToken.exp;
 
-    const decodedToken = jwt.decode(accessTokenForDecode) as DecodedAccessToken;
+    const refreshTokenForDecode = result.value.refreshToken;
+    const decodedRefreshToken = jwt.decode(
+      refreshTokenForDecode,
+    ) as DecodedAccessToken;
+    const refreshTokenExpires = decodedRefreshToken.exp;
 
-    const accessTokenExpires = decodedToken.exp;
-
-    reply.cookie("@shopping-store/AT.2.0", result.value.accessToken, {
+    reply.setCookie("@shopping-store/AT.2.0", result.value.accessToken, {
       expires: new Date(accessTokenExpires * 1000),
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      domain: "shopping-store-kappa.vercel.app",
-      path: "/",
     });
 
-    reply.cookie("@shopping-store/RT.2.0", refreshToken, {
+    reply.setCookie("@shopping-store/RT.2.0", result.value.refreshToken, {
       expires: new Date(refreshTokenExpires * 1000),
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      domain: "shopping-store-kappa.vercel.app",
-      path: "/",
     });
 
     return reply.redirect(env.SHOPPING_STORE_URL_WEB);
   } catch (err: any) {
-    return reply.status(500).send("Failed to process Google OAuth login");
+    return reply
+      .status(500)
+      .send("Failed to process Google OAuth login." + err.message);
   }
 }

@@ -1,3 +1,4 @@
 export interface Encrypter {
-  encrypt(payload: Record<string, unknown>): Promise<string>;
+  encryptAccessToken(payload: Record<string, unknown>): Promise<string>;
+  encryptRefreshToken(payload: Record<string, unknown>): Promise<string>;
 }

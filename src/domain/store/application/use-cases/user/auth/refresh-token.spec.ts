@@ -38,14 +38,10 @@ describe("Refresh Token", () => {
 
     await usersRepository.create(user);
 
-    const { refreshToken } = await makeAuthenticateUserWithTokens(
-      user.id.toString(),
-    );
-
-    await refreshTokensRepository.create(refreshToken);
+    await makeAuthenticateUserWithTokens(user.id.toString());
 
     const result = await sut.execute({
-      refreshId: refreshToken.id.toString(),
+      userId: user.id.toString(),
     });
 
     expect(result.isRight()).toBe(true);

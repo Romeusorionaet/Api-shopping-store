@@ -23,13 +23,19 @@ app.register(CORS, {
 
 app.register(JWT, {
   secret: env.JWT_PRIVATE_KEY,
-  cookie: {
-    cookieName: "",
-    signed: true,
-  },
 });
 
-app.register(fastifyCookie);
+app.register(fastifyCookie, {
+  secret: env.COOKIE_PRIVATE_KEY,
+  parseOptions: {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    domain: "localhost",
+    // signed: false,
+    path: "/",
+  },
+});
 
 app.register(rawBody, {
   field: "rawBody",

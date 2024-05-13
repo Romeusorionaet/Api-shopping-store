@@ -1,7 +1,11 @@
 import { Encrypter } from "src/domain/store/application/cryptography/encrypter";
 
 export class FakeEncrypter implements Encrypter {
-  async encrypt(payload: Record<string, unknown>): Promise<string> {
+  async encryptAccessToken(payload: Record<string, unknown>): Promise<string> {
+    return JSON.stringify(payload);
+  }
+
+  async encryptRefreshToken(payload: Record<string, unknown>): Promise<string> {
     return JSON.stringify(payload);
   }
 }

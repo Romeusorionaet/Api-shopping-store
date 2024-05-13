@@ -1,7 +1,5 @@
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { Either, left, right } from "src/core/either";
-import { RefreshToken } from "src/domain/store/enterprise/entities/refresh-token";
-import dayjs from "dayjs";
 import { UsersRepository } from "../../../repositories/users-repository";
 import { HashComparer } from "../../../cryptography/hash-comparer";
 import { Encrypter } from "../../../cryptography/encrypter";
@@ -16,7 +14,7 @@ type AuthenticateUserUseCaseResponse = Either<
   InvalidCredentialsError,
   {
     accessToken: string;
-    refreshToken: RefreshToken;
+    refreshToken: string;
   }
 >;
 
@@ -47,20 +45,13 @@ export class AuthenticateUserUseCase {
       return left(new InvalidCredentialsError());
     }
 
-    const accessToken = await this.encrypter.encrypt({
+    const accessToken = await this.encrypter.encryptAccessToken({
       sub: user.id.toString(),
     });
 
-    await this.refreshTokensRepository.deleteMany(user.id.toString());
-
-    const expires = dayjs().add(25, "m").unix();
-
-    const refreshToken = RefreshToken.create({
-      userId: user.id,
-      expires,
+    const refreshToken = await this.encrypter.encryptAccessToken({
+      sub: user.id.toString(),
     });
-
-    await this.refreshTokensRepository.create(refreshToken);
 
     return right({
       accessToken,
