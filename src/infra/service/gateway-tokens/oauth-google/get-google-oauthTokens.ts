@@ -35,6 +35,7 @@ export async function getGoogleOAuthTokens({
         },
       },
     );
+
     return res.data;
   } catch (err) {
     throw new Error("Failed to fetch Google Oauth Tokens.");

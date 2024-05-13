@@ -22,15 +22,15 @@ export async function registerWithGoogle(
 ) {
   const code = request.query.code;
 
-  const { id_token, access_token } = await getGoogleOAuthTokens({ code });
-
-  const googleUser = await getGoogleUser({ id_token, access_token });
-
-  if (!googleUser.verified_email) {
-    return reply.status(403).send("Google account is not verified");
-  }
-
   try {
+    const { id_token, access_token } = await getGoogleOAuthTokens({ code });
+
+    const googleUser = await getGoogleUser({ id_token, access_token });
+
+    if (!googleUser.verified_email) {
+      return reply.status(403).send("Google account is not verified");
+    }
+
     const registerUserWithGoogleUseCase = makeRegisterUserWithGoogleUseCase();
 
     const resultRegisterWithGoogle =
@@ -75,16 +75,28 @@ export async function registerWithGoogle(
 
     reply.setCookie("@shopping-store/AT.2.0", result.value.accessToken, {
       expires: new Date(accessTokenExpires * 1000),
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      domain: env.DOMAIN_COOKIE_TOKEN,
+      signed: true,
+      path: "/",
     });
 
     reply.setCookie("@shopping-store/RT.2.0", result.value.refreshToken, {
       expires: new Date(refreshTokenExpires * 1000),
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      domain: env.DOMAIN_COOKIE_TOKEN,
+      signed: true,
+      path: "/",
     });
 
     return reply.redirect(env.SHOPPING_STORE_URL_WEB);
   } catch (err: any) {
     return reply
       .status(500)
-      .send("Failed to process Google OAuth login." + err.message);
+      .send(`Failed to process Google OAuth login. ${err.message}`);
   }
 }

@@ -1,7 +1,7 @@
 import fastify from "fastify";
 import { ZodError } from "zod";
 import { env } from "./infra/env";
-import JWT from "@fastify/jwt";
+import fastifyJWT from "@fastify/jwt";
 import fastifyCookie from "@fastify/cookie";
 import { categoriesRoutes } from "./infra/http/controllers/category/routes";
 import { productsRoutes } from "./infra/http/controllers/products/routes";
@@ -18,23 +18,16 @@ export const app = fastify();
 app.register(CORS, {
   origin: env.SHOPPING_STORE_URL_WEB,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["content-type"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
 });
 
-app.register(JWT, {
+app.register(fastifyJWT, {
   secret: env.JWT_PRIVATE_KEY,
 });
 
 app.register(fastifyCookie, {
   secret: env.COOKIE_PRIVATE_KEY,
-  parseOptions: {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    domain: env.DOMAIN_COOKIE_TOKEN,
-    signed: false,
-    path: "/",
-  },
 });
 
 app.register(rawBody, {
