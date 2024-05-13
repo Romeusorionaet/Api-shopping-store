@@ -75,7 +75,8 @@ export async function registerWithGoogle(
       expires: new Date(accessTokenExpires * 1000),
       httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: "strict",
+      domain: "shopping-store-kappa.vercel.app",
       path: "/",
     });
 
@@ -83,7 +84,8 @@ export async function registerWithGoogle(
       expires: new Date(refreshTokenExpires * 1000),
       httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: "strict",
+      domain: "shopping-store-kappa.vercel.app",
       path: "/",
     });
 
