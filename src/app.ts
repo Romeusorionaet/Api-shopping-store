@@ -30,7 +30,7 @@ app.register(fastifyCookie, {
   parseOptions: {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "none",
     domain: env.DOMAIN_COOKIE_TOKEN,
     signed: false,
     path: "/",
