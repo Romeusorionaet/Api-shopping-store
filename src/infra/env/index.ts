@@ -7,6 +7,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().optional().default(3333),
   JWT_PRIVATE_KEY: z.string(),
   COOKIE_PRIVATE_KEY: z.string(),
+  DOMAIN_COOKIE_TOKEN: z.string(),
   SHOPPING_STORE_URL_WEB: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET_ID: z.string(),
