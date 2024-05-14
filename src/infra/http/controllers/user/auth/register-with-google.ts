@@ -20,8 +20,10 @@ export async function registerWithGoogle(
   }>,
   reply: FastifyReply,
 ) {
+  // const profile: any = request.body;
   const code = request.query.code;
 
+  // console.log(profile, "===");
   try {
     const { id_token, access_token } = await getGoogleOAuthTokens({ code });
 
@@ -55,22 +57,25 @@ export async function registerWithGoogle(
           return reply.status(400).send({
             error: err.message,
           });
-
         default:
           throw new Error(err.message);
       }
     }
 
     const accessTokenForDecode = result.value.accessToken;
+
     const decodedAccessToken = jwt.decode(
       accessTokenForDecode,
     ) as DecodedAccessToken;
+
     const accessTokenExpires = decodedAccessToken.exp;
 
     const refreshTokenForDecode = result.value.refreshToken;
+
     const decodedRefreshToken = jwt.decode(
       refreshTokenForDecode,
     ) as DecodedAccessToken;
+
     const refreshTokenExpires = decodedRefreshToken.exp;
 
     return reply
@@ -80,7 +85,9 @@ export async function registerWithGoogle(
       .setCookie("@shopping-store/RT.2.0", result.value.refreshToken, {
         expires: new Date(refreshTokenExpires * 1000),
       })
-      .redirect(env.SHOPPING_STORE_URL_WEB);
+      .redirect(env.SHOPPING_STORE_URL_WEB)
+      .code(200)
+      .send();
   } catch (err: any) {
     return reply
       .status(500)
