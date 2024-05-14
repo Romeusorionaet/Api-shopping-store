@@ -75,18 +75,17 @@ export async function registerWithGoogle(
 
     reply.setCookie("@shopping-store/AT.2.0", result.value.accessToken, {
       expires: new Date(accessTokenExpires * 1000),
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
       sameSite: "none",
       domain: env.DOMAIN_COOKIE_TOKEN,
-      signed: true,
       path: "/",
     });
 
     reply.setCookie("@shopping-store/RT.2.0", result.value.refreshToken, {
       expires: new Date(refreshTokenExpires * 1000),
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "none",
       domain: env.DOMAIN_COOKIE_TOKEN,
       signed: true,
