@@ -73,26 +73,14 @@ export async function registerWithGoogle(
     ) as DecodedAccessToken;
     const refreshTokenExpires = decodedRefreshToken.exp;
 
-    reply.setCookie("@shopping-store/AT.2.0", result.value.accessToken, {
-      expires: new Date(accessTokenExpires * 1000),
-      httpOnly: false,
-      secure: true,
-      sameSite: "none",
-      domain: env.DOMAIN_COOKIE_TOKEN,
-      path: "/",
-    });
-
-    reply.setCookie("@shopping-store/RT.2.0", result.value.refreshToken, {
-      expires: new Date(refreshTokenExpires * 1000),
-      httpOnly: true,
-      secure: false,
-      sameSite: "none",
-      domain: env.DOMAIN_COOKIE_TOKEN,
-      signed: true,
-      path: "/",
-    });
-
-    return reply.redirect(env.SHOPPING_STORE_URL_WEB);
+    return reply
+      .setCookie("@shopping-store/AT.2.0", result.value.accessToken, {
+        expires: new Date(accessTokenExpires * 1000),
+      })
+      .setCookie("@shopping-store/RT.2.0", result.value.refreshToken, {
+        expires: new Date(refreshTokenExpires * 1000),
+      })
+      .redirect(env.SHOPPING_STORE_URL_WEB);
   } catch (err: any) {
     return reply
       .status(500)

@@ -28,6 +28,13 @@ app.register(fastifyJWT, {
 
 app.register(fastifyCookie, {
   secret: env.COOKIE_PRIVATE_KEY,
+  parseOptions: {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    domain: env.DOMAIN_COOKIE_TOKEN,
+    path: "/",
+  },
 });
 
 app.register(rawBody, {
