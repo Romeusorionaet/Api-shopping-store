@@ -26,15 +26,7 @@ app.register(fastifyJWT, {
   secret: env.JWT_PRIVATE_KEY,
 });
 
-app.register(fastifyCookie, {
-  parseOptions: {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    domain: env.DOMAIN_COOKIE_TOKEN,
-    path: "/",
-  },
-});
+app.register(fastifyCookie);
 
 app.register(rawBody, {
   field: "rawBody",
