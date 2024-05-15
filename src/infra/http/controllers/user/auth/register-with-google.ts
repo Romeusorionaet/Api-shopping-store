@@ -81,7 +81,7 @@ export async function registerWithGoogle(
         expires: new Date(accessTokenExpires * 1000),
         httpOnly: true,
         secure: true,
-        sameSite: "none",
+        sameSite: "lax",
         domain: env.DOMAIN_COOKIE_TOKEN,
         path: "/",
       })
@@ -89,7 +89,7 @@ export async function registerWithGoogle(
         expires: new Date(refreshTokenExpires * 1000),
         httpOnly: true,
         secure: true,
-        sameSite: "none",
+        sameSite: "lax",
         domain: env.DOMAIN_COOKIE_TOKEN,
         path: "/",
       })
