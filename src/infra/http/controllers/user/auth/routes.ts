@@ -5,9 +5,11 @@ import { refreshToken } from "./refresh-token";
 import { authenticate } from "./authenticate";
 import { removeRefreshToken } from "./remove-refresh-token";
 import { verifyJWTRefreshToken } from "src/infra/http/middlewares/verify-jwt-refresh-token";
+import { testRoute } from "./test";
 
 export async function authRoutes(app: FastifyInstance) {
   app.get("/auth/register/oauth-google/callback", registerWithGoogle);
+  app.get("/test-route", testRoute);
   app.post("/auth/user/register", register);
   app.post(
     "/auth/user/refresh-token",
