@@ -5,8 +5,7 @@ export async function verifyJWTRefreshToken(
   reply: FastifyReply,
 ) {
   try {
-    const result = await request.jwtVerify();
-    console.log(result, "===mdrt");
+    await request.jwtVerify();
   } catch (err) {
     return reply.status(401).send({ message: "Unauthorized." });
   }

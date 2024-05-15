@@ -20,10 +20,8 @@ export async function registerWithGoogle(
   }>,
   reply: FastifyReply,
 ) {
-  // const profile: any = request.body;
   const code = request.query.code;
 
-  // console.log(profile, "===");
   try {
     const { id_token, access_token } = await getGoogleOAuthTokens({ code });
 

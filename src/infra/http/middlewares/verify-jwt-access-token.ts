@@ -5,8 +5,7 @@ export async function verifyJWTAccessToken(
   reply: FastifyReply,
 ) {
   try {
-    const result = await request.jwtVerify();
-    console.log(result, "===mdat");
+    await request.jwtVerify();
 
     const tokenPayload = request.user as { permissions?: string[] };
     if (
