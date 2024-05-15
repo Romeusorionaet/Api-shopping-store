@@ -24,10 +24,10 @@ app.register(CORS, {
 
 app.register(fastifyJWT, {
   secret: env.JWT_PRIVATE_KEY,
+  cookie: { cookieName: "", signed: true },
 });
 
 app.register(fastifyCookie, {
-  secret: env.COOKIE_PRIVATE_KEY,
   parseOptions: {
     httpOnly: true,
     secure: true,

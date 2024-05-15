@@ -85,9 +85,7 @@ export async function registerWithGoogle(
       .setCookie("@shopping-store/RT.2.0", result.value.refreshToken, {
         expires: new Date(refreshTokenExpires * 1000),
       })
-      .redirect(env.SHOPPING_STORE_URL_WEB)
-      .code(200)
-      .send();
+      .redirect(env.SHOPPING_STORE_URL_WEB);
   } catch (err: any) {
     return reply
       .status(500)
