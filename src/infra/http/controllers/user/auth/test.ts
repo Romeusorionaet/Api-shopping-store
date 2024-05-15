@@ -9,9 +9,8 @@ export async function testRoute(request: FastifyRequest, reply: FastifyReply) {
       httpOnly: true,
       secure: true,
       sameSite: "lax",
-      domain: "localhost",
       path: "/",
-      // domain: env.DOMAIN_COOKIE_TOKEN,
+      domain: env.DOMAIN_COOKIE_TOKEN,
     })
     .redirect(env.SHOPPING_STORE_URL_WEB);
 }
