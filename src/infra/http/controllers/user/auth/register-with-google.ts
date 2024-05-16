@@ -78,7 +78,7 @@ export async function registerWithGoogle(
 
     return reply
       .setCookie("@shopping-store/AT.2.0", result.value.accessToken, {
-        expires: new Date(accessTokenExpires * 1000),
+        maxAge: accessTokenExpires,
         httpOnly: true,
         secure: true,
         sameSite: "lax",
@@ -86,7 +86,7 @@ export async function registerWithGoogle(
         path: "/",
       })
       .setCookie("@shopping-store/RT.2.0", result.value.refreshToken, {
-        expires: new Date(refreshTokenExpires * 1000),
+        maxAge: refreshTokenExpires,
         httpOnly: true,
         secure: true,
         sameSite: "lax",
