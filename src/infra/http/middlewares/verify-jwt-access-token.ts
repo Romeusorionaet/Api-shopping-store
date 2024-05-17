@@ -5,6 +5,8 @@ export async function verifyJWTAccessToken(
   reply: FastifyReply,
 ) {
   try {
+    console.log(request.headers, "===headers");
+    console.log(request.cookies, "===cookies");
     await request.jwtVerify();
 
     const tokenPayload = request.user as { permissions?: string[] };
