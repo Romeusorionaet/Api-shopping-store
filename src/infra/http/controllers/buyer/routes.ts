@@ -6,7 +6,7 @@ import { getBuyerOrders } from "./get-buyer-orders";
 import { verifyJWTAccessToken } from "../../middlewares/verify-jwt-access-token";
 
 export async function buyerRoutes(app: FastifyInstance) {
-  app.addHook("onRequest", verifyJWTAccessToken);
+  // app.addHook("onRequest", verifyJWTAccessToken);
 
   app.get("/buyer/profile", profile);
   app.put("/buyer/update-buyer-address", updateBuyerAddress);
