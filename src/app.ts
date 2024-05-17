@@ -15,6 +15,11 @@ import rawBody from "fastify-raw-body";
 
 export const app = fastify();
 
+app.addHook("onRequest", async (request, reply) => {
+  console.log(request.headers, "===headers");
+  console.log(request.cookies, "===cookies");
+});
+
 app.register(CORS, {
   origin: env.SHOPPING_STORE_URL_WEB,
   credentials: true,
