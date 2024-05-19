@@ -9,9 +9,6 @@ export async function profile(request: FastifyRequest, reply: FastifyReply) {
     sub: z.string().uuid(),
   });
 
-  console.log("====passou aqui");
-  console.log(request.user);
-
   const { sub: id } = getProfileSchema.parse(request.user);
 
   const getBuyerProfileUseCase = makeGetBuyerProfileUseCase();

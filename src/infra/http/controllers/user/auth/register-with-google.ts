@@ -1,23 +1,29 @@
-/* eslint-disable camelcase */
 import { FastifyReply, FastifyRequest } from "fastify";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { makeRegisterUserWithGoogleUseCase } from "src/domain/store/application/use-cases/user/factory/make-register-user-with-google-use-case";
 import { makeAuthenticateUserWithGoogleUseCase } from "src/domain/store/application/use-cases/user/factory/make-authenticate-user-with-google-use-case";
 import { env } from "src/infra/env";
+import { z } from "zod";
 
 export async function registerWithGoogle(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
-    const data: any = request.body;
+    const getProfileSchema = z.object({
+      email: z.string(),
+      username: z.string(),
+      picture: z.string().optional(),
+    });
+
+    const { email, username } = getProfileSchema.parse(request.body);
 
     const registerUserWithGoogleUseCase = makeRegisterUserWithGoogleUseCase();
 
     const resultRegisterWithGoogle =
       await registerUserWithGoogleUseCase.execute({
-        email: data.profile.email,
-        username: data.profile.given_name,
+        email,
+        username,
       });
 
     const user = resultRegisterWithGoogle.user;
