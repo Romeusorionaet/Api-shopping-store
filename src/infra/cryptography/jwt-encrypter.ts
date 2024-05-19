@@ -11,7 +11,7 @@ export class JwtEncrypter implements Encrypter {
     jwt.decode(token, { complete: true });
 
     const accessToken = app.jwt.sign(payload, {
-      expiresIn: "10m",
+      expiresIn: "30m",
       algorithm: "HS512",
     });
 

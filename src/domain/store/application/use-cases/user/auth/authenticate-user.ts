@@ -3,7 +3,6 @@ import { Either, left, right } from "src/core/either";
 import { UsersRepository } from "../../../repositories/users-repository";
 import { HashComparer } from "../../../cryptography/hash-comparer";
 import { Encrypter } from "../../../cryptography/encrypter";
-import { RefreshTokensRepository } from "../../../repositories/refresh-token-repository";
 
 interface AuthenticateUserUseCaseRequest {
   email: string;
@@ -23,7 +22,6 @@ export class AuthenticateUserUseCase {
     private usersRepository: UsersRepository,
     private hashComparer: HashComparer,
     private encrypter: Encrypter,
-    private refreshTokensRepository: RefreshTokensRepository,
   ) {}
 
   async execute({

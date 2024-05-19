@@ -4,13 +4,11 @@ import { FakeHasher } from "test/cryptography/fake-hasher";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { makeUser } from "test/factories/make-user";
-import { InMemoryRefreshTokenRepository } from "test/repositories/in-memory-refresh-tokens-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 let usersRepository: InMemoryUsersRepository;
 let fakeHasher: FakeHasher;
 let fakeEncrypter: FakeEncrypter;
-let refreshTokensRepository: InMemoryRefreshTokenRepository;
 
 let sut: AuthenticateUserUseCase;
 
@@ -22,13 +20,10 @@ describe("Authenticate User", () => {
 
     fakeEncrypter = new FakeEncrypter();
 
-    refreshTokensRepository = new InMemoryRefreshTokenRepository();
-
     sut = new AuthenticateUserUseCase(
       usersRepository,
       fakeHasher,
       fakeEncrypter,
-      refreshTokensRepository,
     );
   });
 
@@ -51,11 +46,7 @@ describe("Authenticate User", () => {
     expect(result.isRight()).toBe(true);
     expect(result.value).toEqual({
       accessToken: expect.any(String),
-      refreshToken: expect.objectContaining({
-        id: expect.any(UniqueEntityID),
-        userId: new UniqueEntityID("user-test-id-01"),
-        expires: expect.any(Number),
-      }),
+      refreshToken: expect.any(String),
     });
   });
 

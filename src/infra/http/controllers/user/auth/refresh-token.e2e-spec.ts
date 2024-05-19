@@ -23,20 +23,15 @@ describe("Refresh Token (E2E)", () => {
       );
 
     const result = await request(app.server)
-      .post("/auth/user/refresh-token")
-      .send({ refreshId: refreshToken.id });
+      .get("/auth/user/refresh-token")
+      .set("Authorization", `Bearer ${refreshToken}`);
 
     expect(result.statusCode).toEqual(201);
     expect(result.body).toEqual(
       expect.objectContaining({
         accessToken: expect.any(String),
-        newRefreshToken: null,
+        refreshToken: expect.any(String),
       }),
     );
-
-    if (result.body.refreshToken) {
-      expect(result.body.newRefreshToken.id).toEqual(expect.any(String));
-      expect(result.body.newRefreshToken.expires).toEqual(expect.any(Number));
-    }
   });
 });

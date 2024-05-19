@@ -2,7 +2,6 @@ import { FakeHasher } from "test/cryptography/fake-hasher";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { makeUser } from "test/factories/make-user";
-import { InMemoryRefreshTokenRepository } from "test/repositories/in-memory-refresh-tokens-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { RefreshTokenUseCase } from "./refresh-token";
 import { makeAuthenticateUserWithTokens } from "test/factories/make-create-and-authenticate-user";
@@ -10,7 +9,6 @@ import { makeAuthenticateUserWithTokens } from "test/factories/make-create-and-a
 let usersRepository: InMemoryUsersRepository;
 let fakeHasher: FakeHasher;
 let fakeEncrypter: FakeEncrypter;
-let refreshTokensRepository: InMemoryRefreshTokenRepository;
 
 let sut: RefreshTokenUseCase;
 
@@ -22,9 +20,7 @@ describe("Refresh Token", () => {
 
     fakeEncrypter = new FakeEncrypter();
 
-    refreshTokensRepository = new InMemoryRefreshTokenRepository();
-
-    sut = new RefreshTokenUseCase(refreshTokensRepository, fakeEncrypter);
+    sut = new RefreshTokenUseCase(fakeEncrypter);
   });
 
   test("should be able to get a refresh token", async () => {
@@ -48,7 +44,7 @@ describe("Refresh Token", () => {
     expect(result.value).toEqual(
       expect.objectContaining({
         accessToken: expect.any(String),
-        newRefreshToken: null,
+        refreshToken: expect.any(String),
       }),
     );
   });

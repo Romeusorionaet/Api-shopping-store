@@ -30,10 +30,7 @@ describe("Authenticate (E2E)", () => {
     expect(result.body).toEqual(
       expect.objectContaining({
         accessToken: expect.any(String),
-        refreshToken: expect.objectContaining({
-          id: expect.any(String),
-          expires: expect.any(Number),
-        }),
+        refreshToken: expect.any(String),
       }),
     );
   });

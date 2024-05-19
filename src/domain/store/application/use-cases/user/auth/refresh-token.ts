@@ -1,7 +1,6 @@
 import { Either, right } from "src/core/either";
 import { InvalidTokenError } from "../../errors/invalid-token-error";
 import { Encrypter } from "../../../cryptography/encrypter";
-import { RefreshTokensRepository } from "../../../repositories/refresh-token-repository";
 
 interface RefreshTokenUseCaseRequest {
   userId: string;
@@ -16,10 +15,7 @@ type RefreshTokenUseCaseResponse = Either<
 >;
 
 export class RefreshTokenUseCase {
-  constructor(
-    private refreshTokensRepository: RefreshTokensRepository,
-    private encrypter: Encrypter,
-  ) {}
+  constructor(private encrypter: Encrypter) {}
 
   async execute({
     userId,

@@ -2,7 +2,6 @@ import fastify from "fastify";
 import { ZodError } from "zod";
 import { env } from "./infra/env";
 import fastifyJWT from "@fastify/jwt";
-import fastifyCookie from "@fastify/cookie";
 import { categoriesRoutes } from "./infra/http/controllers/category/routes";
 import { productsRoutes } from "./infra/http/controllers/products/routes";
 import CORS from "@fastify/cors";
@@ -29,8 +28,6 @@ app.register(CORS, {
 app.register(fastifyJWT, {
   secret: env.JWT_PRIVATE_KEY,
 });
-
-app.register(fastifyCookie);
 
 app.register(rawBody, {
   field: "rawBody",

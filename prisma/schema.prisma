@@ -34,20 +34,8 @@ model User {
 
   order        Order[]
   buyerAddress BuyerAddress[]
-  refreshToken RefreshToken[]
 
   @@map("users")
-}
-
-model RefreshToken {
-  id      String @id @default(uuid())
-  expires Int
-
-  userId String @map("user_id")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("refresh_tokens")
 }
 
 model UserAddress {
