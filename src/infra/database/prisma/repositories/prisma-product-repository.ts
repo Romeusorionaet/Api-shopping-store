@@ -74,6 +74,35 @@ export class PrismaProductRepository implements ProductRepository {
     return PrismaProductMapper.toDomain(product);
   }
 
+  async findManyByCategoryTitle(
+    slug: string,
+    page: number,
+  ): Promise<Product[] | null> {
+    const slugWord = slug.replace(/-/g, " ").toLowerCase().split(" ");
+
+    const products = await prisma.product.findMany({
+      where: {
+        OR: slugWord.map((word) => ({
+          categoryTitle: {
+            contains: word,
+            mode: "insensitive",
+          },
+        })),
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: (page - 1) * 20,
+      take: 20,
+    });
+
+    if (!products) {
+      return null;
+    }
+
+    return products.map(PrismaProductMapper.toDomain);
+  }
+
   async searchMany(query: string, page: number): Promise<Product[] | null> {
     const queryWords = query.toLowerCase().split(" ");
 

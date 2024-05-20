@@ -16,9 +16,11 @@ describe("Fetch Products", () => {
     const product2 = makeProduct();
     const product3 = makeProduct();
 
-    await productsRepository.create(product1);
-    await productsRepository.create(product2);
-    await productsRepository.create(product3);
+    await Promise.all([
+      productsRepository.create(product1),
+      productsRepository.create(product2),
+      productsRepository.create(product3),
+    ]);
 
     const result = await sut.execute({ page: 1 });
 

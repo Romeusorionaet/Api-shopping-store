@@ -17,9 +17,11 @@ describe("Search Products", () => {
     const products2 = makeProduct({ title: "product python" });
     const products3 = makeProduct({ title: "product java" });
 
-    await productsRepository.create(products1);
-    await productsRepository.create(products2);
-    await productsRepository.create(products3);
+    await Promise.all([
+      productsRepository.create(products1),
+      productsRepository.create(products2),
+      productsRepository.create(products3),
+    ]);
 
     const result = await sut.execute({ query: "java", page: 1 });
 
@@ -68,9 +70,11 @@ describe("Search Products", () => {
       categoryTitle: secondCategory.title,
     });
 
-    await productsRepository.create(firstProduct);
-    await productsRepository.create(secondProduct);
-    await productsRepository.create(thirdProduct);
+    await Promise.all([
+      await productsRepository.create(firstProduct),
+      await productsRepository.create(secondProduct),
+      await productsRepository.create(thirdProduct),
+    ]);
 
     const result = await sut.execute({ query: "first", page: 1 });
 
