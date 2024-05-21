@@ -5,6 +5,7 @@ export async function verifyJWTAccessToken(
   reply: FastifyReply,
 ) {
   try {
+    console.log(request.headers, "frommid");
     await request.jwtVerify();
 
     const tokenPayload = request.user as { permissions?: string[] };
@@ -12,9 +13,9 @@ export async function verifyJWTAccessToken(
       !tokenPayload.permissions ||
       !tokenPayload.permissions.includes("read")
     ) {
-      return reply
-        .status(401)
-        .send("Token não possui permissão para acessar esta rota.");
+      return reply.status(401).send({
+        message: "Token não possui permissão para acessar esta rota.",
+      });
     }
   } catch (err) {
     return reply.status(401).send({ message: "Unauthorized." });
