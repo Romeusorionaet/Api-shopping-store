@@ -7,6 +7,7 @@ export class ProductPresenter {
       categoryId: product.categoryId.toString(),
       categoryTitle: product.categoryTitle,
       title: product.title,
+      slug: product.slug.value,
       description: product.description,
       price: product.price,
       imgUrlList: product.imgUrlList,
