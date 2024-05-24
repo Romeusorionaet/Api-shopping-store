@@ -12,9 +12,21 @@ export class InMemoryUsersAddressRepository implements UserAddressRepository {
     const userAddress = this.items.find(
       (items) => items.userId.toString() === userId,
     );
+
     if (!userAddress) {
       return null;
     }
+
     return userAddress;
+  }
+
+  async update(userAddress: UserAddress): Promise<void> {
+    const existingUserAddress = this.items.find(
+      (item) => item.id === userAddress.id,
+    );
+
+    if (existingUserAddress) {
+      Object.assign(existingUserAddress, userAddress);
+    }
   }
 }

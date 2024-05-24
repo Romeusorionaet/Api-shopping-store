@@ -1,6 +1,5 @@
 import { UsersRepository } from "../../repositories/users-repository";
 import { Either, left, right } from "src/core/either";
-import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
 import { AddressAlreadyExistError } from "../errors/address-already-exist-error";
 import { UserAddress } from "src/domain/store/enterprise/entities/user-address";
@@ -60,7 +59,7 @@ export class CreateUserAddressUseCase {
     }
 
     const userAddress = UserAddress.create({
-      userId: new UniqueEntityID(user.id.toString()),
+      userId: user.id,
       cep,
       city,
       uf,

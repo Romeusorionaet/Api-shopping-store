@@ -25,4 +25,15 @@ export class PrismaUserAddressRepository implements UserAddressRepository {
 
     return PrismaUserAddressMapper.toDomain(userAddress);
   }
+
+  async update(userAddress: UserAddress): Promise<void> {
+    const data = PrismaUserAddressMapper.toPrisma(userAddress);
+
+    await prisma.userAddress.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    });
+  }
 }
