@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { hash } from "bcryptjs";
 import { FastifyInstance } from "fastify";
 import { prisma } from "src/infra/database/prisma/prisma";
@@ -14,10 +15,12 @@ export async function makeAuthenticateUserWithTokens(userId: string) {
 
 export class CreateAndAuthenticateUserWithTokensFactory {
   async makePrismaCreateAndAuthenticateUserWithTokens(app: FastifyInstance) {
+    const fakeFirstName = faker.person.firstName();
+
     const user = await prisma.user.create({
       data: {
-        username: "Romeu soares de souto",
-        email: "romeusoaresdesouto@gmail.com",
+        username: fakeFirstName,
+        email: `${fakeFirstName}@gmail.com`,
         passwordHash: await hash("123456", 8),
       },
     });
@@ -25,7 +28,7 @@ export class CreateAndAuthenticateUserWithTokensFactory {
     const result = await request(app.server)
       .post("/auth/user/authenticate")
       .send({
-        email: "romeusoaresdesouto@gmail.com",
+        email: `${fakeFirstName}@gmail.com`,
         password: "123456",
       });
 

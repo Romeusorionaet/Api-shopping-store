@@ -9,7 +9,7 @@ import { makeOrderProduct } from "test/factories/make-order-product";
 import { ProductFactory } from "test/factories/make-product";
 import { UserAddressFactory } from "test/factories/make-user-address";
 
-describe("Get buyer orders (E2E)", () => {
+describe("Get buyer order product (E2E)", () => {
   let userAddressFactory: UserAddressFactory;
   let orderFactory: OrderFactory;
   let categoryFactory: CategoryFactory;
@@ -31,13 +31,19 @@ describe("Get buyer orders (E2E)", () => {
     await app.close();
   });
 
-  test("[GET] /buyer/orders", async () => {
+  test("[GET] /buyer/order/products", async () => {
     const { accessToken, user } =
       await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
         app,
       );
 
+    const { user: otherUser } =
+      await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
+        app,
+      );
+
     const buyerId = user.id;
+    const otherBuyerId = otherUser.id;
 
     const userAddress = await userAddressFactory.makePrismaUserAddress({
       userId: new UniqueEntityID(buyerId),
@@ -69,74 +75,45 @@ describe("Get buyer orders (E2E)", () => {
       categoryTitle: category.title,
     });
 
-    const orderProductFirst = makeOrderProduct(
-      {
-        productId: product.id,
-        basePrice: 150,
-      },
+    const orderProductFirstBuyer = makeOrderProduct(
+      { productId: product.id },
       new UniqueEntityID("order-product-id-01"),
     );
 
-    const orderProductSecond = makeOrderProduct(
-      {
-        productId: product.id,
-        basePrice: 150,
-      },
+    const orderProductOtherBuyer = makeOrderProduct(
+      { productId: product.id },
       new UniqueEntityID("order-product-id-02"),
     );
 
-    const orderProductsFirst = [];
-    const orderProductsSecond = [];
+    const orderProductsFirstBuyer = [];
+    const orderProductsOtherBuyer = [];
 
-    orderProductsFirst.push(orderProductFirst);
-    orderProductsSecond.push(orderProductSecond);
+    orderProductsFirstBuyer.push(orderProductFirstBuyer);
+    orderProductsOtherBuyer.push(orderProductOtherBuyer);
 
-    const buyerAddressFirst = createBuyerAddress();
-    const buyerAddressSecond = createBuyerAddress();
+    const buyerAddressFirstBuyer = createBuyerAddress();
+    const buyerAddressOtherBuyer = createBuyerAddress();
 
     await Promise.all([
       orderFactory.makePrismaOrder({
         buyerId: new UniqueEntityID(buyerId),
-        buyerAddress: buyerAddressFirst,
-        orderProducts: orderProductsFirst,
+        buyerAddress: buyerAddressFirstBuyer,
+        orderProducts: orderProductsFirstBuyer,
       }),
 
       orderFactory.makePrismaOrder({
-        buyerId: new UniqueEntityID(buyerId),
-        buyerAddress: buyerAddressSecond,
-        orderProducts: orderProductsSecond,
+        buyerId: new UniqueEntityID(otherBuyerId),
+        buyerAddress: buyerAddressOtherBuyer,
+        orderProducts: orderProductsOtherBuyer,
       }),
     ]);
 
     const result = await request(app.server)
-      .get("/buyer/orders")
-      .set("Authorization", `Bearer ${accessToken}`);
+      .get("/buyer/order/products")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .query({ page: 1 });
 
     expect(result.statusCode).toBe(200);
-
-    expect(result.body.orders).toEqual(
-      expect.arrayContaining([expect.objectContaining({ buyerId })]),
-    );
-
-    expect(result.body.orders).toHaveLength(2);
-    expect(result.body.orders[0]).toEqual(
-      expect.objectContaining({
-        buyerAddress: expect.objectContaining({
-          buyerId,
-          city: "Canguaretama",
-        }),
-      }),
-    );
-
-    expect(result.body.orders[0]).toEqual(
-      expect.objectContaining({
-        orderProducts: expect.arrayContaining([
-          expect.objectContaining({
-            productId: product.id.toString(),
-            basePrice: 150,
-          }),
-        ]),
-      }),
-    );
+    expect(result.body.products).toHaveLength(1);
   });
 });

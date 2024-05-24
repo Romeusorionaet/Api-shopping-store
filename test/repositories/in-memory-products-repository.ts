@@ -1,11 +1,14 @@
 /* eslint-disable array-callback-return */
 import { PaginationParams } from "src/core/repositories/pagination-params";
+import { OrderRepository } from "src/domain/store/application/repositories/order-repository";
 import { ProductRepository } from "src/domain/store/application/repositories/product-repository";
 import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
 import { Product } from "src/domain/store/enterprise/entities/product";
 
 export class InMemoryProductsRepository implements ProductRepository {
   public items: Product[] = [];
+
+  constructor(private orderRepository: OrderRepository) {}
 
   async decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void> {
     for (const productSold of orderProducts) {
@@ -73,6 +76,31 @@ export class InMemoryProductsRepository implements ProductRepository {
       .slice((page - 1) * 20, page * 20);
 
     if (!products) {
+      return null;
+    }
+
+    return products;
+  }
+
+  async findByBuyerId(
+    buyerId: string,
+    page: number,
+  ): Promise<Product[] | null> {
+    const orders = await this.orderRepository.findByBuyerId(buyerId);
+
+    if (!orders || orders.length === 0) return null;
+
+    const productIds = orders
+      .filter((order) => order.buyerId.toString() === buyerId)
+      .flatMap((order) => order.orderProducts)
+      .map((orderProduct) => orderProduct.productId);
+
+    const products = productIds
+      .map((productId) => this.items.find((item) => item.id === productId))
+      .filter((product): product is Product => product !== undefined)
+      .slice((page - 1) * 20, page * 20);
+
+    if (products.length === 0) {
       return null;
     }
 

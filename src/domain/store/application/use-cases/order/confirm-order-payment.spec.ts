@@ -13,7 +13,7 @@ let sut: ConfirmOrderPaymentUseCase;
 
 describe("Confirm Order Payment", () => {
   beforeEach(() => {
-    productRepository = new InMemoryProductsRepository();
+    productRepository = new InMemoryProductsRepository(orderRepository);
 
     orderRepository = new InMemoryOrdersRepository(productRepository);
 

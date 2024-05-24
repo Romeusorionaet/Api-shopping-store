@@ -11,7 +11,7 @@ let sut: GetBuyerOrdersUseCase;
 
 describe("Get Buyer Orders", () => {
   beforeEach(() => {
-    productRepository = new InMemoryProductsRepository();
+    productRepository = new InMemoryProductsRepository(ordersRepository);
 
     ordersRepository = new InMemoryOrdersRepository(productRepository);
 

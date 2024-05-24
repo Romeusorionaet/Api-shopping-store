@@ -17,6 +17,7 @@ export async function getBuyerAddress(
   const getBuyerAddressUseCase = makeGetBuyerAddressUseCase();
 
   const result = await getBuyerAddressUseCase.execute({ buyerId });
+
   if (result.isLeft()) {
     const err = result.value;
     switch (err.constructor) {

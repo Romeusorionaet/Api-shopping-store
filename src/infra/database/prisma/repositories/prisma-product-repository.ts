@@ -103,6 +103,34 @@ export class PrismaProductRepository implements ProductRepository {
     return products.map(PrismaProductMapper.toDomain);
   }
 
+  async findByBuyerId(
+    buyerId: string,
+    page: number,
+  ): Promise<Product[] | null> {
+    const products = await prisma.product.findMany({
+      where: {
+        orderProducts: {
+          some: {
+            order: {
+              buyerId,
+            },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: (page - 1) * 20,
+      take: 20,
+    });
+
+    if (!products) {
+      return null;
+    }
+
+    return products.map(PrismaProductMapper.toDomain);
+  }
+
   async searchMany(query: string, page: number): Promise<Product[] | null> {
     const queryWords = query.toLowerCase().split(" ");
 

@@ -2,13 +2,20 @@ import { GetProductDetailsUseCase } from "./get-product-details";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { makeProduct } from "test/factories/make-product";
+import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 
 let productsRepository: InMemoryProductsRepository;
+let orderRepository: InMemoryOrdersRepository;
 let sut: GetProductDetailsUseCase;
 
 describe("Get Product Details", () => {
   beforeEach(() => {
-    productsRepository = new InMemoryProductsRepository();
+    orderRepository = new InMemoryOrdersRepository(productsRepository);
+
+    productsRepository = new InMemoryProductsRepository(orderRepository);
+
+    orderRepository = new InMemoryOrdersRepository(productsRepository);
+
     sut = new GetProductDetailsUseCase(productsRepository);
   });
 

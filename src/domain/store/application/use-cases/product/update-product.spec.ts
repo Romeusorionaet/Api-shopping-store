@@ -4,14 +4,18 @@ import { makeCategory } from "test/factories/make-category";
 import { makeProduct } from "test/factories/make-product";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { UpdateProductUseCase } from "./update-product";
+import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 
 let productsRepository: InMemoryProductsRepository;
 let categoryRepository: InMemoryCategoriesRepository;
+let orderRepository: InMemoryOrdersRepository;
 let sut: UpdateProductUseCase;
 
 describe("Create Product", () => {
   beforeEach(() => {
-    productsRepository = new InMemoryProductsRepository();
+    orderRepository = new InMemoryOrdersRepository(productsRepository);
+
+    productsRepository = new InMemoryProductsRepository(orderRepository);
 
     categoryRepository = new InMemoryCategoriesRepository();
 

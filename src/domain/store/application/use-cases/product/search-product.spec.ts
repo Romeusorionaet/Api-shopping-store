@@ -2,13 +2,18 @@ import { InMemoryProductsRepository } from "test/repositories/in-memory-products
 import { makeProduct } from "test/factories/make-product";
 import { SearchProductsUseCase } from "./search-products";
 import { makeCategory } from "test/factories/make-category";
+import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 
 let productsRepository: InMemoryProductsRepository;
+let orderRepository: InMemoryOrdersRepository;
 let sut: SearchProductsUseCase;
 
 describe("Search Products", () => {
   beforeEach(() => {
-    productsRepository = new InMemoryProductsRepository();
+    orderRepository = new InMemoryOrdersRepository(productsRepository);
+
+    productsRepository = new InMemoryProductsRepository(orderRepository);
+
     sut = new SearchProductsUseCase(productsRepository);
   });
 

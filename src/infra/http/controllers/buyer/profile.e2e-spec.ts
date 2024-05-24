@@ -17,7 +17,7 @@ describe("Profile (E2E)", () => {
   });
 
   test("[GET] /buyer/profile", async () => {
-    const { accessToken } =
+    const { accessToken, user } =
       await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
         app,
       );
@@ -29,7 +29,8 @@ describe("Profile (E2E)", () => {
     expect(result.statusCode).toEqual(200);
     expect(result.body).toEqual({
       profile: expect.objectContaining({
-        email: "romeusoaresdesouto@gmail.com",
+        email: user.email,
+        username: user.username,
       }),
     });
   });

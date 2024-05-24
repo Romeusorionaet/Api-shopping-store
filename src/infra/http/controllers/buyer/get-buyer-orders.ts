@@ -8,10 +8,10 @@ export async function getBuyerOrders(
   reply: FastifyReply,
 ) {
   const getBuyerOrdersParamsSchema = z.object({
-    buyerId: z.string().uuid(),
+    sub: z.string().uuid(),
   });
 
-  const { buyerId } = getBuyerOrdersParamsSchema.parse(request.params);
+  const { sub: buyerId } = getBuyerOrdersParamsSchema.parse(request.user);
 
   const getBuyerOrdersUseCase = makeGetBuyerOrdersUseCase();
 

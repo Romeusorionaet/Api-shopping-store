@@ -19,7 +19,7 @@ let sut: PurchaseOrderUseCase;
 
 describe("Purchase Order", () => {
   beforeEach(() => {
-    productRepository = new InMemoryProductsRepository();
+    productRepository = new InMemoryProductsRepository(orderRepository);
 
     orderRepository = new InMemoryOrdersRepository(productRepository);
 
