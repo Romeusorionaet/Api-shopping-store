@@ -113,6 +113,7 @@ export class PrismaProductRepository implements ProductRepository {
           some: {
             order: {
               buyerId,
+              NOT: { status: "PAYMENT_CONFIRMED" },
             },
           },
         },

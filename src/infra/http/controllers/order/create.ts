@@ -14,7 +14,6 @@ const uuidType = z.string().refine((value) => {
 });
 
 const createOrderBodySchema = z.object({
-  buyerId: z.string().uuid(),
   orderProducts: z.array(
     z.object({
       productId: uuidType.transform((value) => new UniqueEntityID(value)),
@@ -28,12 +27,17 @@ const createOrderBodySchema = z.object({
   ),
 });
 
+const buyerSchema = z.object({
+  sub: z.string().uuid(),
+});
+
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   if (request.method !== "POST") {
     return reply.status(405).send({ error: "Method not allowed" });
   }
 
-  const { buyerId, orderProducts } = createOrderBodySchema.parse(request.body);
+  const { orderProducts } = createOrderBodySchema.parse(request.body);
+  const { sub: buyerId } = buyerSchema.parse(request.user);
 
   const createOrderUseCase = makePurchaseOrderUseCase();
 

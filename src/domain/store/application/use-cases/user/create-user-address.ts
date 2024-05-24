@@ -54,6 +54,7 @@ export class CreateUserAddressUseCase {
     if (existBuyerAddress) {
       return left(new AddressAlreadyExistError());
     }
+
     if (!user) {
       return left(new UserNotFoundError());
     }

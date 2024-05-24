@@ -22,6 +22,7 @@ export async function updateBuyerAddress(
     username: z.string(),
     email: z.string(),
   });
+
   const dataBuyerAddress = updateBuyerAddressBodySchema.parse(request.body);
 
   const updateBuyerAddressUseCase = makeUpdateBuyerAddressUseCase();

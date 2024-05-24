@@ -7,5 +7,5 @@ export async function userRoutes(app: FastifyInstance) {
   app.addHook("onRequest", verifyJWTAccessToken);
 
   app.post("/user/create-address", createUserAddress);
-  app.get("/user/get-address/:userId", getUserAddress);
+  app.get("/user/get-address", getUserAddress);
 }

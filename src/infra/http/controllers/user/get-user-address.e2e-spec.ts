@@ -20,7 +20,7 @@ describe("Get user address (E2E)", () => {
     await app.close();
   });
 
-  test("[GET] /user/get-address/:userId", async () => {
+  test("[GET] /user/get-address", async () => {
     const { accessToken, user } =
       await createAndAuthenticateUserWithTokensFactory.makePrismaCreateAndAuthenticateUserWithTokens(
         app,
@@ -34,7 +34,7 @@ describe("Get user address (E2E)", () => {
     });
 
     const result = await request(app.server)
-      .get(`/user/get-address/${userId}`)
+      .get("/user/get-address")
       .set("Authorization", `Bearer ${accessToken}`);
 
     expect(result.statusCode).toBe(200);

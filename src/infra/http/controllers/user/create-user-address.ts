@@ -9,7 +9,6 @@ export async function createUserAddress(
   reply: FastifyReply,
 ) {
   const createUserAddressBodySchema = z.object({
-    userId: z.string(),
     cep: z.coerce.number().refine((value) => value.toString().length === 8, {
       message: "O CEP deve ter 8 dígitos",
     }),
@@ -24,11 +23,18 @@ export async function createUserAddress(
     email: z.string(),
   });
 
+  const userSchema = z.object({
+    sub: z.string().uuid(),
+  });
+
   const dataUserAddress = createUserAddressBodySchema.parse(request.body);
+  const { sub: userId } = userSchema.parse(request.user);
+
+  const addressWithUserId = { ...dataUserAddress, userId };
 
   const createUserAddressUseCase = makeCreateUserAddressUseCase();
 
-  const result = await createUserAddressUseCase.execute(dataUserAddress);
+  const result = await createUserAddressUseCase.execute(addressWithUserId);
 
   if (result.isLeft()) {
     const err = result.value;

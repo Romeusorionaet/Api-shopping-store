@@ -9,10 +9,10 @@ export async function getUserAddress(
   reply: FastifyReply,
 ) {
   const getUserAddressParamsSchema = z.object({
-    userId: z.string().uuid(),
+    sub: z.string().uuid(),
   });
 
-  const { userId } = getUserAddressParamsSchema.parse(request.params);
+  const { sub: userId } = getUserAddressParamsSchema.parse(request.user);
   const getUserAddressUseCase = makeGetUserAddressUseCase();
 
   const result = await getUserAddressUseCase.execute({ userId });
