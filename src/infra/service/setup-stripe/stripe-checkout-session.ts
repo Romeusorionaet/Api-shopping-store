@@ -19,8 +19,8 @@ interface Props {
 export async function stripeCheckoutSession({ orderId, orderProducts }: Props) {
   const stripe = initializeStripe();
 
-  const successUrl = `${env.STRIPE_SUCCESS_URL}/success?session_id={CHECKOUT_SESSION_ID}`;
-  const cancelUrl = `${env.STRIPE_CANCEL_URL}/`;
+  const successUrl = `${env.STRIPE_SUCCESS_URL}`;
+  const cancelUrl = `${env.STRIPE_CANCEL_URL}`;
 
   const checkoutSession = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],

@@ -49,5 +49,5 @@ export async function createUserAddress(
     }
   }
 
-  return reply.status(201).send();
+  return reply.status(201).send({ message: "Endereço criado." });
 }

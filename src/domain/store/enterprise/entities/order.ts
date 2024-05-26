@@ -70,7 +70,7 @@ export class Order extends Entity<OrderProps> {
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
-        status: (props.status = OrderStatus.WAITING_FOR_PAYMENT),
+        status: props.status ?? OrderStatus.WAITING_FOR_PAYMENT,
         trackingCode: (props.trackingCode = ""),
         orderStatusTracking: (props.orderStatusTracking =
           OrderStatusTracking.WAITING),
