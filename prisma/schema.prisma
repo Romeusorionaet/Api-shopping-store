@@ -94,8 +94,6 @@ model Product {
 
   category Category @relation(fields: [categoryId], references: [id])
 
-  orderProducts OrderProduct[]
-
   @@map("products")
 }
 
@@ -143,6 +141,8 @@ model BuyerAddress {
 
 model OrderProduct {
   id                 String  @id @default(uuid())
+  title              String
+  imgUrl             String
   basePrice          Decimal @map("base_price") @db.Decimal(8, 2)
   discountPercentage Int     @default(0) @map("discount_percentage")
   quantity           Int
@@ -151,8 +151,7 @@ model OrderProduct {
   productId String
   orderId   String?
 
-  product Product @relation(fields: [productId], references: [id])
-  order   Order?  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order Order? @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("order_products")
 }

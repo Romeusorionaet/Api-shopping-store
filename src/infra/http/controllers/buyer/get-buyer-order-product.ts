@@ -1,8 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
 import { makeGetBuyerOrderProductUseCase } from "src/domain/store/application/use-cases/buyer/factory/make-get-buyer-order-product-use-case";
-import { NoProductsOrderedByBuyerError } from "src/domain/store/application/use-cases/errors/no-products-ordered-by-buyer-error";
-import { ProductPresenter } from "../../presenters/product-presenter";
+import { OrderProductPresenter } from "../../presenters/order-product-presenter";
 
 export async function getBuyerOrderProduct(
   request: FastifyRequest,
@@ -12,31 +11,20 @@ export async function getBuyerOrderProduct(
     sub: z.string().uuid(),
   });
 
-  const getBuyerOrderProductQuerySchema = z.object({
-    page: z.coerce.number().min(1).default(1),
-  });
-
-  const { page } = getBuyerOrderProductQuerySchema.parse(request.query);
-
   const { sub: buyerId } = getBuyerOrderProductUserSchema.parse(request.user);
 
   const getBuyerOrderProductUseCase = makeGetBuyerOrderProductUseCase();
 
-  const result = await getBuyerOrderProductUseCase.execute({ buyerId, page });
+  const result = await getBuyerOrderProductUseCase.execute({ buyerId });
 
-  if (result.isLeft()) {
-    const err = result.value;
-    switch (err.constructor) {
-      case NoProductsOrderedByBuyerError:
-        return reply.status(400).send({
-          error: err.message,
-        });
-      default:
-        throw new Error(err.message);
-    }
+  if (!result.value || result.value.orderProducts.length === 0) {
+    return reply.status(200).send({
+      message: "No order products found.",
+      products: [],
+    });
   }
 
   return reply.status(200).send({
-    products: result.value.products.map(ProductPresenter.toHTTP),
+    products: result.value.orderProducts.map(OrderProductPresenter.toHTTP),
   });
 }

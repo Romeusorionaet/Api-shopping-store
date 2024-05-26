@@ -17,6 +17,7 @@ const createOrderBodySchema = z.object({
   orderProducts: z.array(
     z.object({
       productId: uuidType.transform((value) => new UniqueEntityID(value)),
+      imgUrl: z.string(),
       title: z.string(),
       description: z.string(),
       basePrice: z.coerce.number(),

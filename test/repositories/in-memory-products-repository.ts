@@ -12,11 +12,11 @@ export class InMemoryProductsRepository implements ProductRepository {
 
   async decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void> {
     for (const productSold of orderProducts) {
-      const productId = productSold.productId;
+      const title = productSold.title;
       const quantitySold = productSold.quantity;
 
       this.items.map((item) => {
-        if (item.id === productId) {
+        if (item.title === title) {
           item.stockQuantity = item.stockQuantity - quantitySold;
         }
       });
@@ -90,13 +90,15 @@ export class InMemoryProductsRepository implements ProductRepository {
 
     if (!orders || orders.length === 0) return null;
 
-    const productIds = orders
+    const productTitles = orders
       .filter((order) => order.buyerId.toString() === buyerId)
       .flatMap((order) => order.orderProducts)
-      .map((orderProduct) => orderProduct.productId);
+      .map((orderProduct) => orderProduct.title);
 
-    const products = productIds
-      .map((productId) => this.items.find((item) => item.id === productId))
+    const products = productTitles
+      .map((productTitle) =>
+        this.items.find((item) => item.title === productTitle),
+      )
       .filter((product): product is Product => product !== undefined)
       .slice((page - 1) * 20, page * 20);
 

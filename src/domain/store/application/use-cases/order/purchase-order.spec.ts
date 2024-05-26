@@ -48,25 +48,19 @@ describe("Purchase Order", () => {
 
     await userAddressRepository.create(userAddress);
 
-    const productFirst = makeProduct(
-      { title: "Notebook" },
-      new UniqueEntityID("test-product-notebook-id-01"),
-    );
+    const productFirst = makeProduct({ title: "Notebook" });
 
-    const productSecond = makeProduct(
-      { title: "Cell Phone" },
-      new UniqueEntityID("test-product-cell-phone-id-02"),
-    );
+    const productSecond = makeProduct({ title: "Cell Phone" });
 
     productRepository.items.push(productFirst);
     productRepository.items.push(productSecond);
 
     const orderProductFirst = makeOrderProduct({
-      productId: productFirst.id,
+      title: productFirst.title,
     });
 
     const orderProductSecond = makeOrderProduct({
-      productId: productSecond.id,
+      title: productSecond.title,
     });
 
     const orderProducts = [];
@@ -91,10 +85,10 @@ describe("Purchase Order", () => {
           }),
           orderProducts: expect.arrayContaining([
             expect.objectContaining({
-              productId: new UniqueEntityID("test-product-notebook-id-01"),
+              title: "Notebook",
             }),
             expect.objectContaining({
-              productId: new UniqueEntityID("test-product-cell-phone-id-02"),
+              title: "Cell Phone",
             }),
           ]),
           status: OrderStatus.WAITING_FOR_PAYMENT,

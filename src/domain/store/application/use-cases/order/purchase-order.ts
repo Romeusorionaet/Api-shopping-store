@@ -45,10 +45,9 @@ export class PurchaseOrderUseCase {
   }: PurchaseOrderUseCaseRequest): Promise<PurchaseOrderUseCaseResponse> {
     const outOfStockProducts = [];
     const insufficientProductInventory = [];
-
     for (const orderProduct of orderProducts) {
-      const product = await this.productRepository.findById(
-        orderProduct.productId.toString(),
+      const product = await this.productRepository.findByTitle(
+        orderProduct.title,
       );
 
       if (!product) {
@@ -105,6 +104,8 @@ export class PurchaseOrderUseCase {
     const newOrderProducts = orderProducts.map((product) => {
       return OrderProduct.create({
         productId: product.productId,
+        title: product.title,
+        imgUrl: product.imgUrl,
         basePrice: product.basePrice,
         discountPercentage: product.discountPercentage,
         quantity: product.quantity,

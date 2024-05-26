@@ -73,15 +73,16 @@ describe("Get buyer order product (E2E)", () => {
     const product = await productFactory.makePrismaProduct({
       categoryId: category.id,
       categoryTitle: category.title,
+      title: "tablet",
     });
 
     const orderProductFirstBuyer = makeOrderProduct(
-      { productId: product.id },
+      { title: product.title },
       new UniqueEntityID("order-product-id-01"),
     );
 
     const orderProductOtherBuyer = makeOrderProduct(
-      { productId: product.id },
+      { title: product.title },
       new UniqueEntityID("order-product-id-02"),
     );
 

@@ -1,33 +1,28 @@
-import { Either, left, right } from "src/core/either";
-import { ProductRepository } from "../../repositories/product-repository";
-import { Product } from "src/domain/store/enterprise/entities/product";
-import { NoProductsOrderedByBuyerError } from "../errors/no-products-ordered-by-buyer-error";
+import { Either, right } from "src/core/either";
+import { OrderRepository } from "../../repositories/order-repository";
+import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
 
 interface GetBuyerOrderProductUseCaseRequest {
   buyerId: string;
-  page: number;
 }
 
 type GetBuyerOrderProductUseCaseResponse = Either<
-  NoProductsOrderedByBuyerError,
+  null,
   {
-    products: Product[];
+    orderProducts: OrderProduct[];
   }
 >;
 
 export class GetBuyerOrderProductUseCase {
-  constructor(private productRepository: ProductRepository) {}
+  constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     buyerId,
-    page,
   }: GetBuyerOrderProductUseCaseRequest): Promise<GetBuyerOrderProductUseCaseResponse> {
-    const products = await this.productRepository.findByBuyerId(buyerId, page);
+    const orders = await this.orderRepository.findByBuyerId(buyerId);
 
-    if (!products) {
-      return left(new NoProductsOrderedByBuyerError());
-    }
+    const orderProducts = orders.flatMap((order) => order.orderProducts);
 
-    return right({ products });
+    return right({ orderProducts });
   }
 }

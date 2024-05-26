@@ -7,6 +7,8 @@ export class PrismaOrderProductMapper {
     return OrderProduct.create(
       {
         productId: new UniqueEntityID(raw.productId),
+        title: raw.title,
+        imgUrl: raw.imgUrl,
         basePrice: Number(raw.basePrice),
         discountPercentage: raw.discountPercentage,
         quantity: raw.quantity,
@@ -22,6 +24,8 @@ export class PrismaOrderProductMapper {
     return {
       id: orderProduct.id.toString(),
       productId: orderProduct.productId.toString(),
+      title: orderProduct.title,
+      imgUrl: orderProduct.imgUrl,
       basePrice: orderProduct.basePrice,
       discountPercentage: orderProduct.discountPercentage,
       quantity: orderProduct.quantity,

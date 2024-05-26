@@ -12,6 +12,8 @@ export function makeOrderProduct(
   const orderProduct = OrderProduct.create(
     {
       productId: new UniqueEntityID(),
+      title: faker.lorem.word.toString(),
+      imgUrl: faker.image.toString(),
       discountPercentage: 15,
       basePrice: 200,
       quantity: 2,

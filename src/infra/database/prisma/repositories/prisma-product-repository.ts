@@ -8,12 +8,12 @@ import { OrderProduct } from "src/domain/store/enterprise/entities/order-product
 export class PrismaProductRepository implements ProductRepository {
   async decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void> {
     for (const productSold of orderProducts) {
-      const productId = productSold.productId;
+      const title = productSold.title;
       const quantitySold = productSold.quantity;
 
       await prisma.product.update({
         where: {
-          id: productId.toString(),
+          title,
         },
         data: {
           stockQuantity: {
@@ -88,35 +88,6 @@ export class PrismaProductRepository implements ProductRepository {
             mode: "insensitive",
           },
         })),
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      skip: (page - 1) * 20,
-      take: 20,
-    });
-
-    if (!products) {
-      return null;
-    }
-
-    return products.map(PrismaProductMapper.toDomain);
-  }
-
-  async findByBuyerId(
-    buyerId: string,
-    page: number,
-  ): Promise<Product[] | null> {
-    const products = await prisma.product.findMany({
-      where: {
-        orderProducts: {
-          some: {
-            order: {
-              buyerId,
-              NOT: { status: "PAYMENT_CONFIRMED" },
-            },
-          },
-        },
       },
       orderBy: {
         createdAt: "desc",

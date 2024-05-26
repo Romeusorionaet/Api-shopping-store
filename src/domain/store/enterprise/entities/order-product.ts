@@ -4,6 +4,8 @@ import { Optional } from "src/core/@types/optional";
 
 export interface OrderProductProps {
   productId: UniqueEntityID;
+  title: string;
+  imgUrl: string;
   discountPercentage: number;
   basePrice: number;
   quantity: number;
@@ -13,6 +15,14 @@ export interface OrderProductProps {
 export class OrderProduct extends Entity<OrderProductProps> {
   get productId() {
     return this.props.productId;
+  }
+
+  get title() {
+    return this.props.title;
+  }
+
+  get imgUrl() {
+    return this.props.imgUrl;
   }
 
   get discountPercentage() {

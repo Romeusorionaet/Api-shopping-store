@@ -55,20 +55,22 @@ describe("Create Order (E2E)", () => {
 
     const orderProductFirst = {
       productId: productFirst.id.toString(),
+      title: productFirst.title,
+      imgUrl: "https://test.img",
       discountPercentage: 15,
       basePrice: 200,
       quantity: 5,
-      title: "tablet",
       description: "lorem description for product test e2e",
       productColor: "green",
     };
 
     const orderProductSecond = {
       productId: productSeconde.id.toString(),
+      title: productSeconde.title,
+      imgUrl: "https://test.img",
       discountPercentage: 15,
       basePrice: 200,
       quantity: 2,
-      title: "notebook",
       description: "lorem description for product test e2e",
       productColor: "blue",
     };
@@ -81,11 +83,11 @@ describe("Create Order (E2E)", () => {
     const response = await request(app.server)
       .post("/order/create")
       .send({
-        buyerId,
         orderProducts,
       })
       .set("Authorization", `Bearer ${accessToken}`);
 
+    console.log(response.body);
     expect(response.statusCode).toEqual(201);
 
     expect(response.body).toEqual(
@@ -101,11 +103,13 @@ describe("Create Order (E2E)", () => {
       },
       include: {
         buyerAddress: true,
-        orderProducts: {
-          include: {
-            product: true,
-          },
-        },
+        orderProducts: true,
+      },
+    });
+
+    const orderProductOnDataBase = await prisma.orderProduct.findMany({
+      where: {
+        orderId: orderOnDatabase[0].id,
       },
     });
 
@@ -115,14 +119,14 @@ describe("Create Order (E2E)", () => {
         city: "Canguaretama",
       }),
     ]);
-    expect(orderOnDatabase[0].orderProducts).toEqual(
+    expect(orderProductOnDataBase).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          product: expect.objectContaining({ title: "tablet" }),
+          title: "tablet",
         }),
 
         expect.objectContaining({
-          product: expect.objectContaining({ title: "notebook" }),
+          title: "notebook",
         }),
       ]),
     );

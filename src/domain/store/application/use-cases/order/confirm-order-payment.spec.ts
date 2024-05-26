@@ -45,32 +45,26 @@ describe("Confirm Order Payment", () => {
   });
 
   test("should be able to decrement product stock quantity", async () => {
-    const productFirst = makeProduct(
-      {
-        title: "Cell Phnoe",
-        stockQuantity: 10,
-      },
-      new UniqueEntityID("cell-phone-id-01"),
-    );
+    const productFirst = makeProduct({
+      title: "Cell Phone",
+      stockQuantity: 10,
+    });
 
-    const productSecond = makeProduct(
-      {
-        title: "Notebook",
-        stockQuantity: 10,
-      },
-      new UniqueEntityID("notebook-id-01"),
-    );
+    const productSecond = makeProduct({
+      title: "Notebook",
+      stockQuantity: 10,
+    });
 
     productRepository.create(productFirst);
     productRepository.create(productSecond);
 
     const orderProductFirst = makeOrderProduct({
-      productId: productFirst.id,
+      title: productFirst.title,
       quantity: 5,
     });
 
     const orderProductSecond = makeOrderProduct({
-      productId: productSecond.id,
+      title: productSecond.title,
       quantity: 1,
     });
 

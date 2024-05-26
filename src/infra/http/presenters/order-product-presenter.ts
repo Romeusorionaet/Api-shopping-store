@@ -5,6 +5,8 @@ export class OrderProductPresenter {
     return {
       id: orderProduct.id.toString(),
       productId: orderProduct.productId.toString(),
+      title: orderProduct.title,
+      imgUrl: orderProduct.imgUrl,
       basePrice: orderProduct.basePrice,
       discountPercentage: orderProduct.discountPercentage,
       quantity: orderProduct.quantity,

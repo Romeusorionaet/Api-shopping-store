@@ -14,5 +14,4 @@ export interface ProductRepository {
     slug: string,
     page: number,
   ): Promise<Product[] | null>;
-  findByBuyerId(buyerId: string, page: number): Promise<Product[] | null>;
 }

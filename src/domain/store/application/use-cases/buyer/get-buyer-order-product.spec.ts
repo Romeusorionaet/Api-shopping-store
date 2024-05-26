@@ -17,7 +17,7 @@ describe("Get Buyer Orders Products", () => {
 
     productRepository = new InMemoryProductsRepository(ordersRepository);
 
-    sut = new GetBuyerOrderProductUseCase(productRepository);
+    sut = new GetBuyerOrderProductUseCase(ordersRepository);
   });
 
   test("can be able get products ordered by buyer", async () => {
@@ -26,14 +26,14 @@ describe("Get Buyer Orders Products", () => {
       new UniqueEntityID("user-buyer-order-test-id"),
     );
 
-    const product1 = makeProduct({}, new UniqueEntityID("product-id-test-01"));
-    const product2 = makeProduct({}, new UniqueEntityID("product-id-test-02"));
+    const product1 = makeProduct({ title: "notebook" });
+    const product2 = makeProduct({ title: "tablet" });
 
     await productRepository.create(product1);
     await productRepository.create(product2);
 
     const orderProduct = makeOrderProduct({
-      productId: product1.id,
+      title: product1.title,
     });
 
     const orderProducts = [];
@@ -47,14 +47,14 @@ describe("Get Buyer Orders Products", () => {
 
     await ordersRepository.create(order);
 
-    const result = await sut.execute({ buyerId: user.id.toString(), page: 1 });
+    const result = await sut.execute({ buyerId: user.id.toString() });
 
     expect(result.isRight()).toBe(true);
     if (result.isRight()) {
-      expect(result.value.products).toEqual(
+      expect(result.value.orderProducts).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            id: new UniqueEntityID("product-id-test-01"),
+            title: "notebook",
           }),
         ]),
       );

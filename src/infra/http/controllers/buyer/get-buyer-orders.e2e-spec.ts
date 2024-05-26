@@ -67,11 +67,12 @@ describe("Get buyer orders (E2E)", () => {
     const product = await productFactory.makePrismaProduct({
       categoryId: category.id,
       categoryTitle: category.title,
+      title: "tablet",
     });
 
     const orderProductFirst = makeOrderProduct(
       {
-        productId: product.id,
+        title: product.title,
         basePrice: 150,
       },
       new UniqueEntityID("order-product-id-01"),
@@ -79,7 +80,7 @@ describe("Get buyer orders (E2E)", () => {
 
     const orderProductSecond = makeOrderProduct(
       {
-        productId: product.id,
+        title: product.title,
         basePrice: 150,
       },
       new UniqueEntityID("order-product-id-02"),
@@ -132,7 +133,7 @@ describe("Get buyer orders (E2E)", () => {
       expect.objectContaining({
         orderProducts: expect.arrayContaining([
           expect.objectContaining({
-            productId: product.id.toString(),
+            title: "tablet",
             basePrice: 150,
           }),
         ]),
