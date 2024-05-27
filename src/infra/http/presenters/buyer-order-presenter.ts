@@ -15,8 +15,8 @@ export class BuyerOrderPresenter {
       status: order.status,
       buyerAddress,
       orderProducts,
-      createAt: order.createdAt,
-      updateAt: order.updatedAt,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
     };
   }
 }
