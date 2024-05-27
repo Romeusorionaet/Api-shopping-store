@@ -61,7 +61,7 @@ describe("Create Order (E2E)", () => {
       basePrice: 200,
       quantity: 5,
       description: "lorem description for product test e2e",
-      productColor: "green",
+      colorList: ["green"],
     };
 
     const orderProductSecond = {
@@ -72,7 +72,7 @@ describe("Create Order (E2E)", () => {
       basePrice: 200,
       quantity: 2,
       description: "lorem description for product test e2e",
-      productColor: "blue",
+      colorList: ["blue"],
     };
 
     const orderProducts = [];
@@ -87,7 +87,6 @@ describe("Create Order (E2E)", () => {
       })
       .set("Authorization", `Bearer ${accessToken}`);
 
-    console.log(response.body);
     expect(response.statusCode).toEqual(201);
 
     expect(response.body).toEqual(

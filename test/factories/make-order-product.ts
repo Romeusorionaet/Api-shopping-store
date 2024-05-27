@@ -17,7 +17,7 @@ export function makeOrderProduct(
       discountPercentage: 15,
       basePrice: 200,
       quantity: 2,
-      productColor: faker.color.human(),
+      colorList: [faker.color.human()],
       ...override,
     },
     id,

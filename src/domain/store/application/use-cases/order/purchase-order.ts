@@ -109,7 +109,7 @@ export class PurchaseOrderUseCase {
         basePrice: product.basePrice,
         discountPercentage: product.discountPercentage,
         quantity: product.quantity,
-        productColor: product.productColor,
+        colorList: product.colorList,
       });
     });
 

@@ -23,7 +23,7 @@ const createOrderBodySchema = z.object({
       basePrice: z.coerce.number(),
       discountPercentage: z.coerce.number(),
       quantity: z.coerce.number(),
-      productColor: z.string().nullable(),
+      colorList: z.array(z.string()),
     }),
   ),
 });

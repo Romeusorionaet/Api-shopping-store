@@ -12,7 +12,7 @@ export class PrismaOrderProductMapper {
         basePrice: Number(raw.basePrice),
         discountPercentage: raw.discountPercentage,
         quantity: raw.quantity,
-        productColor: raw.productColor,
+        colorList: raw.colorList,
       },
       new UniqueEntityID(raw.id),
     );
@@ -29,7 +29,7 @@ export class PrismaOrderProductMapper {
       basePrice: orderProduct.basePrice,
       discountPercentage: orderProduct.discountPercentage,
       quantity: orderProduct.quantity,
-      productColor: orderProduct.productColor,
+      colorList: orderProduct.colorList,
     };
   }
 }

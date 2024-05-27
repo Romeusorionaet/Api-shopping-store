@@ -140,13 +140,13 @@ model BuyerAddress {
 }
 
 model OrderProduct {
-  id                 String  @id @default(uuid())
+  id                 String   @id @default(uuid())
   title              String
   imgUrl             String
-  basePrice          Decimal @map("base_price") @db.Decimal(8, 2)
-  discountPercentage Int     @default(0) @map("discount_percentage")
+  basePrice          Decimal  @map("base_price") @db.Decimal(8, 2)
+  discountPercentage Int      @default(0) @map("discount_percentage")
   quantity           Int
-  productColor       String? @map("product_color")
+  colorList          String[] @map("color_list")
 
   productId String
   orderId   String?
