@@ -74,20 +74,13 @@ export class PrismaProductRepository implements ProductRepository {
     return PrismaProductMapper.toDomain(product);
   }
 
-  async findManyByCategoryTitle(
-    slug: string,
+  async findManyByCategoryId(
+    id: string,
     page: number,
   ): Promise<Product[] | null> {
-    const slugWord = slug.replace(/-/g, " ").toLowerCase().split(" ");
-
     const products = await prisma.product.findMany({
       where: {
-        OR: slugWord.map((word) => ({
-          categoryTitle: {
-            contains: word,
-            mode: "insensitive",
-          },
-        })),
+        categoryId: id,
       },
       orderBy: {
         createdAt: "desc",

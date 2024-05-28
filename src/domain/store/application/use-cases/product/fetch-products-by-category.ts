@@ -4,7 +4,7 @@ import { ProductRepository } from "../../repositories/product-repository";
 import { ProductNotFoundError } from "../errors/product-not-found-error";
 
 interface FetchProductsByCategoryUseCaseRequest {
-  slug: string;
+  categoryId: string;
   page: number;
 }
 
@@ -19,11 +19,11 @@ export class FetchProductsByCategoryUseCase {
   constructor(private productRepository: ProductRepository) {}
 
   async execute({
-    slug,
+    categoryId,
     page,
   }: FetchProductsByCategoryUseCaseRequest): Promise<FetchProductsByCategoryUseCaseResponse> {
-    const products = await this.productRepository.findManyByCategoryTitle(
-      slug,
+    const products = await this.productRepository.findManyByCategoryId(
+      categoryId,
       page,
     );
 

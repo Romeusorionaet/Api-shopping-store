@@ -10,8 +10,5 @@ export interface ProductRepository {
   searchMany(query: string, page: number): Promise<Product[] | null>;
   update(data: Product): Promise<void>;
   decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void>;
-  findManyByCategoryTitle(
-    slug: string,
-    page: number,
-  ): Promise<Product[] | null>;
+  findManyByCategoryId(id: string, page: number): Promise<Product[] | null>;
 }

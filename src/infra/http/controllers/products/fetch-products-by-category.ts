@@ -9,15 +9,17 @@ export async function fetchProductsByCategory(
   reply: FastifyReply,
 ) {
   const fetchProductsSchema = z.object({
-    slug: z.string().min(1),
+    categoryId: z.string().min(1),
     page: z.coerce.number().min(1).default(1),
   });
 
-  const { slug, page } = fetchProductsSchema.parse(request.query);
-
+  const { categoryId, page } = fetchProductsSchema.parse(request.query);
   const fetchProductsByCategoryUseCase = makeFetchProductsByCategoryUseCase();
 
-  const result = await fetchProductsByCategoryUseCase.execute({ slug, page });
+  const result = await fetchProductsByCategoryUseCase.execute({
+    categoryId,
+    page,
+  });
 
   if (result.isLeft()) {
     const err = result.value;

@@ -2,6 +2,7 @@ import { InMemoryProductsRepository } from "test/repositories/in-memory-products
 import { makeProduct } from "test/factories/make-product";
 import { FetchProductsByCategoryUseCase } from "./fetch-products-by-category";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
+import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 let productsRepository: InMemoryProductsRepository;
 let orderRepository: InMemoryOrdersRepository;
@@ -16,18 +17,18 @@ describe("Fetch products by category title", () => {
     sut = new FetchProductsByCategoryUseCase(productsRepository);
   });
 
-  test("should be able to fetch products by category title", async () => {
+  test("should be able to fetch products by category ID", async () => {
     const products1 = makeProduct({
       title: "ball",
-      categoryTitle: "sports",
+      categoryId: new UniqueEntityID("id-01"),
     });
     const products2 = makeProduct({
       title: "cell phone",
-      categoryTitle: "Electronics Products",
+      categoryId: new UniqueEntityID("id-01"),
     });
     const products3 = makeProduct({
       title: "notebook",
-      categoryTitle: "Electronics Products",
+      categoryId: new UniqueEntityID("id-02"),
     });
 
     await Promise.all([
@@ -36,7 +37,10 @@ describe("Fetch products by category title", () => {
       productsRepository.create(products3),
     ]);
 
-    const result = await sut.execute({ slug: "Electronics Products", page: 1 });
+    const result = await sut.execute({
+      categoryId: "id-01",
+      page: 1,
+    });
 
     expect(result.isRight()).toBe(true);
 
@@ -48,20 +52,19 @@ describe("Fetch products by category title", () => {
   test("should be able to fetch paginated products", async () => {
     for (let i = 1; i <= 22; i++) {
       await productsRepository.create(
-        makeProduct({ title: `product ${i}`, categoryTitle: "Electronics" }),
+        makeProduct({ categoryId: new UniqueEntityID(`id-${i}`) }),
       );
     }
 
     const result = await sut.execute({
-      slug: "Electronics",
-      page: 2,
+      categoryId: "id-22",
+      page: 1,
     });
 
     if (result.isRight()) {
-      expect(result.value.products).toHaveLength(2);
+      expect(result.value.products).toHaveLength(1);
       expect(result.value.products).toEqual([
-        expect.objectContaining({ title: "product 21" }),
-        expect.objectContaining({ title: "product 22" }),
+        expect.objectContaining({ categoryId: new UniqueEntityID("id-22") }),
       ]);
     }
   });

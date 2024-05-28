@@ -19,40 +19,33 @@ describe("Fetch Products by category (E2E)", () => {
   });
 
   test("[GET] /products/same-category", async () => {
-    const category1 = await categoryFactory.makePrismaCategory({
-      title: "Electronics",
-    });
+    const category1 = await categoryFactory.makePrismaCategory();
 
-    const category2 = await categoryFactory.makePrismaCategory({
-      title: "Sports",
-    });
+    const category2 = await categoryFactory.makePrismaCategory();
 
     await Promise.all([
       productFactory.makePrismaProduct({
         categoryId: category1.id,
-        categoryTitle: category1.title,
       }),
 
       productFactory.makePrismaProduct({
         categoryId: category1.id,
-        categoryTitle: category1.title,
       }),
 
       productFactory.makePrismaProduct({
         categoryId: category2.id,
-        categoryTitle: category2.title,
       }),
     ]);
 
     const response = await request(app.server)
       .get("/products/same-category")
-      .query({ slug: "Electronics", page: 1 });
+      .query({ categoryId: category1.id.toString(), page: 1 });
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.products).toHaveLength(2);
     expect(response.body).toEqual({
       products: expect.arrayContaining([
-        expect.objectContaining({ categoryTitle: "Electronics" }),
+        expect.objectContaining({ categoryId: category1.id.toString() }),
       ]),
     });
   });
