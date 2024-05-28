@@ -61,18 +61,12 @@ export class InMemoryProductsRepository implements ProductRepository {
     return product;
   }
 
-  async findManyByCategoryTitle(
-    slug: string,
+  async findManyByCategoryId(
+    id: string,
     page: number,
   ): Promise<Product[] | null> {
-    const slugWord = slug.replace(/-/g, " ").toLowerCase().split(" ");
-
     const products = this.items
-      .filter((item) =>
-        slugWord.some((word) =>
-          item.categoryTitle.toLowerCase().includes(word),
-        ),
-      )
+      .filter((item) => item.categoryId.toString() === id)
       .slice((page - 1) * 20, page * 20);
 
     if (!products) {

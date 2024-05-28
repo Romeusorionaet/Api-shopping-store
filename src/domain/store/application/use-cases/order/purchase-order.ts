@@ -45,6 +45,19 @@ export class PurchaseOrderUseCase {
   }: PurchaseOrderUseCaseRequest): Promise<PurchaseOrderUseCaseResponse> {
     const outOfStockProducts = [];
     const insufficientProductInventory = [];
+
+    const address = await this.userAddressRepository.findByUserId(buyerId);
+
+    const buyer = await this.userRepository.findById(buyerId);
+
+    if (!buyer) {
+      return left(new UserNotFoundError());
+    }
+
+    if (!address) {
+      return left(new OrderWithEmptyAddressError());
+    }
+
     for (const orderProduct of orderProducts) {
       const product = await this.productRepository.findByTitle(
         orderProduct.title,
@@ -61,6 +74,11 @@ export class PurchaseOrderUseCase {
       if (product.stockQuantity <= 0) {
         outOfStockProducts.push(product.title);
       }
+
+      await this.orderRepository.removeDuplicatedOrders(
+        buyerId,
+        orderProduct.productId.toString(),
+      );
     }
 
     if (outOfStockProducts.length > 0) {
@@ -73,18 +91,6 @@ export class PurchaseOrderUseCase {
           insufficientProductInventory.join(", "),
         ),
       );
-    }
-
-    const address = await this.userAddressRepository.findByUserId(buyerId);
-
-    const buyer = await this.userRepository.findById(buyerId);
-
-    if (!buyer) {
-      return left(new UserNotFoundError());
-    }
-
-    if (!address) {
-      return left(new OrderWithEmptyAddressError());
     }
 
     const buyerAddress = BuyerAddress.create({

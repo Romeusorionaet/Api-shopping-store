@@ -5,4 +5,5 @@ export interface OrderRepository {
   findByBuyerId(buyerId: string): Promise<Order[]>;
   confirmPayment(orderId: string): Promise<void>;
   findById(id: string): Promise<Order | null>;
+  removeDuplicatedOrders(buyerId: string, productId: string): Promise<void>;
 }

@@ -52,8 +52,8 @@ describe("Purchase Order", () => {
 
     const productSecond = makeProduct({ title: "Cell Phone" });
 
-    productRepository.items.push(productFirst);
-    productRepository.items.push(productSecond);
+    productRepository.create(productFirst);
+    productRepository.create(productSecond);
 
     const orderProductFirst = makeOrderProduct({
       title: productFirst.title,
@@ -96,6 +96,47 @@ describe("Purchase Order", () => {
           trackingCode: "",
         }),
       );
+    }
+  });
+
+  test("should be able to remove duplicated orders of user if not payment", async () => {
+    const user = await makeUser({}, new UniqueEntityID("user-test-id-01"));
+
+    await usersRepository.create(user);
+
+    const userAddress = makeUserAddress({
+      userId: user.id,
+    });
+
+    await userAddressRepository.create(userAddress);
+
+    const product = makeProduct({}, new UniqueEntityID("product-id-01"));
+
+    productRepository.create(product);
+
+    const orderProduct = makeOrderProduct({
+      title: product.title,
+      productId: product.id,
+    });
+
+    const orderProducts = [];
+
+    orderProducts.push(orderProduct);
+
+    await sut.execute({
+      buyerId: user.id.toString(),
+      orderProducts,
+    });
+
+    const result = await sut.execute({
+      buyerId: user.id.toString(),
+      orderProducts,
+    });
+
+    expect(result.isRight()).toEqual(true);
+
+    if (result.isRight()) {
+      expect(orderRepository.items).toHaveLength(1);
     }
   });
 });

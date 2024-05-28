@@ -39,4 +39,22 @@ export class InMemoryOrdersRepository implements OrderRepository {
 
     return orders;
   }
+
+  async removeDuplicatedOrders(
+    buyerId: string,
+    productId: string,
+  ): Promise<void> {
+    this.items = this.items.filter((order) => {
+      if (
+        order.buyerId.toString() === buyerId &&
+        order.status === OrderStatus.WAITING_FOR_PAYMENT &&
+        order.orderProducts.some((op) => op.productId.toString() === productId)
+      ) {
+        return false;
+      }
+      return true;
+    });
+
+    this.items = this.items.filter((order) => order.orderProducts.length > 0);
+  }
 }

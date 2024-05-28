@@ -92,4 +92,29 @@ export class PrismaOrderRepository implements OrderRepository {
 
     return mappedOrders;
   }
+
+  async removeDuplicatedOrders(
+    buyerId: string,
+    productId: string,
+  ): Promise<void> {
+    await prisma.order.deleteMany({
+      where: {
+        buyerId,
+        status: OrderStatus.WAITING_FOR_PAYMENT,
+        orderProducts: {
+          some: {
+            productId,
+          },
+        },
+      },
+    });
+
+    await prisma.order.deleteMany({
+      where: {
+        orderProducts: {
+          none: {},
+        },
+      },
+    });
+  }
 }
