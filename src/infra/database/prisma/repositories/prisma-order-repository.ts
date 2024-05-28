@@ -42,6 +42,11 @@ export class PrismaOrderRepository implements OrderRepository {
     );
 
     this.productRepository.decrementStockQuantity(orderProducts);
+    orderProducts.map((orderProduct) =>
+      this.productRepository.addStarToProduct(
+        orderProduct.productId.toString(),
+      ),
+    );
   }
 
   async create(order: Order): Promise<void> {

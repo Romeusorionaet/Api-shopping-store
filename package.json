@@ -7,6 +7,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsup src --external supertest --external @faker-js/faker",
     "start": "node dist/server.js",
+    "seed": "ts-node prisma/seed.ts",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:cov": "vitest run --coverage",

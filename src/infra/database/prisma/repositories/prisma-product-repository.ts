@@ -132,4 +132,17 @@ export class PrismaProductRepository implements ProductRepository {
       data: product,
     });
   }
+
+  async addStarToProduct(id: string): Promise<void> {
+    await prisma.product.update({
+      where: {
+        id,
+      },
+      data: {
+        stars: {
+          increment: 1,
+        },
+      },
+    });
+  }
 }

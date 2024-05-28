@@ -9,6 +9,13 @@ export class InMemoryProductsRepository implements ProductRepository {
   public items: Product[] = [];
 
   constructor(private orderRepository: OrderRepository) {}
+  async addStarToProduct(id: string): Promise<void> {
+    const product = this.items.find((item) => item.id.toString() === id);
+
+    if (product && product.stars) {
+      product.stars += 1;
+    }
+  }
 
   async decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void> {
     for (const productSold of orderProducts) {

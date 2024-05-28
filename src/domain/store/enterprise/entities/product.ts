@@ -95,6 +95,10 @@ export class Product extends Entity<ProductProps> {
     return this.props.stars;
   }
 
+  set stars(value: number | null | undefined) {
+    this.props.stars = value;
+  }
+
   get createdAt() {
     return this.props.createdAt;
   }

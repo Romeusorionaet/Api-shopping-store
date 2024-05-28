@@ -11,4 +11,5 @@ export interface ProductRepository {
   update(data: Product): Promise<void>;
   decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void>;
   findManyByCategoryId(id: string, page: number): Promise<Product[] | null>;
+  addStarToProduct(id: string): Promise<void>;
 }
