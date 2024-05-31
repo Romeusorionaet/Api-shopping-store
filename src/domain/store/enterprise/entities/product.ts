@@ -17,9 +17,6 @@ export interface ProductProps {
   stockQuantity: number;
   minimumQuantityStock: number;
   discountPercentage: number;
-  width: number;
-  height: number;
-  weight: number;
   placeOfSale?: ModeOfSale;
   stars?: number | null;
   createdAt: Date;
@@ -69,18 +66,6 @@ export class Product extends Entity<ProductProps> {
 
   get discountPercentage() {
     return this.props.discountPercentage;
-  }
-
-  get width() {
-    return this.props.width;
-  }
-
-  get height() {
-    return this.props.height;
-  }
-
-  get weight() {
-    return this.props.weight;
   }
 
   get corsList() {

@@ -2,15 +2,18 @@ import { Either, left, right } from "src/core/either";
 import { Product } from "../../../enterprise/entities/product";
 import { ProductRepository } from "../../repositories/product-repository";
 import { ProductNotFoundError } from "../errors/product-not-found-error";
+import { TechnicalProductNotFoundError } from "../errors/technical-product-details-not-found-error";
+import { TechnicalProductDetails } from "src/domain/store/enterprise/entities/technical-product-details";
 
 interface GetProductDetailsUseCaseRequest {
   productId: string;
 }
 
 type GetProductDetailsUseCaseResponse = Either<
-  ProductNotFoundError,
+  ProductNotFoundError | TechnicalProductNotFoundError,
   {
     product: Product;
+    technicalProductDetails: TechnicalProductDetails;
   }
 >;
 
@@ -26,6 +29,15 @@ export class GetProductDetailsUseCase {
       return left(new ProductNotFoundError());
     }
 
-    return right({ product });
+    const technicalProductDetails =
+      await this.productRepository.findTechnicalProductDetailsByProductId(
+        productId,
+      );
+
+    if (!technicalProductDetails) {
+      return left(new TechnicalProductNotFoundError());
+    }
+
+    return right({ product, technicalProductDetails });
   }
 }

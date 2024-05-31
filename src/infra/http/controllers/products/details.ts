@@ -3,6 +3,8 @@ import { ProductPresenter } from "../../presenters/product-presenter";
 import { z } from "zod";
 import { makeGetProductDetailsUseCase } from "src/domain/store/application/use-cases/product/factory/make-get-product-details-use-case";
 import { ProductNotFoundError } from "src/domain/store/application/use-cases/errors/product-not-found-error";
+import { TechnicalProductNotFoundError } from "src/domain/store/application/use-cases/errors/technical-product-details-not-found-error";
+import { TechnicalProductDetailsPresenter } from "../../presenters/technical-product-details-presenter";
 
 export async function details(request: FastifyRequest, reply: FastifyReply) {
   const getProductDetailsParamsSchema = z.object({
@@ -22,13 +24,20 @@ export async function details(request: FastifyRequest, reply: FastifyReply) {
         return reply.status(400).send({
           error: err.message,
         });
+      case TechnicalProductNotFoundError:
+        return reply.status(400).send({
+          error: err.message,
+        });
 
       default:
         throw new Error(err.message);
     }
   }
 
-  return reply
-    .status(200)
-    .send({ product: ProductPresenter.toHTTP(result.value.product) });
+  return reply.status(200).send({
+    product: ProductPresenter.toHTTP(result.value.product),
+    technicalProductDetails: TechnicalProductDetailsPresenter.toHTTP(
+      result.value.technicalProductDetails,
+    ),
+  });
 }

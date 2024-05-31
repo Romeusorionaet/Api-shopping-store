@@ -5,6 +5,7 @@ import { makeProduct } from "test/factories/make-product";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { UpdateProductUseCase } from "./update-product";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
+import { makeTechnicalProductDetails } from "test/factories/make-technical-products-details";
 
 let productsRepository: InMemoryProductsRepository;
 let categoryRepository: InMemoryCategoriesRepository;
@@ -39,6 +40,13 @@ describe("Create Product", () => {
 
     await productsRepository.create(product);
 
+    const technicalProduct = makeTechnicalProductDetails({
+      productId: product.id,
+      brand: "Moto G",
+    });
+
+    await productsRepository.createTechnicalProductDetails(technicalProduct);
+
     const result = await sut.execute({
       id: product.id.toString(),
       title: "product register 01 updated",
@@ -48,11 +56,25 @@ describe("Create Product", () => {
       stockQuantity: product.stockQuantity,
       minimumQuantityStock: product.minimumQuantityStock,
       discountPercentage: product.discountPercentage,
-      width: product.width,
-      height: product.height,
-      weight: product.weight,
       corsList: product.corsList,
       placeOfSale: product.placeOfSale,
+      technicalProductDetails: {
+        technicalProductId: technicalProduct.id.toString(),
+        brand: "Iphone",
+        ram: technicalProduct.ram,
+        rom: technicalProduct.rom,
+        width: technicalProduct.width,
+        height: technicalProduct.height,
+        weight: technicalProduct.weight,
+        model: technicalProduct.model,
+        averageBatteryLife: technicalProduct.averageBatteryLife,
+        batteryCapacity: technicalProduct.batteryCapacity,
+        operatingSystem: technicalProduct.operatingSystem,
+        processorBrand: technicalProduct.processorBrand,
+        screenOrWatchFace: technicalProduct.screenOrWatchFace,
+        videoCaptureResolution: technicalProduct.videoCaptureResolution,
+        videoResolution: technicalProduct.videoResolution,
+      },
     });
 
     expect(result.isRight()).toBe(true);

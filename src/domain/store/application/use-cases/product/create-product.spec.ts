@@ -5,6 +5,7 @@ import { makeCategory } from "test/factories/make-category";
 import { makeProduct } from "test/factories/make-product";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
+import { makeTechnicalProductDetails } from "test/factories/make-technical-products-details";
 
 let productsRepository: InMemoryProductsRepository;
 let categoryRepository: InMemoryCategoriesRepository;
@@ -35,6 +36,10 @@ describe("Create Product", () => {
       title: "first product register 01",
     });
 
+    const technicalProductDetails = makeTechnicalProductDetails({
+      productId: product.id,
+    });
+
     const result = await sut.execute({
       categoryId: category.id.toString(),
       categoryTitle: category.title,
@@ -45,12 +50,10 @@ describe("Create Product", () => {
       stockQuantity: product.stockQuantity,
       minimumQuantityStock: product.minimumQuantityStock,
       discountPercentage: product.discountPercentage,
-      width: product.width,
-      height: product.height,
-      weight: product.weight,
       corsList: product.corsList,
       placeOfSale: product.placeOfSale,
       stars: product.stars,
+      technicalProductDetails,
     });
 
     expect(result.isRight()).toBe(true);

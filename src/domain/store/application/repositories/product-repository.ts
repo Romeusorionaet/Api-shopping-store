@@ -1,6 +1,7 @@
 import { PaginationParams } from "src/core/repositories/pagination-params";
 import { Product } from "../../enterprise/entities/product";
 import { OrderProduct } from "../../enterprise/entities/order-product";
+import { TechnicalProductDetails } from "../../enterprise/entities/technical-product-details";
 
 export interface ProductRepository {
   create(data: Product): Promise<void>;
@@ -12,4 +13,12 @@ export interface ProductRepository {
   decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void>;
   findManyByCategoryId(id: string, page: number): Promise<Product[] | null>;
   addStarToProduct(id: string): Promise<void>;
+  createTechnicalProductDetails(data: TechnicalProductDetails): Promise<void>;
+  updateTechnicalProductDetails(data: TechnicalProductDetails): Promise<void>;
+  findTechnicalProductDetails(
+    id: string,
+  ): Promise<TechnicalProductDetails | null>;
+  findTechnicalProductDetailsByProductId(
+    id: string,
+  ): Promise<TechnicalProductDetails | null>;
 }

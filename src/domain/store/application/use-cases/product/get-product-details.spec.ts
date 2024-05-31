@@ -3,6 +3,7 @@ import { InMemoryProductsRepository } from "test/repositories/in-memory-products
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { makeProduct } from "test/factories/make-product";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
+import { makeTechnicalProductDetails } from "test/factories/make-technical-products-details";
 
 let productsRepository: InMemoryProductsRepository;
 let orderRepository: InMemoryOrdersRepository;
@@ -28,7 +29,14 @@ describe("Get Product Details", () => {
       new UniqueEntityID("first-product-id"),
     );
 
+    const technicalProductDetails = makeTechnicalProductDetails({
+      productId: product.id,
+    });
+
     await productsRepository.create(product);
+    await productsRepository.createTechnicalProductDetails(
+      technicalProductDetails,
+    );
 
     const result = await sut.execute({ productId: product.id.toString() });
 
@@ -41,6 +49,11 @@ describe("Get Product Details", () => {
           id: new UniqueEntityID("first-product-id"),
           categoryId: new UniqueEntityID("first-category-id"),
           title: "my product",
+        }),
+      );
+      expect(result.value.technicalProductDetails).toEqual(
+        expect.objectContaining({
+          productId: product.id,
         }),
       );
     }

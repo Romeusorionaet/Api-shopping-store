@@ -71,30 +71,53 @@ model Category {
 }
 
 model Product {
-  id                   String    @id @default(uuid())
-  categoryTitle        String    @map("category_title")
-  title                String    @unique
+  id                   String   @id @default(uuid())
+  categoryTitle        String   @map("category_title")
+  title                String   @unique
   slug                 String
-  description          String    @db.Text
-  imgUrlList           String[]  @map("img_url_list")
-  corsList             String[]  @map("color_list")
+  description          String   @db.Text
+  imgUrlList           String[] @map("img_url_list")
+  corsList             String[] @map("color_list")
   price                Int
-  stockQuantity        Int       @map("stock_quantity")
-  minimumQuantityStock Int       @map("minimum_quantity_stock")
-  discountPercentage   Int       @map("discount_percentage")
-  width                Int
-  height               Int
-  weight               Int
-  stars                Int?      @default(0)
-  updatedAt            DateTime? @default(now()) @updatedAt @map("updated_at")
-  createdAt            DateTime  @default(now()) @map("created_at")
+  stockQuantity        Int      @map("stock_quantity")
+  minimumQuantityStock Int      @map("minimum_quantity_stock")
+  discountPercentage   Int      @map("discount_percentage")
+  stars                Int?     @default(0)
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @default(now()) @updatedAt @map("updated_at")
 
   placeOfSale ModeOfSale @default(ONLINE_STORE)
   categoryId  String
 
-  category Category @relation(fields: [categoryId], references: [id])
+  category                Category                  @relation(fields: [categoryId], references: [id])
+  TechnicalProductDetails TechnicalProductDetails[]
 
   @@map("products")
+}
+
+model TechnicalProductDetails {
+  id                     String @id @default(uuid())
+  width                  Int
+  height                 Int
+  weight                 Int
+  brand                  String
+  model                  String
+  ram                    Int
+  rom                    Int
+  videoResolution        String @map("video_resolution")
+  batteryCapacity        String @map("battery_capacity")
+  screenOrWatchFace      String @map("screen_or_watch_face")
+  averageBatteryLife     String @map("average_battery_life")
+  videoCaptureResolution String @map("video_capture_resolution")
+  processorBrand         String @map("processor_brand")
+  operatingSystem        String @map("operating_system")
+
+  productId String
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("technical_products_details")
 }
 
 model Order {

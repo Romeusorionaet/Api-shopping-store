@@ -64,16 +64,35 @@ CREATE TABLE "products" (
     "stock_quantity" INTEGER NOT NULL,
     "minimum_quantity_stock" INTEGER NOT NULL,
     "discount_percentage" INTEGER NOT NULL,
-    "width" INTEGER NOT NULL,
-    "height" INTEGER NOT NULL,
-    "weight" INTEGER NOT NULL,
     "stars" INTEGER DEFAULT 0,
-    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "placeOfSale" "ModeOfSale" NOT NULL DEFAULT 'ONLINE_STORE',
     "categoryId" TEXT NOT NULL,
 
     CONSTRAINT "products_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "technical_products_details" (
+    "id" TEXT NOT NULL,
+    "width" INTEGER NOT NULL,
+    "height" INTEGER NOT NULL,
+    "weight" INTEGER NOT NULL,
+    "brand" TEXT NOT NULL,
+    "model" TEXT NOT NULL,
+    "ram" INTEGER NOT NULL,
+    "rom" INTEGER NOT NULL,
+    "video_resolution" TEXT NOT NULL,
+    "battery_capacity" TEXT NOT NULL,
+    "screen_or_watch_face" TEXT NOT NULL,
+    "average_battery_life" TEXT NOT NULL,
+    "video_capture_resolution" TEXT NOT NULL,
+    "processor_brand" TEXT NOT NULL,
+    "operating_system" TEXT NOT NULL,
+    "productId" TEXT NOT NULL,
+
+    CONSTRAINT "technical_products_details_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -118,7 +137,7 @@ CREATE TABLE "order_products" (
     "base_price" DECIMAL(8,2) NOT NULL,
     "discount_percentage" INTEGER NOT NULL DEFAULT 0,
     "quantity" INTEGER NOT NULL,
-    "product_color" TEXT,
+    "color_list" TEXT[],
     "productId" TEXT NOT NULL,
     "orderId" TEXT,
 
@@ -136,6 +155,9 @@ CREATE UNIQUE INDEX "products_title_key" ON "products"("title");
 
 -- AddForeignKey
 ALTER TABLE "products" ADD CONSTRAINT "products_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "technical_products_details" ADD CONSTRAINT "technical_products_details_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "orders" ADD CONSTRAINT "orders_buyerId_fkey" FOREIGN KEY ("buyerId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

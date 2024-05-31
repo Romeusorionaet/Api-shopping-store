@@ -4,6 +4,8 @@ import { prisma } from "../prisma";
 import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
 import { PaginationParams } from "src/core/repositories/pagination-params";
 import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
+import { TechnicalProductDetails } from "src/domain/store/enterprise/entities/technical-product-details";
+import { PrismaTechnicalProductDetailsMapper } from "../mappers/prisma-technical-product-details-mapper";
 
 export class PrismaProductRepository implements ProductRepository {
   async decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void> {
@@ -29,6 +31,16 @@ export class PrismaProductRepository implements ProductRepository {
 
     await prisma.product.create({
       data,
+    });
+  }
+
+  async createTechnicalProductDetails(
+    data: TechnicalProductDetails,
+  ): Promise<void> {
+    const dataMapper = PrismaTechnicalProductDetailsMapper.toPrisma(data);
+
+    await prisma.technicalProductDetails.create({
+      data: dataMapper,
     });
   }
 
@@ -96,6 +108,44 @@ export class PrismaProductRepository implements ProductRepository {
     return products.map(PrismaProductMapper.toDomain);
   }
 
+  async findTechnicalProductDetailsByProductId(
+    id: string,
+  ): Promise<TechnicalProductDetails | null> {
+    const technicalProductDetails =
+      await prisma.technicalProductDetails.findFirst({
+        where: {
+          productId: id,
+        },
+      });
+
+    if (!technicalProductDetails) {
+      return null;
+    }
+
+    return PrismaTechnicalProductDetailsMapper.toDomain(
+      technicalProductDetails,
+    );
+  }
+
+  async findTechnicalProductDetails(
+    id: string,
+  ): Promise<TechnicalProductDetails | null> {
+    const technicalProductDetails =
+      await prisma.technicalProductDetails.findUnique({
+        where: {
+          id,
+        },
+      });
+
+    if (!technicalProductDetails) {
+      return null;
+    }
+
+    return PrismaTechnicalProductDetailsMapper.toDomain(
+      technicalProductDetails,
+    );
+  }
+
   async searchMany(query: string, page: number): Promise<Product[] | null> {
     const queryWords = query.toLowerCase().split(" ");
 
@@ -130,6 +180,20 @@ export class PrismaProductRepository implements ProductRepository {
         id: product.id,
       },
       data: product,
+    });
+  }
+
+  async updateTechnicalProductDetails(
+    data: TechnicalProductDetails,
+  ): Promise<void> {
+    const technicalProductDetails =
+      PrismaTechnicalProductDetailsMapper.toPrisma(data);
+
+    await prisma.technicalProductDetails.update({
+      where: {
+        id: technicalProductDetails.id,
+      },
+      data: technicalProductDetails,
     });
   }
 

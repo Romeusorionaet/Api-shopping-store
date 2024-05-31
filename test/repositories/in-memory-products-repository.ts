@@ -4,11 +4,14 @@ import { OrderRepository } from "src/domain/store/application/repositories/order
 import { ProductRepository } from "src/domain/store/application/repositories/product-repository";
 import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
 import { Product } from "src/domain/store/enterprise/entities/product";
+import { TechnicalProductDetails } from "src/domain/store/enterprise/entities/technical-product-details";
 
 export class InMemoryProductsRepository implements ProductRepository {
   public items: Product[] = [];
+  public itemsDetails: TechnicalProductDetails[] = [];
 
   constructor(private orderRepository: OrderRepository) {}
+
   async addStarToProduct(id: string): Promise<void> {
     const product = this.items.find((item) => item.id.toString() === id);
 
@@ -32,6 +35,12 @@ export class InMemoryProductsRepository implements ProductRepository {
 
   async create(data: Product): Promise<void> {
     this.items.push(data);
+  }
+
+  async createTechnicalProductDetails(
+    data: TechnicalProductDetails,
+  ): Promise<void> {
+    this.itemsDetails.push(data);
   }
 
   async findMany({ page }: PaginationParams): Promise<Product[]> {
@@ -66,6 +75,20 @@ export class InMemoryProductsRepository implements ProductRepository {
     }
 
     return product;
+  }
+
+  async findTechnicalProductDetailsByProductId(
+    id: string,
+  ): Promise<TechnicalProductDetails | null> {
+    const existingTechnicalProductDetails = this.itemsDetails.find(
+      (item) => item.productId.toString() === id,
+    );
+
+    if (!existingTechnicalProductDetails) {
+      return null;
+    }
+
+    return existingTechnicalProductDetails;
   }
 
   async findManyByCategoryId(
@@ -108,6 +131,34 @@ export class InMemoryProductsRepository implements ProductRepository {
     }
 
     return products;
+  }
+
+  async updateTechnicalProductDetails(
+    data: TechnicalProductDetails,
+  ): Promise<void> {
+    const existingTechnicalProductDetails = this.itemsDetails.find(
+      (item) => item.id === data.id,
+    );
+
+    if (existingTechnicalProductDetails) {
+      Object.assign(existingTechnicalProductDetails, data);
+    } else {
+      throw new Error("Detalhes tecnicos do produto não encontrado");
+    }
+  }
+
+  async findTechnicalProductDetails(
+    id: string,
+  ): Promise<TechnicalProductDetails | null> {
+    const technicalProductDetails = this.itemsDetails.find(
+      (item) => item.id?.toString() === id,
+    );
+
+    if (!technicalProductDetails) {
+      return null;
+    }
+
+    return technicalProductDetails;
   }
 
   async searchMany(query: string, page: number): Promise<Product[] | null> {

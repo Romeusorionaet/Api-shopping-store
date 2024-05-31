@@ -17,14 +17,27 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     stockQuantity: z.coerce.number(),
     minimumQuantityStock: z.coerce.number(),
     discountPercentage: z.coerce.number(),
-    width: z.coerce.number(),
-    height: z.coerce.number(),
-    weight: z.coerce.number(),
     placeOfSale: z.enum([
       ModeOfSale.ONLINE_STORE,
       ModeOfSale.SELLS_ONLY_IN_THE_REGION,
     ]),
     stars: z.coerce.number(),
+    technicalProductDetails: z.object({
+      width: z.coerce.number(),
+      height: z.coerce.number(),
+      weight: z.coerce.number(),
+      brand: z.string(),
+      model: z.string(),
+      ram: z.coerce.number(),
+      rom: z.coerce.number(),
+      videoResolution: z.string(),
+      batteryCapacity: z.string(),
+      screenOrWatchFace: z.string(),
+      averageBatteryLife: z.string(),
+      videoCaptureResolution: z.string(),
+      processorBrand: z.string(),
+      operatingSystem: z.string(),
+    }),
   });
 
   const productData = createProductBodySchema.parse(request.body);

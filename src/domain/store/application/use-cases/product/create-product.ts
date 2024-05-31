@@ -6,6 +6,7 @@ import { ModeOfSale } from "src/core/entities/mode-of-sale";
 import { ProductAlreadyExistsError } from "../errors/product-already-exists-error";
 import { CategoryRepository } from "../../repositories/category-repository";
 import { TheAssignedCategoryDoesNotExistError } from "../errors/the-assigned-category-does-not-exist-error";
+import { TechnicalProductDetails } from "src/domain/store/enterprise/entities/technical-product-details";
 
 interface CreateProductUseCaseRequest {
   categoryId: string;
@@ -18,11 +19,24 @@ interface CreateProductUseCaseRequest {
   stockQuantity: number;
   minimumQuantityStock: number;
   discountPercentage: number;
-  width: number;
-  height: number;
-  weight: number;
   placeOfSale?: ModeOfSale;
   stars?: number | null;
+  technicalProductDetails: {
+    width: number;
+    height: number;
+    weight: number;
+    brand: string;
+    model: string;
+    ram: number;
+    rom: number;
+    videoResolution: string;
+    batteryCapacity: string;
+    screenOrWatchFace: string;
+    averageBatteryLife: string;
+    videoCaptureResolution: string;
+    processorBrand: string;
+    operatingSystem: string;
+  };
 }
 
 type CreateProductUseCaseResponse = Either<
@@ -47,11 +61,24 @@ export class CreateProductUseCase {
     stockQuantity,
     minimumQuantityStock,
     discountPercentage,
-    width,
-    height,
-    weight,
     placeOfSale,
     stars,
+    technicalProductDetails: {
+      width,
+      height,
+      weight,
+      brand,
+      model,
+      ram,
+      rom,
+      videoResolution,
+      batteryCapacity,
+      screenOrWatchFace,
+      averageBatteryLife,
+      videoCaptureResolution,
+      processorBrand,
+      operatingSystem,
+    },
   }: CreateProductUseCaseRequest): Promise<CreateProductUseCaseResponse> {
     const existProduct = await this.productRepository.findByTitle(title);
 
@@ -76,14 +103,32 @@ export class CreateProductUseCase {
       stockQuantity,
       minimumQuantityStock,
       discountPercentage,
-      width,
-      height,
-      weight,
       placeOfSale,
       stars,
     });
 
+    const technicalProductDetails = TechnicalProductDetails.create({
+      productId: product.id,
+      width,
+      height,
+      weight,
+      brand,
+      model,
+      ram,
+      rom,
+      videoResolution,
+      batteryCapacity,
+      screenOrWatchFace,
+      averageBatteryLife,
+      videoCaptureResolution,
+      processorBrand,
+      operatingSystem,
+    });
+
     await this.productRepository.create(product);
+    await this.productRepository.createTechnicalProductDetails(
+      technicalProductDetails,
+    );
 
     return right({ product });
   }
