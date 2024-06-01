@@ -2,6 +2,7 @@
 import { PaginationParams } from "src/core/repositories/pagination-params";
 import { OrderRepository } from "src/domain/store/application/repositories/order-repository";
 import { ProductRepository } from "src/domain/store/application/repositories/product-repository";
+import { TechnicalProductNotFoundError } from "src/domain/store/application/use-cases/errors/technical-product-details-not-found-error";
 import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
 import { Product } from "src/domain/store/enterprise/entities/product";
 import { TechnicalProductDetails } from "src/domain/store/enterprise/entities/technical-product-details";
@@ -143,7 +144,7 @@ export class InMemoryProductsRepository implements ProductRepository {
     if (existingTechnicalProductDetails) {
       Object.assign(existingTechnicalProductDetails, data);
     } else {
-      throw new Error("Detalhes tecnicos do produto não encontrado");
+      throw new TechnicalProductNotFoundError();
     }
   }
 

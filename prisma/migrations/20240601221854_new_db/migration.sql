@@ -76,13 +76,13 @@ CREATE TABLE "products" (
 -- CreateTable
 CREATE TABLE "technical_products_details" (
     "id" TEXT NOT NULL,
-    "width" INTEGER NOT NULL,
-    "height" INTEGER NOT NULL,
-    "weight" INTEGER NOT NULL,
+    "height" TEXT NOT NULL,
+    "weight" TEXT NOT NULL,
+    "width" TEXT NOT NULL,
     "brand" TEXT NOT NULL,
     "model" TEXT NOT NULL,
-    "ram" INTEGER NOT NULL,
-    "rom" INTEGER NOT NULL,
+    "ram" TEXT NOT NULL,
+    "rom" TEXT NOT NULL,
     "video_resolution" TEXT NOT NULL,
     "battery_capacity" TEXT NOT NULL,
     "screen_or_watch_face" TEXT NOT NULL,
@@ -157,7 +157,7 @@ CREATE UNIQUE INDEX "products_title_key" ON "products"("title");
 ALTER TABLE "products" ADD CONSTRAINT "products_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "technical_products_details" ADD CONSTRAINT "technical_products_details_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "technical_products_details" ADD CONSTRAINT "technical_products_details_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "orders" ADD CONSTRAINT "orders_buyerId_fkey" FOREIGN KEY ("buyerId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

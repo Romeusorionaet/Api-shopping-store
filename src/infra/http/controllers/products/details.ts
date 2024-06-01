@@ -34,6 +34,8 @@ export async function details(request: FastifyRequest, reply: FastifyReply) {
     }
   }
 
+  console.log(result.value.technicalProductDetails);
+
   return reply.status(200).send({
     product: ProductPresenter.toHTTP(result.value.product),
     technicalProductDetails: TechnicalProductDetailsPresenter.toHTTP(

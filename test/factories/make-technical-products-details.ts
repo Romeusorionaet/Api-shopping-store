@@ -13,13 +13,13 @@ export function makeTechnicalProductDetails(
   const product = TechnicalProductDetails.create(
     {
       productId: new UniqueEntityID(),
-      width: 5,
-      height: 14,
-      weight: 380,
+      width: "7,40 cm",
+      height: "16,00 cm",
+      weight: "166,00 g",
       brand: "Xiaomi",
       model: "Redmi note 7",
-      ram: 4,
-      rom: 64,
+      ram: "4 GB",
+      rom: "64 GB",
       averageBatteryLife: "22,5 Horas",
       batteryCapacity: "5000 Milliamp Hours",
       operatingSystem: "Android",

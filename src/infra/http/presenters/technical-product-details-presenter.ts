@@ -13,7 +13,7 @@ export class TechnicalProductDetailsPresenter {
       ram: technicalProductDetails.ram,
       rom: technicalProductDetails.rom,
       averageBatteryLife: technicalProductDetails.averageBatteryLife,
-      batteryCapacity: technicalProductDetails.averageBatteryLife,
+      batteryCapacity: technicalProductDetails.batteryCapacity,
       operatingSystem: technicalProductDetails.operatingSystem,
       processorBrand: technicalProductDetails.processorBrand,
       screenOrWatchFace: technicalProductDetails.screenOrWatchFace,

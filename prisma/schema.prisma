@@ -98,13 +98,13 @@ model Product {
 
 model TechnicalProductDetails {
   id                     String @id @default(uuid())
-  width                  Int
-  height                 Int
-  weight                 Int
+  height                 String
+  weight                 String
+  width                  String
   brand                  String
   model                  String
-  ram                    Int
-  rom                    Int
+  ram                    String
+  rom                    String
   videoResolution        String @map("video_resolution")
   batteryCapacity        String @map("battery_capacity")
   screenOrWatchFace      String @map("screen_or_watch_face")
@@ -115,7 +115,7 @@ model TechnicalProductDetails {
 
   productId String
 
-  product Product @relation(fields: [productId], references: [id])
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("technical_products_details")
 }

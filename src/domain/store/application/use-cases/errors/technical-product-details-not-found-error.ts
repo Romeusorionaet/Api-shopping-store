@@ -5,6 +5,6 @@ export class TechnicalProductNotFoundError
   implements UseCaseError
 {
   constructor() {
-    super("Detalhes tecnicos do produto não encontrado.");
+    super("Detalhes técnicos do produto não encontrado.");
   }
 }

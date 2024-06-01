@@ -22,13 +22,13 @@ interface CreateProductUseCaseRequest {
   placeOfSale?: ModeOfSale;
   stars?: number | null;
   technicalProductDetails: {
-    width: number;
-    height: number;
-    weight: number;
+    width: string;
+    height: string;
+    weight: string;
     brand: string;
     model: string;
-    ram: number;
-    rom: number;
+    ram: string;
+    rom: string;
     videoResolution: string;
     batteryCapacity: string;
     screenOrWatchFace: string;
