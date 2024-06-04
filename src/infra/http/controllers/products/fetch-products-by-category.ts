@@ -1,8 +1,8 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ProductPresenter } from "../../presenters/product-presenter";
 import { z } from "zod";
-import { ProductNotFoundError } from "src/domain/store/application/use-cases/errors/product-not-found-error";
 import { makeFetchProductsByCategoryUseCase } from "src/domain/store/application/use-cases/product/factory/make-fetch-products-by-category-use-case";
+import { ProductsNotFoundForThisCategoryError } from "src/domain/store/application/use-cases/errors/products-not-found-for-this-category-error";
 
 export async function fetchProductsByCategory(
   request: FastifyRequest,
@@ -24,7 +24,7 @@ export async function fetchProductsByCategory(
   if (result.isLeft()) {
     const err = result.value;
     switch (err.constructor) {
-      case ProductNotFoundError:
+      case ProductsNotFoundForThisCategoryError:
         return reply.status(400).send({
           error: err.message,
         });

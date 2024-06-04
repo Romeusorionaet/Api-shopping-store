@@ -64,7 +64,7 @@ export class PurchaseOrderUseCase {
       );
 
       if (!product) {
-        return left(new ProductNotFoundError());
+        return left(new ProductNotFoundError(orderProduct.title));
       }
 
       if (product.stockQuantity < orderProduct.quantity) {

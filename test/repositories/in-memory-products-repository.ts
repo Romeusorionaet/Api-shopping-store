@@ -162,6 +162,30 @@ export class InMemoryProductsRepository implements ProductRepository {
     return technicalProductDetails;
   }
 
+  async findManyByDiscountPercentage(page: number): Promise<Product[] | null> {
+    const products = this.items
+      .filter((item) => item.discountPercentage > 0)
+      .slice((page - 1) * 20, page * 20);
+
+    if (!products) {
+      return null;
+    }
+
+    return products;
+  }
+
+  async findManyByStars(page: number): Promise<Product[] | null> {
+    const products = this.items
+      .filter((item) => item.stars! > 0)
+      .slice((page - 1) * 20, page * 20);
+
+    if (!products) {
+      return null;
+    }
+
+    return products;
+  }
+
   async searchMany(query: string, page: number): Promise<Product[] | null> {
     const queryWords = query.toLocaleLowerCase().split(" ");
 

@@ -46,25 +46,32 @@ describe("Search Products (E2E)", () => {
     });
   });
 
-  test("[GET] /products/search - should not be able to search with query empty", async () => {
+  test("[GET] /products/search - should not be able to search with a section", async () => {
     const category = await categoryFactory.makePrismaCategory();
 
     await Promise.all([
       productFactory.makePrismaProduct({
         categoryId: category.id,
         title: "product title 03",
+        stars: 0,
       }),
 
       productFactory.makePrismaProduct({
         categoryId: category.id,
         title: "product title 04",
+        stars: 10,
       }),
     ]);
 
     const response = await request(app.server)
       .get("/products/search")
-      .query({ query: "", page: 1 });
+      .query({ query: "", section: "stars", page: 1 });
 
-    expect(response.statusCode).toEqual(400);
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toEqual({
+      products: expect.arrayContaining([
+        expect.objectContaining({ title: "product title 04", stars: 10 }),
+      ]),
+    });
   });
 });

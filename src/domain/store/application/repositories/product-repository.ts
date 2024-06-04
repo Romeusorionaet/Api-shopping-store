@@ -21,4 +21,6 @@ export interface ProductRepository {
   findTechnicalProductDetailsByProductId(
     id: string,
   ): Promise<TechnicalProductDetails | null>;
+  findManyByStars(page: number): Promise<Product[] | null>;
+  findManyByDiscountPercentage(page: number): Promise<Product[] | null>;
 }

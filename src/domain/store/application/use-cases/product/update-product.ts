@@ -77,7 +77,7 @@ export class UpdateProductUseCase {
     const product = await this.productRepository.findById(id);
 
     if (!product) {
-      return left(new ProductNotFoundError());
+      return left(new ProductNotFoundError(title));
     }
 
     const productUpdated = product.update({

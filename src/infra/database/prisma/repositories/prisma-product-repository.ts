@@ -6,6 +6,7 @@ import { PaginationParams } from "src/core/repositories/pagination-params";
 import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
 import { TechnicalProductDetails } from "src/domain/store/enterprise/entities/technical-product-details";
 import { PrismaTechnicalProductDetailsMapper } from "../mappers/prisma-technical-product-details-mapper";
+import { QuantityOfProducts } from "src/domain/store/application/constants/quantity-of-products";
 
 export class PrismaProductRepository implements ProductRepository {
   async decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void> {
@@ -45,14 +46,12 @@ export class PrismaProductRepository implements ProductRepository {
   }
 
   async findMany({ page }: PaginationParams): Promise<Product[]> {
-    const perPage = 10;
-
     const products = await prisma.product.findMany({
-      take: perPage,
-      skip: (page - 1) * perPage,
       orderBy: {
         createdAt: "desc",
       },
+      skip: (page - 1) * QuantityOfProducts.PER_PAGE,
+      take: QuantityOfProducts.PER_PAGE,
     });
 
     return products.map(PrismaProductMapper.toDomain);
@@ -97,8 +96,8 @@ export class PrismaProductRepository implements ProductRepository {
       orderBy: {
         createdAt: "desc",
       },
-      skip: (page - 1) * 20,
-      take: 20,
+      skip: (page - 1) * QuantityOfProducts.PER_PAGE,
+      take: QuantityOfProducts.PER_PAGE,
     });
 
     if (!products) {
@@ -146,23 +145,64 @@ export class PrismaProductRepository implements ProductRepository {
     );
   }
 
+  async findManyByDiscountPercentage(page: number): Promise<Product[] | null> {
+    const products = await prisma.product.findMany({
+      where: {
+        discountPercentage: {
+          gt: 0,
+        },
+      },
+      skip: (page - 1) * QuantityOfProducts.PER_PAGE,
+      take: QuantityOfProducts.PER_PAGE,
+    });
+
+    if (!products) {
+      return null;
+    }
+
+    return products.map(PrismaProductMapper.toDomain);
+  }
+
+  async findManyByStars(page: number): Promise<Product[] | null> {
+    const products = await prisma.product.findMany({
+      where: {
+        stars: {
+          gt: 0,
+        },
+      },
+      skip: (page - 1) * QuantityOfProducts.PER_PAGE,
+      take: QuantityOfProducts.PER_PAGE,
+    });
+
+    if (!products) {
+      return null;
+    }
+
+    return products.map(PrismaProductMapper.toDomain);
+  }
+
   async searchMany(query: string, page: number): Promise<Product[] | null> {
     const queryWords = query.toLowerCase().split(" ");
 
     const products = await prisma.product.findMany({
       where: {
-        OR: queryWords.map((word) => ({
-          title: {
-            contains: word,
-            mode: "insensitive",
+        OR: queryWords.flatMap((word) => [
+          {
+            title: {
+              contains: word,
+              mode: "insensitive",
+            },
           },
-        })),
+          {
+            categoryTitle: {
+              contains: word,
+              mode: "insensitive",
+            },
+          },
+        ]),
       },
-      orderBy: {
-        createdAt: "desc",
-      },
-      skip: (page - 1) * 20,
-      take: 20,
+      skip: (page - 1) * QuantityOfProducts.PER_PAGE,
+      take: QuantityOfProducts.PER_PAGE,
     });
 
     if (!products) {

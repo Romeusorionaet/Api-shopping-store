@@ -3,7 +3,7 @@ import { initializeStripe } from "./stripe";
 import {
   ConstructorEvent,
   ConstructorEventProps,
-} from "src/domain/store/application/stripe/constructor-event";
+} from "src/infra/gateway-payment/constructor-event";
 import Stripe from "stripe";
 
 export class StripeConstructorEvent implements ConstructorEvent {

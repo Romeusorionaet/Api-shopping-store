@@ -28,7 +28,7 @@ describe("Search Products", () => {
       productsRepository.create(products3),
     ]);
 
-    const result = await sut.execute({ query: "java", page: 1 });
+    const result = await sut.execute({ query: "java", section: "", page: 1 });
 
     expect(result.isRight()).toBe(true);
 
@@ -44,6 +44,7 @@ describe("Search Products", () => {
 
     const result = await sut.execute({
       query: "product",
+      section: "",
       page: 2,
     });
 
@@ -81,12 +82,98 @@ describe("Search Products", () => {
       await productsRepository.create(thirdProduct),
     ]);
 
-    const result = await sut.execute({ query: "first", page: 1 });
+    const result = await sut.execute({ query: "first", section: "", page: 1 });
 
     expect(result.isRight()).toBe(true);
 
     if (result.isRight()) {
       expect(result.value.products).toHaveLength(2);
+    }
+  });
+
+  test("should be able to search only for products whose discount percentage is greater than 0", async () => {
+    const category = makeCategory({ title: "first category" });
+
+    const firstProduct = makeProduct({
+      categoryId: category.id,
+      categoryTitle: category.title,
+      title: "Iphone",
+      discountPercentage: 50,
+    });
+
+    const secondProduct = makeProduct({
+      categoryId: category.id,
+      categoryTitle: category.title,
+      title: "Xiaomi",
+      discountPercentage: 0,
+    });
+
+    await Promise.all([
+      await productsRepository.create(firstProduct),
+      await productsRepository.create(secondProduct),
+    ]);
+
+    const result = await sut.execute({
+      query: "",
+      section: "discountPercentage",
+      page: 1,
+    });
+
+    expect(result.isRight()).toBe(true);
+
+    if (result.isRight()) {
+      expect(result.value.products).toHaveLength(1);
+      expect(result.value.products).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            title: "Iphone",
+            discountPercentage: 50,
+          }),
+        ]),
+      );
+    }
+  });
+
+  test("should be able to search only for products whose stars is greater than 0", async () => {
+    const category = makeCategory({ title: "first category" });
+
+    const firstProduct = makeProduct({
+      categoryId: category.id,
+      categoryTitle: category.title,
+      title: "Iphone",
+      stars: 0,
+    });
+
+    const secondProduct = makeProduct({
+      categoryId: category.id,
+      categoryTitle: category.title,
+      title: "Xiaomi",
+      stars: 10,
+    });
+
+    await Promise.all([
+      await productsRepository.create(firstProduct),
+      await productsRepository.create(secondProduct),
+    ]);
+
+    const result = await sut.execute({
+      query: "",
+      section: "stars",
+      page: 1,
+    });
+
+    expect(result.isRight()).toBe(true);
+
+    if (result.isRight()) {
+      expect(result.value.products).toHaveLength(1);
+      expect(result.value.products).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            title: "Xiaomi",
+            stars: 10,
+          }),
+        ]),
+      );
     }
   });
 });

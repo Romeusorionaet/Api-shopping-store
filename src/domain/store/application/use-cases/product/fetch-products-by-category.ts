@@ -1,7 +1,7 @@
 import { Either, left, right } from "src/core/either";
 import { Product } from "../../../enterprise/entities/product";
 import { ProductRepository } from "../../repositories/product-repository";
-import { ProductNotFoundError } from "../errors/product-not-found-error";
+import { ProductsNotFoundForThisCategoryError } from "../errors/products-not-found-for-this-category-error";
 
 interface FetchProductsByCategoryUseCaseRequest {
   categoryId: string;
@@ -9,7 +9,7 @@ interface FetchProductsByCategoryUseCaseRequest {
 }
 
 type FetchProductsByCategoryUseCaseResponse = Either<
-  ProductNotFoundError,
+  ProductsNotFoundForThisCategoryError,
   {
     products: Product[];
   }
@@ -28,7 +28,7 @@ export class FetchProductsByCategoryUseCase {
     );
 
     if (!products) {
-      return left(new ProductNotFoundError());
+      return left(new ProductsNotFoundForThisCategoryError());
     }
 
     return right({ products });
