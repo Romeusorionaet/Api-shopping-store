@@ -9,7 +9,6 @@ export class BuyerOrderPresenter {
 
     return {
       id: order.id.toString(),
-      buyerId: order.buyerId.toString(),
       trackingCode: order.trackingCode,
       orderStatusTracking: order.orderStatusTracking,
       status: order.status,

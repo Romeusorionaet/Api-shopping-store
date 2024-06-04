@@ -57,7 +57,6 @@ app.setErrorHandler((error, _, reply) => {
     console.error(error);
   } else {
     console.error(error.message);
-    // TODO Here we should log to on external tool
   }
 
   return reply.status(500).send({ message: "Internal server error." });
