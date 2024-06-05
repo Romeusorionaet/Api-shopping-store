@@ -6,14 +6,21 @@ import { makeOrder } from "test/factories/make-order";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 import { makeOrderProduct } from "test/factories/make-order-product";
 import { makeProduct } from "test/factories/make-product";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 
 let orderRepository: InMemoryOrdersRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let productRepository: InMemoryProductsRepository;
 let sut: ConfirmOrderPaymentUseCase;
 
 describe("Confirm Order Payment", () => {
   beforeEach(() => {
-    productRepository = new InMemoryProductsRepository(orderRepository);
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
+
+    productRepository = new InMemoryProductsRepository(
+      productDataStoreRepository,
+      orderRepository,
+    );
 
     orderRepository = new InMemoryOrdersRepository(productRepository);
 

@@ -6,16 +6,23 @@ import { InMemoryProductsRepository } from "test/repositories/in-memory-products
 import { GetBuyerOrderProductUseCase } from "./get-buyer-order-product";
 import { makeOrderProduct } from "test/factories/make-order-product";
 import { makeProduct } from "test/factories/make-product";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 
 let ordersRepository: InMemoryOrdersRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let productRepository: InMemoryProductsRepository;
 let sut: GetBuyerOrderProductUseCase;
 
 describe("Get Buyer Orders Products", () => {
   beforeEach(() => {
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
+
     ordersRepository = new InMemoryOrdersRepository(productRepository);
 
-    productRepository = new InMemoryProductsRepository(ordersRepository);
+    productRepository = new InMemoryProductsRepository(
+      productDataStoreRepository,
+      ordersRepository,
+    );
 
     sut = new GetBuyerOrderProductUseCase(ordersRepository);
   });

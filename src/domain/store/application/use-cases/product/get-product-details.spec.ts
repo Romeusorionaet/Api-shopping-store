@@ -4,20 +4,35 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { makeProduct } from "test/factories/make-product";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { makeTechnicalProductDetails } from "test/factories/make-technical-products-details";
+import { InMemoryTechnicalProductDetailsRepository } from "test/repositories/in-memory-technical-product-details-repository";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 
 let productsRepository: InMemoryProductsRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let orderRepository: InMemoryOrdersRepository;
+let technicalProductDetailsRepository: InMemoryTechnicalProductDetailsRepository;
 let sut: GetProductDetailsUseCase;
 
 describe("Get Product Details", () => {
   beforeEach(() => {
     orderRepository = new InMemoryOrdersRepository(productsRepository);
 
-    productsRepository = new InMemoryProductsRepository(orderRepository);
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
+
+    productsRepository = new InMemoryProductsRepository(
+      productDataStoreRepository,
+      orderRepository,
+    );
 
     orderRepository = new InMemoryOrdersRepository(productsRepository);
 
-    sut = new GetProductDetailsUseCase(productsRepository);
+    technicalProductDetailsRepository =
+      new InMemoryTechnicalProductDetailsRepository();
+
+    sut = new GetProductDetailsUseCase(
+      productsRepository,
+      technicalProductDetailsRepository,
+    );
   });
 
   test("should be able to get product details", async () => {
@@ -34,14 +49,12 @@ describe("Get Product Details", () => {
     });
 
     await productsRepository.create(product);
-    await productsRepository.createTechnicalProductDetails(
-      technicalProductDetails,
-    );
+    await technicalProductDetailsRepository.create(technicalProductDetails);
 
     const result = await sut.execute({ productId: product.id.toString() });
 
     expect(result.isRight()).toBe(true);
-    expect(productsRepository.items).toHaveLength(1);
+    expect(productsRepository.dataStore.items).toHaveLength(1);
 
     if (result.isRight()) {
       expect(result.value.product).toEqual(

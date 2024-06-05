@@ -5,10 +5,15 @@ import { PrismaUserAddressRepository } from "src/infra/database/prisma/repositor
 import { PrismaProductRepository } from "src/infra/database/prisma/repositories/prisma-product-repository";
 import { RedisCacheRepository } from "src/infra/cache/redis/redis-cache-repository";
 import { RedisService } from "src/infra/cache/redis/redis-service";
+import { PrismaProductRatingRepository } from "src/infra/database/prisma/repositories/prisma-product-rating-repository";
 
 export function makePurchaseOrderUseCase() {
   const productRepository = new PrismaProductRepository();
-  const orderRepository = new PrismaOrderRepository(productRepository);
+  const productRatingRepository = new PrismaProductRatingRepository();
+  const orderRepository = new PrismaOrderRepository(
+    productRepository,
+    productRatingRepository,
+  );
   const userAddressRepository = new PrismaUserAddressRepository();
   const redis = new RedisService();
   const cacheRepository = new RedisCacheRepository(redis);

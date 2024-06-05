@@ -3,6 +3,7 @@ import { Product } from "../../../enterprise/entities/product";
 import { ProductRepository } from "../../repositories/product-repository";
 import { ProductNotFoundError } from "../errors/product-not-found-error";
 import { SectionForSearch } from "../../constants/section-for-search";
+import { ProductRatingRepository } from "../../repositories/product-rating-repository";
 
 interface SearchProductsUseCaseRequest {
   query: string;
@@ -18,7 +19,10 @@ type SearchProductsUseCaseResponse = Either<
 >;
 
 export class SearchProductsUseCase {
-  constructor(private productRepository: ProductRepository) {}
+  constructor(
+    private productRepository: ProductRepository,
+    private ProductRatingRepository: ProductRatingRepository,
+  ) {}
 
   async execute({
     query,
@@ -29,7 +33,7 @@ export class SearchProductsUseCase {
       section && section === SectionForSearch.STARS && !query;
 
     if (thisIsStarsSection) {
-      const products = await this.productRepository.findManyByStars(page);
+      const products = await this.ProductRatingRepository.findManyByStars(page);
 
       if (!products) {
         return left(new ProductNotFoundError(query));
@@ -43,7 +47,7 @@ export class SearchProductsUseCase {
 
     if (thisIsDiscountPercentageSection) {
       const products =
-        await this.productRepository.findManyByDiscountPercentage(page);
+        await this.ProductRatingRepository.findManyByDiscountPercentage(page);
 
       if (!products) {
         return left(new ProductNotFoundError(query));

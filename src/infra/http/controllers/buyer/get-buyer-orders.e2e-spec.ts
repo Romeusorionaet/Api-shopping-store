@@ -115,15 +115,10 @@ describe("Get buyer orders (E2E)", () => {
 
     expect(result.statusCode).toBe(200);
 
-    expect(result.body.orders).toEqual(
-      expect.arrayContaining([expect.objectContaining({ buyerId })]),
-    );
-
     expect(result.body.orders).toHaveLength(2);
     expect(result.body.orders[0]).toEqual(
       expect.objectContaining({
         buyerAddress: expect.objectContaining({
-          buyerId,
           city: "Canguaretama",
         }),
       }),

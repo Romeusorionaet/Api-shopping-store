@@ -3,18 +3,34 @@ import { makeProduct } from "test/factories/make-product";
 import { SearchProductsUseCase } from "./search-products";
 import { makeCategory } from "test/factories/make-category";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
+import { InMemoryProductRatingRepository } from "test/repositories/in-memory-product-rating-repository";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 
 let productsRepository: InMemoryProductsRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let orderRepository: InMemoryOrdersRepository;
+let productRatingRepository: InMemoryProductRatingRepository;
 let sut: SearchProductsUseCase;
 
 describe("Search Products", () => {
   beforeEach(() => {
     orderRepository = new InMemoryOrdersRepository(productsRepository);
 
-    productsRepository = new InMemoryProductsRepository(orderRepository);
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
 
-    sut = new SearchProductsUseCase(productsRepository);
+    productsRepository = new InMemoryProductsRepository(
+      productDataStoreRepository,
+      orderRepository,
+    );
+
+    productRatingRepository = new InMemoryProductRatingRepository(
+      productDataStoreRepository,
+    );
+
+    sut = new SearchProductsUseCase(
+      productsRepository,
+      productRatingRepository,
+    );
   });
 
   test("should be able to search products", async () => {
@@ -77,9 +93,9 @@ describe("Search Products", () => {
     });
 
     await Promise.all([
-      await productsRepository.create(firstProduct),
-      await productsRepository.create(secondProduct),
-      await productsRepository.create(thirdProduct),
+      productsRepository.create(firstProduct),
+      productsRepository.create(secondProduct),
+      productsRepository.create(thirdProduct),
     ]);
 
     const result = await sut.execute({ query: "first", section: "", page: 1 });
@@ -109,8 +125,8 @@ describe("Search Products", () => {
     });
 
     await Promise.all([
-      await productsRepository.create(firstProduct),
-      await productsRepository.create(secondProduct),
+      productsRepository.create(firstProduct),
+      productsRepository.create(secondProduct),
     ]);
 
     const result = await sut.execute({

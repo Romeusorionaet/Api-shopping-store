@@ -5,8 +5,8 @@ import { z } from "zod";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   const createCategoryBodySchema = z.object({
-    title: z.string(),
-    imgUrl: z.string(),
+    title: z.string().min(1, { message: "Título obrigatório." }),
+    imgUrl: z.string().min(1, { message: "Url da imagem obrigatório." }),
   });
 
   const categoryData = createCategoryBodySchema.parse(request.body);

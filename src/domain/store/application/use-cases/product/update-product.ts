@@ -4,6 +4,7 @@ import { ProductRepository } from "../../repositories/product-repository";
 import { ModeOfSale } from "src/core/entities/mode-of-sale";
 import { ProductNotFoundError } from "../errors/product-not-found-error";
 import { TechnicalProductNotFoundError } from "../errors/technical-product-details-not-found-error";
+import { TechnicalProductDetailsRepository } from "../../repositories/technical-product-details-repository";
 
 interface UpdateProductUseCaseRequest {
   id: string;
@@ -43,7 +44,10 @@ type UpdateProductUseCaseResponse = Either<
 >;
 
 export class UpdateProductUseCase {
-  constructor(private productRepository: ProductRepository) {}
+  constructor(
+    private productRepository: ProductRepository,
+    private technicalProductDetailsRepository: TechnicalProductDetailsRepository,
+  ) {}
 
   async execute({
     id,
@@ -93,9 +97,7 @@ export class UpdateProductUseCase {
     });
 
     const technicalProductDetails =
-      await this.productRepository.findTechnicalProductDetails(
-        technicalProductId,
-      );
+      await this.technicalProductDetailsRepository.findById(technicalProductId);
 
     if (!technicalProductDetails) {
       return left(new TechnicalProductNotFoundError());
@@ -119,7 +121,7 @@ export class UpdateProductUseCase {
       operatingSystem,
     });
 
-    await this.productRepository.updateTechnicalProductDetails(
+    await this.technicalProductDetailsRepository.update(
       technicalProductDetailsUpdated,
     );
 

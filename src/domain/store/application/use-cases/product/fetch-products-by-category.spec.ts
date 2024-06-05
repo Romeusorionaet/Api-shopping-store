@@ -3,8 +3,10 @@ import { makeProduct } from "test/factories/make-product";
 import { FetchProductsByCategoryUseCase } from "./fetch-products-by-category";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 
 let productsRepository: InMemoryProductsRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let orderRepository: InMemoryOrdersRepository;
 let sut: FetchProductsByCategoryUseCase;
 
@@ -12,7 +14,12 @@ describe("Fetch products by category title", () => {
   beforeEach(() => {
     orderRepository = new InMemoryOrdersRepository(productsRepository);
 
-    productsRepository = new InMemoryProductsRepository(orderRepository);
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
+
+    productsRepository = new InMemoryProductsRepository(
+      productDataStoreRepository,
+      orderRepository,
+    );
 
     sut = new FetchProductsByCategoryUseCase(productsRepository);
   });

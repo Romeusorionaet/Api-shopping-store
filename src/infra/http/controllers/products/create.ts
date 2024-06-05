@@ -1,5 +1,6 @@
 import { ModeOfSale } from "@prisma/client";
 import { FastifyRequest, FastifyReply } from "fastify";
+import { CategoryTitleSentDoesNotMatchError } from "src/domain/store/application/use-cases/errors/category-title-sent-does-not-match-error";
 import { ProductAlreadyExistsError } from "src/domain/store/application/use-cases/errors/product-already-exists-error";
 import { TheAssignedCategoryDoesNotExistError } from "src/domain/store/application/use-cases/errors/the-assigned-category-does-not-exist-error";
 import { makeCreateProductUseCase } from "src/domain/store/application/use-cases/product/factory/make-create-product-use-case";
@@ -9,8 +10,16 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   const createProductBodySchema = z.object({
     categoryId: z.string(),
     categoryTitle: z.string(),
-    title: z.string(),
-    description: z.string(),
+    title: z
+      .string()
+      .min(1, { message: "Adicione um título ao seu produto." })
+      .max(100, {
+        message:
+          "O Título do seu produto deve conter no máximo 100 caracteres. Informações mais detalhada do produto pode ser registrado em descrição do produto.",
+      }),
+    description: z
+      .string()
+      .min(1, { message: "Adicione uma descrição ao seu produto." }),
     price: z.coerce.number(),
     imgUrlList: z.array(z.string()),
     corsList: z.array(z.string()),
@@ -21,7 +30,6 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
       ModeOfSale.ONLINE_STORE,
       ModeOfSale.SELLS_ONLY_IN_THE_REGION,
     ]),
-    stars: z.coerce.number(),
     technicalProductDetails: z.object({
       width: z.string(),
       height: z.string(),
@@ -50,6 +58,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     const err = result.value;
     switch (err.constructor) {
       case ProductAlreadyExistsError:
+      case CategoryTitleSentDoesNotMatchError:
       case TheAssignedCategoryDoesNotExistError:
         return reply.status(400).send({
           error: err.message,

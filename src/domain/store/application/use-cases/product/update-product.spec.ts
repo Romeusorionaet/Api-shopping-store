@@ -6,21 +6,36 @@ import { InMemoryCategoriesRepository } from "test/repositories/in-memory-catego
 import { UpdateProductUseCase } from "./update-product";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { makeTechnicalProductDetails } from "test/factories/make-technical-products-details";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
+import { InMemoryTechnicalProductDetailsRepository } from "test/repositories/in-memory-technical-product-details-repository";
 
 let productsRepository: InMemoryProductsRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let categoryRepository: InMemoryCategoriesRepository;
 let orderRepository: InMemoryOrdersRepository;
+let technicalProductDetailsRepository: InMemoryTechnicalProductDetailsRepository;
 let sut: UpdateProductUseCase;
 
 describe("Create Product", () => {
   beforeEach(() => {
     orderRepository = new InMemoryOrdersRepository(productsRepository);
 
-    productsRepository = new InMemoryProductsRepository(orderRepository);
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
+
+    productsRepository = new InMemoryProductsRepository(
+      productDataStoreRepository,
+      orderRepository,
+    );
 
     categoryRepository = new InMemoryCategoriesRepository();
 
-    sut = new UpdateProductUseCase(productsRepository);
+    technicalProductDetailsRepository =
+      new InMemoryTechnicalProductDetailsRepository();
+
+    sut = new UpdateProductUseCase(
+      productsRepository,
+      technicalProductDetailsRepository,
+    );
   });
 
   test("should be able to update a product", async () => {
@@ -45,7 +60,7 @@ describe("Create Product", () => {
       brand: "Moto G",
     });
 
-    await productsRepository.createTechnicalProductDetails(technicalProduct);
+    await technicalProductDetailsRepository.create(technicalProduct);
 
     const result = await sut.execute({
       id: product.id.toString(),
@@ -79,7 +94,7 @@ describe("Create Product", () => {
 
     expect(result.isRight()).toBe(true);
 
-    expect(productsRepository.items[0]).toEqual(
+    expect(productsRepository.dataStore.items[0]).toEqual(
       expect.objectContaining({
         title: "product register 01 updated",
         description: "description for product updated",

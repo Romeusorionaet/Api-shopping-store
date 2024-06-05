@@ -1,9 +1,11 @@
 import { FetchProductsUseCase } from "./fetch-products";
 import { makeProduct } from "test/factories/make-product";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 
 let productsRepository: InMemoryProductsRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let orderRepository: InMemoryOrdersRepository;
 let sut: FetchProductsUseCase;
 
@@ -11,7 +13,12 @@ describe("Fetch Products", () => {
   beforeEach(() => {
     orderRepository = new InMemoryOrdersRepository(productsRepository);
 
-    productsRepository = new InMemoryProductsRepository(orderRepository);
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
+
+    productsRepository = new InMemoryProductsRepository(
+      productDataStoreRepository,
+      orderRepository,
+    );
 
     sut = new FetchProductsUseCase(productsRepository);
   });

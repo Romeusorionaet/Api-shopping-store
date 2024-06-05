@@ -7,6 +7,8 @@ import { ProductAlreadyExistsError } from "../errors/product-already-exists-erro
 import { CategoryRepository } from "../../repositories/category-repository";
 import { TheAssignedCategoryDoesNotExistError } from "../errors/the-assigned-category-does-not-exist-error";
 import { TechnicalProductDetails } from "src/domain/store/enterprise/entities/technical-product-details";
+import { CategoryTitleSentDoesNotMatchError } from "../errors/category-title-sent-does-not-match-error";
+import { TechnicalProductDetailsRepository } from "../../repositories/technical-product-details-repository";
 
 interface CreateProductUseCaseRequest {
   categoryId: string;
@@ -40,7 +42,9 @@ interface CreateProductUseCaseRequest {
 }
 
 type CreateProductUseCaseResponse = Either<
-  ProductAlreadyExistsError | TheAssignedCategoryDoesNotExistError,
+  | ProductAlreadyExistsError
+  | TheAssignedCategoryDoesNotExistError
+  | CategoryTitleSentDoesNotMatchError,
   { product: Product }
 >;
 
@@ -48,6 +52,7 @@ export class CreateProductUseCase {
   constructor(
     private productRepository: ProductRepository,
     private categoryRepository: CategoryRepository,
+    private technicalProductDetailsRepository: TechnicalProductDetailsRepository,
   ) {}
 
   async execute({
@@ -88,6 +93,10 @@ export class CreateProductUseCase {
       return left(new TheAssignedCategoryDoesNotExistError());
     }
 
+    if (existCategory.title !== categoryTitle) {
+      return left(new CategoryTitleSentDoesNotMatchError());
+    }
+
     if (existProduct) {
       return left(new ProductAlreadyExistsError(existProduct.title));
     }
@@ -126,7 +135,7 @@ export class CreateProductUseCase {
     });
 
     await this.productRepository.create(product);
-    await this.productRepository.createTechnicalProductDetails(
+    await this.technicalProductDetailsRepository.create(
       technicalProductDetails,
     );
 

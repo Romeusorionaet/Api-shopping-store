@@ -6,21 +6,37 @@ import { makeProduct } from "test/factories/make-product";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { makeTechnicalProductDetails } from "test/factories/make-technical-products-details";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
+import { InMemoryTechnicalProductDetailsRepository } from "test/repositories/in-memory-technical-product-details-repository";
 
 let productsRepository: InMemoryProductsRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let categoryRepository: InMemoryCategoriesRepository;
 let orderRepository: InMemoryOrdersRepository;
+let technicalProductDetailsRepository: InMemoryTechnicalProductDetailsRepository;
 let sut: CreateProductUseCase;
 
 describe("Create Product", () => {
   beforeEach(() => {
     orderRepository = new InMemoryOrdersRepository(productsRepository);
 
-    productsRepository = new InMemoryProductsRepository(orderRepository);
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
+
+    productsRepository = new InMemoryProductsRepository(
+      productDataStoreRepository,
+      orderRepository,
+    );
 
     categoryRepository = new InMemoryCategoriesRepository();
 
-    sut = new CreateProductUseCase(productsRepository, categoryRepository);
+    technicalProductDetailsRepository =
+      new InMemoryTechnicalProductDetailsRepository();
+
+    sut = new CreateProductUseCase(
+      productsRepository,
+      categoryRepository,
+      technicalProductDetailsRepository,
+    );
   });
 
   test("should be able create a product", async () => {

@@ -6,8 +6,8 @@ import { z } from "zod";
 export async function update(request: FastifyRequest, reply: FastifyReply) {
   const updateCategoryDetailsParamsSchema = z.object({
     id: z.string().uuid(),
-    title: z.string(),
-    imgUrl: z.string(),
+    title: z.string().min(1, { message: "Título obrigatório." }),
+    imgUrl: z.string().min(1, { message: "Url da imagem obrigatório." }),
   });
 
   const { id, imgUrl, title } = updateCategoryDetailsParamsSchema.parse(

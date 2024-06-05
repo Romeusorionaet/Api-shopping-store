@@ -8,8 +8,16 @@ import { z } from "zod";
 export async function update(request: FastifyRequest, reply: FastifyReply) {
   const updateProductBodySchema = z.object({
     id: z.string().uuid(),
-    title: z.string(),
-    description: z.string(),
+    title: z
+      .string()
+      .min(1, { message: "Adicione um título ao seu produto." })
+      .max(100, {
+        message:
+          "O Título do seu produto deve conter no máximo 100 caracteres. Informações mais detalhada do produto pode ser registrado em descrição do produto.",
+      }),
+    description: z
+      .string()
+      .min(1, { message: "Adicione uma descrição ao seu produto." }),
     price: z.coerce.number(),
     imgUrlList: z.array(z.string()),
     corsList: z.array(z.string()),

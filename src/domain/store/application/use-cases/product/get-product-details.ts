@@ -4,6 +4,7 @@ import { ProductRepository } from "../../repositories/product-repository";
 import { ProductNotFoundError } from "../errors/product-not-found-error";
 import { TechnicalProductNotFoundError } from "../errors/technical-product-details-not-found-error";
 import { TechnicalProductDetails } from "src/domain/store/enterprise/entities/technical-product-details";
+import { TechnicalProductDetailsRepository } from "../../repositories/technical-product-details-repository";
 
 interface GetProductDetailsUseCaseRequest {
   productId: string;
@@ -18,7 +19,10 @@ type GetProductDetailsUseCaseResponse = Either<
 >;
 
 export class GetProductDetailsUseCase {
-  constructor(private productRepository: ProductRepository) {}
+  constructor(
+    private productRepository: ProductRepository,
+    private technicalProductDetailsRepository: TechnicalProductDetailsRepository,
+  ) {}
 
   async execute({
     productId,
@@ -30,9 +34,7 @@ export class GetProductDetailsUseCase {
     }
 
     const technicalProductDetails =
-      await this.productRepository.findTechnicalProductDetailsByProductId(
-        productId,
-      );
+      await this.technicalProductDetailsRepository.findByProductId(productId);
 
     if (!technicalProductDetails) {
       return left(new TechnicalProductNotFoundError());

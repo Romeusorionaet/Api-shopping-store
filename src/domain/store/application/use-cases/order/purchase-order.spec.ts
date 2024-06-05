@@ -10,8 +10,10 @@ import { InMemoryUsersAddressRepository } from "test/repositories/in-memory-user
 import { makeUserAddress } from "test/factories/make-user-address";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 import { makeProduct } from "test/factories/make-product";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 
 let orderRepository: InMemoryOrdersRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let userAddressRepository: InMemoryUsersAddressRepository;
 let usersRepository: InMemoryUsersRepository;
 let productRepository: InMemoryProductsRepository;
@@ -19,7 +21,12 @@ let sut: PurchaseOrderUseCase;
 
 describe("Purchase Order", () => {
   beforeEach(() => {
-    productRepository = new InMemoryProductsRepository(orderRepository);
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
+
+    productRepository = new InMemoryProductsRepository(
+      productDataStoreRepository,
+      orderRepository,
+    );
 
     orderRepository = new InMemoryOrdersRepository(productRepository);
 

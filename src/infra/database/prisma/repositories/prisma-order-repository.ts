@@ -6,9 +6,13 @@ import { PrismaOrderProductMapper } from "../mappers/prisma-order-product-mapper
 import { PrismaBuyerAddressMapper } from "../mappers/prisma-buyer-address-mapper";
 import { OrderStatus } from "@prisma/client";
 import { PrismaProductRepository } from "./prisma-product-repository";
+import { ProductRatingRepository } from "src/domain/store/application/repositories/product-rating-repository";
 
 export class PrismaOrderRepository implements OrderRepository {
-  constructor(private productRepository: PrismaProductRepository) {}
+  constructor(
+    private productRepository: PrismaProductRepository,
+    private productRatingRepository: ProductRatingRepository,
+  ) {}
 
   async findById(id: string): Promise<Order | null> {
     const order = await prisma.order.findUnique({
@@ -43,7 +47,7 @@ export class PrismaOrderRepository implements OrderRepository {
 
     this.productRepository.decrementStockQuantity(orderProducts);
     orderProducts.map((orderProduct) =>
-      this.productRepository.addStarToProduct(
+      this.productRatingRepository.addStarToProduct(
         orderProduct.productId.toString(),
       ),
     );

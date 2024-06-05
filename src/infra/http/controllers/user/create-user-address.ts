@@ -10,17 +10,28 @@ export async function createUserAddress(
 ) {
   const createUserAddressBodySchema = z.object({
     cep: z.coerce.number().refine((value) => value.toString().length === 8, {
-      message: "O CEP deve ter 8 dígitos",
+      message: "O CEP deve ter 8 dígitos.",
     }),
-    city: z.string(),
-    uf: z.string(),
-    street: z.string(),
-    neighborhood: z.string(),
-    houseNumber: z.coerce.number(),
-    complement: z.string(),
-    phoneNumber: z.string(),
-    username: z.string(),
-    email: z.string(),
+    city: z.string().min(1, { message: "É preciso informar a cidade." }),
+    uf: z.string().min(1, { message: "É preciso informar o UF." }),
+    street: z.string().min(1, { message: "É preciso informar a rua." }),
+    neighborhood: z
+      .string()
+      .min(1, { message: "É preciso informar o bairro." }),
+    houseNumber: z.coerce
+      .number()
+      .min(1, { message: "É preciso informar o número da casa." }),
+    complement: z.string().min(1, {
+      message:
+        "É preciso informar algum complemento que possa ajudar na localição.",
+    }),
+    phoneNumber: z
+      .string()
+      .min(1, { message: "É preciso informar o número para contato." }),
+    username: z
+      .string()
+      .min(1, { message: "É preciso informar o nome do comprador." }),
+    email: z.string().min(1, { message: "É preciso informar o email." }),
   });
 
   const userSchema = z.object({
