@@ -1,51 +1,44 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { AddressNotFoundError } from "src/domain/store/application/use-cases/errors/address-not-found-error";
 import { makeUpdateUserAddressUseCase } from "src/domain/store/application/use-cases/user/factory/make-update-user-address-use-case";
+import { addressSchema } from "../../schemas/address-schema";
 import { z } from "zod";
+import { subSchema } from "../../schemas/sub-schema";
 
 export async function updateUserAddress(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const updateUserAddressBodySchema = z.object({
-    cep: z.coerce.number().refine((value) => value.toString().length === 8, {
-      message: "O CEP deve ter 8 dígitos",
-    }),
-    city: z.string(),
-    uf: z.string(),
-    street: z.string(),
-    neighborhood: z.string(),
-    houseNumber: z.coerce.number(),
-    complement: z.string(),
-    phoneNumber: z.string(),
-    username: z.string(),
-    email: z.string(),
-  });
+  try {
+    const dataUserAddress = addressSchema.parse(request.body);
+    const { sub: userId } = subSchema.parse(request.user);
 
-  const userSchema = z.object({ sub: z.string().uuid() });
+    const dataUserAddressWithUserId = { ...dataUserAddress, userId };
 
-  const dataUserAddress = updateUserAddressBodySchema.parse(request.body);
-  const { sub: userId } = userSchema.parse(request.user);
+    const updateUserAddressUseCase = makeUpdateUserAddressUseCase();
 
-  const dataUserAddressWithUserId = { ...dataUserAddress, userId };
+    const result = await updateUserAddressUseCase.execute(
+      dataUserAddressWithUserId,
+    );
 
-  const updateUserAddressUseCase = makeUpdateUserAddressUseCase();
+    if (result.isLeft()) {
+      const err = result.value;
+      switch (err.constructor) {
+        case AddressNotFoundError:
+          return reply.status(400).send({
+            error: err.message,
+          });
+        default:
+          throw new Error(err.message);
+      }
+    }
 
-  const result = await updateUserAddressUseCase.execute(
-    dataUserAddressWithUserId,
-  );
-
-  if (result.isLeft()) {
-    const err = result.value;
-    switch (err.constructor) {
-      case AddressNotFoundError:
-        return reply.status(400).send({
-          error: err.message,
-        });
-      default:
-        throw new Error(err.message);
+    return reply.status(201).send({ message: "Endereço atualizado." });
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return reply.status(400).send({
+        error: err.errors[0].message,
+      });
     }
   }
-
-  return reply.status(201).send({ message: "Endereço atualizado." });
 }

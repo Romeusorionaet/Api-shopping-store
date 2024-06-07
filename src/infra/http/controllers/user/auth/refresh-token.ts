@@ -1,17 +1,13 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { InvalidTokenError } from "src/domain/store/application/use-cases/errors/invalid-token-error";
 import { makeRefreshTokenUseCase } from "src/domain/store/application/use-cases/user/factory/make-refresh-token-use-case";
-import { z } from "zod";
+import { subSchema } from "src/infra/http/schemas/sub-schema";
 
 export async function refreshToken(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const createRefreshTokenBodySchema = z.object({
-    sub: z.string().uuid(),
-  });
-
-  const { sub: id } = createRefreshTokenBodySchema.parse(request.user);
+  const { sub: id } = subSchema.parse(request.user);
 
   const refreshTokenUseCase = makeRefreshTokenUseCase();
 

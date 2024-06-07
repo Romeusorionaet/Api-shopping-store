@@ -17,6 +17,6 @@ export async function verifyJWTAccessToken(
       });
     }
   } catch (err) {
-    return reply.status(401).send({ error: "Unauthorized." });
+    return reply.status(401).send({ error: "Não autorizado." });
   }
 }

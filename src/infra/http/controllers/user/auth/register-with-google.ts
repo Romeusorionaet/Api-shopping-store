@@ -4,19 +4,14 @@ import { makeRegisterUserWithGoogleUseCase } from "src/domain/store/application/
 import { makeAuthenticateUserWithGoogleUseCase } from "src/domain/store/application/use-cases/user/factory/make-authenticate-user-with-google-use-case";
 import { env } from "src/infra/env";
 import { z } from "zod";
+import { profileFromGoogleSchema } from "src/infra/http/schemas/profile-schema";
 
 export async function registerWithGoogle(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
-    const getProfileSchema = z.object({
-      email: z.string(),
-      username: z.string(),
-      picture: z.string().optional(),
-    });
-
-    const { email, username } = getProfileSchema.parse(request.body);
+    const { email, username } = profileFromGoogleSchema.parse(request.body);
 
     const registerUserWithGoogleUseCase = makeRegisterUserWithGoogleUseCase();
 
@@ -49,8 +44,14 @@ export async function registerWithGoogle(
 
     return reply.send(result.value).redirect(env.SHOPPING_STORE_URL_WEB);
   } catch (err: any) {
-    return reply
-      .status(500)
-      .send(`Failed to process Google OAuth login. ${err.message}`);
+    if (err instanceof z.ZodError) {
+      return reply.status(400).send({
+        error: err.errors[0].message,
+      });
+    } else {
+      return reply
+        .status(500)
+        .send(`Failed to process Google OAuth login. ${err.message}`);
+    }
   }
 }

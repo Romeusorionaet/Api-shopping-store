@@ -3,14 +3,14 @@ import { CategoryPresenter } from "../../presenters/category-presenter";
 import { z } from "zod";
 import { makeFetchCategoriesUseCase } from "src/domain/store/application/use-cases/category/factory/make-fetch-categories-use-case";
 
+const fetchCategoriesSchema = z.object({
+  page: z.coerce.number().min(1).default(1),
+});
+
 export async function fetchCategories(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const fetchCategoriesSchema = z.object({
-    page: z.coerce.number().min(1).default(1),
-  });
-
   const { page } = fetchCategoriesSchema.parse(request.query);
 
   const fetchCategoriesUseCase = makeFetchCategoriesUseCase();

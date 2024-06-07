@@ -8,6 +8,7 @@ import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-rep
 import { makeTechnicalProductDetails } from "test/factories/make-technical-products-details";
 import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 import { InMemoryTechnicalProductDetailsRepository } from "test/repositories/in-memory-technical-product-details-repository";
+import { ModeOfSale } from "src/core/entities/mode-of-sale";
 
 let productsRepository: InMemoryProductsRepository;
 let productDataStoreRepository: InMemoryProductDataStoreRepository;
@@ -72,7 +73,7 @@ describe("Create Product", () => {
       minimumQuantityStock: product.minimumQuantityStock,
       discountPercentage: product.discountPercentage,
       corsList: product.corsList,
-      placeOfSale: product.placeOfSale,
+      placeOfSale: ModeOfSale.ONLINE_STORE,
       technicalProductDetails: {
         technicalProductId: technicalProduct.id.toString(),
         brand: "Iphone",

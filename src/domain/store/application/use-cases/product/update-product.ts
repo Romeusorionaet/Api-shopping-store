@@ -16,7 +16,7 @@ interface UpdateProductUseCaseRequest {
   stockQuantity: number;
   minimumQuantityStock: number;
   discountPercentage: number;
-  placeOfSale?: ModeOfSale;
+  placeOfSale: ModeOfSale;
   technicalProductDetails: {
     technicalProductId: string;
     width: string;

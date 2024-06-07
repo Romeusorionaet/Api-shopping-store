@@ -1,18 +1,15 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { makeGetUserAddressUseCase } from "src/domain/store/application/use-cases/user/factory/make-get-user-address";
 import { AddressNotFoundError } from "src/domain/store/application/use-cases/errors/address-not-found-error";
-import { z } from "zod";
 import { UserAddressPresenter } from "../../presenters/user-address-presenter";
+import { subSchema } from "../../schemas/sub-schema";
 
 export async function getUserAddress(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const getUserAddressParamsSchema = z.object({
-    sub: z.string().uuid(),
-  });
+  const { sub: userId } = subSchema.parse(request.user);
 
-  const { sub: userId } = getUserAddressParamsSchema.parse(request.user);
   const getUserAddressUseCase = makeGetUserAddressUseCase();
 
   const result = await getUserAddressUseCase.execute({ userId });

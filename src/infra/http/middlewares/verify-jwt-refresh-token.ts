@@ -7,6 +7,6 @@ export async function verifyJWTRefreshToken(
   try {
     await request.jwtVerify();
   } catch (err) {
-    return reply.status(401).send({ message: "Unauthorized." });
+    return reply.status(401).send({ message: "Não autorizado." });
   }
 }

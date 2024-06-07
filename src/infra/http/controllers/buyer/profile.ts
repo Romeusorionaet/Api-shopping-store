@@ -2,14 +2,10 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 import { BuyerPresenter } from "../../presenters/buyer-presenter";
 import { makeGetBuyerProfileUseCase } from "src/domain/store/application/use-cases/buyer/factory/make-get-buyer-profile-use-case";
-import { z } from "zod";
+import { subSchema } from "../../schemas/sub-schema";
 
 export async function profile(request: FastifyRequest, reply: FastifyReply) {
-  const getProfileSchema = z.object({
-    sub: z.string().uuid(),
-  });
-
-  const { sub: id } = getProfileSchema.parse(request.user);
+  const { sub: id } = subSchema.parse(request.user);
 
   const getBuyerProfileUseCase = makeGetBuyerProfileUseCase();
 

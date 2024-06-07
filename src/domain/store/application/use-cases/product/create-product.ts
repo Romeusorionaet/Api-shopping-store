@@ -21,7 +21,7 @@ interface CreateProductUseCaseRequest {
   stockQuantity: number;
   minimumQuantityStock: number;
   discountPercentage: number;
-  placeOfSale?: ModeOfSale;
+  placeOfSale: ModeOfSale;
   stars?: number | null;
   technicalProductDetails: {
     width: string;

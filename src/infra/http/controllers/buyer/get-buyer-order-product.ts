@@ -1,17 +1,13 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { z } from "zod";
 import { makeGetBuyerOrderProductUseCase } from "src/domain/store/application/use-cases/buyer/factory/make-get-buyer-order-product-use-case";
 import { OrderProductPresenter } from "../../presenters/order-product-presenter";
+import { subSchema } from "../../schemas/sub-schema";
 
 export async function getBuyerOrderProduct(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const getBuyerOrderProductUserSchema = z.object({
-    sub: z.string().uuid(),
-  });
-
-  const { sub: buyerId } = getBuyerOrderProductUserSchema.parse(request.user);
+  const { sub: buyerId } = subSchema.parse(request.user);
 
   const getBuyerOrderProductUseCase = makeGetBuyerOrderProductUseCase();
 

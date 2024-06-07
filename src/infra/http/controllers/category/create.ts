@@ -2,31 +2,35 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { makeCreateCategoryUseCase } from "src/domain/store/application/use-cases/category/factory/make-create-category-use-case";
 import { CategoryAlreadyExistsError } from "src/domain/store/application/use-cases/errors/category-already-exists-error";
 import { z } from "zod";
+import { categoryCreateSchema } from "../../schemas/category-schema";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
-  const createCategoryBodySchema = z.object({
-    title: z.string().min(1, { message: "Título obrigatório." }),
-    imgUrl: z.string().min(1, { message: "Url da imagem obrigatório." }),
-  });
+  try {
+    const categoryData = categoryCreateSchema.parse(request.body);
 
-  const categoryData = createCategoryBodySchema.parse(request.body);
+    const createCategoryUseCase = makeCreateCategoryUseCase();
 
-  const createCategoryUseCase = makeCreateCategoryUseCase();
+    const result = await createCategoryUseCase.execute(categoryData);
 
-  const result = await createCategoryUseCase.execute(categoryData);
+    if (result.isLeft()) {
+      const err = result.value;
+      switch (err.constructor) {
+        case CategoryAlreadyExistsError:
+          return reply.status(400).send({
+            error: err.message,
+          });
 
-  if (result.isLeft()) {
-    const err = result.value;
-    switch (err.constructor) {
-      case CategoryAlreadyExistsError:
-        return reply.status(400).send({
-          error: err.message,
-        });
+        default:
+          throw new Error(err.message);
+      }
+    }
 
-      default:
-        throw new Error(err.message);
+    return reply.status(201).send();
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return reply.status(400).send({
+        error: err.errors[0].message,
+      });
     }
   }
-
-  return reply.status(201).send();
 }

@@ -1,18 +1,14 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UserNotFoundError } from "src/core/errors/user-not-found-error";
-import { z } from "zod";
 import { makeGetBuyerAddressUseCase } from "src/domain/store/application/use-cases/buyer/factory/make-get-buyer-address-use-case";
 import { BuyerAddressPresenter } from "../../presenters/buyer-address-presenter";
+import { subSchema } from "../../schemas/sub-schema";
 
 export async function getBuyerAddress(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const buyerSchema = z.object({
-    sub: z.string().uuid(),
-  });
-
-  const { sub: buyerId } = buyerSchema.parse(request.user);
+  const { sub: buyerId } = subSchema.parse(request.user);
 
   const getBuyerAddressUseCase = makeGetBuyerAddressUseCase();
 
