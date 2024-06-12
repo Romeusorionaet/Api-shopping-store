@@ -3,8 +3,11 @@ import { ProductRatingRepository } from "src/domain/store/application/repositori
 import { Product } from "src/domain/store/enterprise/entities/product";
 import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
 import { prisma } from "../prisma";
+import { CacheRepository } from "src/infra/cache/cache-repository";
 
 export class PrismaProductRatingRepository implements ProductRatingRepository {
+  constructor(private cacheRepository: CacheRepository) {}
+
   async addStarToProduct(id: string): Promise<void> {
     await prisma.product.update({
       where: {
@@ -16,9 +19,22 @@ export class PrismaProductRatingRepository implements ProductRatingRepository {
         },
       },
     });
+
+    await this.cacheRepository.delete(`product:${id}`);
+    await this.cacheRepository.deleteCacheByPattern("products:*");
   }
 
   async findManyByDiscountPercentage(page: number): Promise<Product[] | null> {
+    const cacheKey = `products:byDiscountPercentage:${page}`;
+
+    const cacheHit = await this.cacheRepository.get(cacheKey);
+
+    if (cacheHit) {
+      const cacheData = JSON.parse(cacheHit);
+
+      return cacheData.map(PrismaProductMapper.toDomain);
+    }
+
     const products = await prisma.product.findMany({
       where: {
         discountPercentage: {
@@ -33,10 +49,22 @@ export class PrismaProductRatingRepository implements ProductRatingRepository {
       return null;
     }
 
+    await this.cacheRepository.set(cacheKey, JSON.stringify(products));
+
     return products.map(PrismaProductMapper.toDomain);
   }
 
   async findManyByStars(page: number): Promise<Product[] | null> {
+    const cacheKey = `products:byStars:${page}`;
+
+    const cacheHit = await this.cacheRepository.get(cacheKey);
+
+    if (cacheHit) {
+      const cacheData = JSON.parse(cacheHit);
+
+      return cacheData.map(PrismaProductMapper.toDomain);
+    }
+
     const products = await prisma.product.findMany({
       where: {
         stars: {
@@ -50,6 +78,8 @@ export class PrismaProductRatingRepository implements ProductRatingRepository {
     if (!products) {
       return null;
     }
+
+    await this.cacheRepository.set(cacheKey, JSON.stringify(products));
 
     return products.map(PrismaProductMapper.toDomain);
   }

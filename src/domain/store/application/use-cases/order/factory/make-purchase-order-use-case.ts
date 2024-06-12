@@ -11,7 +11,9 @@ export function makePurchaseOrderUseCase() {
   const redis = new RedisService();
   const cacheRepository = new RedisCacheRepository(redis);
   const productRepository = new PrismaProductRepository(cacheRepository);
-  const productRatingRepository = new PrismaProductRatingRepository();
+  const productRatingRepository = new PrismaProductRatingRepository(
+    cacheRepository,
+  );
   const orderRepository = new PrismaOrderRepository(
     productRepository,
     productRatingRepository,
