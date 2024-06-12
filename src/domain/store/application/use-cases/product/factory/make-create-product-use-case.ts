@@ -2,12 +2,16 @@ import { PrismaProductRepository } from "src/infra/database/prisma/repositories/
 import { CreateProductUseCase } from "../create-product";
 import { PrismaCategoryRepository } from "src/infra/database/prisma/repositories/prisma-category-repository";
 import { PrismaTechnicalProductDetailsRepository } from "src/infra/database/prisma/repositories/prisma-technical-product-details-repository";
+import { RedisService } from "src/infra/cache/redis/redis-service";
+import { RedisCacheRepository } from "src/infra/cache/redis/redis-cache-repository";
 
 export function makeCreateProductUseCase() {
-  const productRepository = new PrismaProductRepository();
+  const redis = new RedisService();
+  const cacheRepository = new RedisCacheRepository(redis);
+  const productRepository = new PrismaProductRepository(cacheRepository);
   const categoryRepository = new PrismaCategoryRepository();
   const technicalProductDetailsRepository =
-    new PrismaTechnicalProductDetailsRepository();
+    new PrismaTechnicalProductDetailsRepository(cacheRepository);
 
   const useCase = new CreateProductUseCase(
     productRepository,
