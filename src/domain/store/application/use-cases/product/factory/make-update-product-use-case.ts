@@ -1,8 +1,8 @@
 import { PrismaProductRepository } from "src/infra/database/prisma/repositories/prisma-product-repository";
 import { UpdateProductUseCase } from "../update-product";
 import { PrismaTechnicalProductDetailsRepository } from "src/infra/database/prisma/repositories/prisma-technical-product-details-repository";
-import { RedisService } from "src/infra/cache/redis/redis-service";
 import { RedisCacheRepository } from "src/infra/cache/redis/redis-cache-repository";
+import { RedisService } from "src/infra/service/setup-cache/redis-service";
 
 export function makeUpdateProductUseCase() {
   const redis = new RedisService();

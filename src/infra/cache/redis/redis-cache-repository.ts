@@ -1,5 +1,5 @@
+import { RedisService } from "src/infra/service/setup-cache/redis-service";
 import { CacheRepository } from "../cache-repository";
-import { RedisService } from "./redis-service";
 
 export class RedisCacheRepository implements CacheRepository {
   constructor(private redis: RedisService) {}

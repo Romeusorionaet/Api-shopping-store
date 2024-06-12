@@ -4,8 +4,8 @@ import { PurchaseOrderUseCase } from "../purchase-order";
 import { PrismaUserAddressRepository } from "src/infra/database/prisma/repositories/prisma-user-address-repository";
 import { PrismaProductRepository } from "src/infra/database/prisma/repositories/prisma-product-repository";
 import { RedisCacheRepository } from "src/infra/cache/redis/redis-cache-repository";
-import { RedisService } from "src/infra/cache/redis/redis-service";
 import { PrismaProductRatingRepository } from "src/infra/database/prisma/repositories/prisma-product-rating-repository";
+import { RedisService } from "src/infra/service/setup-cache/redis-service";
 
 export function makePurchaseOrderUseCase() {
   const redis = new RedisService();
@@ -19,7 +19,7 @@ export function makePurchaseOrderUseCase() {
     productRatingRepository,
   );
   const userAddressRepository = new PrismaUserAddressRepository();
-  const usersRepository = new PrismaUserRepository(cacheRepository);
+  const usersRepository = new PrismaUserRepository();
 
   const useCase = new PurchaseOrderUseCase(
     orderRepository,

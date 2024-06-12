@@ -2,8 +2,8 @@ import { PrismaProductRepository } from "src/infra/database/prisma/repositories/
 import { GetBuyerOrderProductUseCase } from "../get-buyer-order-product";
 import { PrismaOrderRepository } from "src/infra/database/prisma/repositories/prisma-order-repository";
 import { PrismaProductRatingRepository } from "src/infra/database/prisma/repositories/prisma-product-rating-repository";
-import { RedisService } from "src/infra/cache/redis/redis-service";
 import { RedisCacheRepository } from "src/infra/cache/redis/redis-cache-repository";
+import { RedisService } from "src/infra/service/setup-cache/redis-service";
 
 export function makeGetBuyerOrderProductUseCase() {
   const redis = new RedisService();
