@@ -18,7 +18,9 @@ export function makePurchaseOrderUseCase() {
     productRepository,
     productRatingRepository,
   );
-  const userAddressRepository = new PrismaUserAddressRepository();
+  const userAddressRepository = new PrismaUserAddressRepository(
+    cacheRepository,
+  );
   const usersRepository = new PrismaUserRepository();
 
   const useCase = new PurchaseOrderUseCase(

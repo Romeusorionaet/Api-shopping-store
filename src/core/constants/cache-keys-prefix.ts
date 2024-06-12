@@ -3,4 +3,6 @@ export const CacheKeysPrefix = {
   PRODUCT: "product",
   CATEGORY_LIST: "categories",
   CATEGORY: "category",
+  BUYER_ADDRESS: "buyerAddress",
+  USER_ADDRESS: "userAddress",
 };
