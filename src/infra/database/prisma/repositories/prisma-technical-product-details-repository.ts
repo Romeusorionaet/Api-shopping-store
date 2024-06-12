@@ -1,7 +1,7 @@
 import { TechnicalProductDetailsRepository } from "src/domain/store/application/repositories/technical-product-details-repository";
 import { TechnicalProductDetails } from "src/domain/store/enterprise/entities/technical-product-details";
 import { PrismaTechnicalProductDetailsMapper } from "../mappers/prisma-technical-product-details-mapper";
-import { prisma } from "../prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { CacheRepository } from "src/infra/cache/cache-repository";
 
 export class PrismaTechnicalProductDetailsRepository

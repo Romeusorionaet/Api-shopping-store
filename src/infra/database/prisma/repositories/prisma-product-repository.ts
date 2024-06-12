@@ -1,6 +1,6 @@
 import { ProductRepository } from "src/domain/store/application/repositories/product-repository";
 import { Product } from "src/domain/store/enterprise/entities/product";
-import { prisma } from "../prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
 import { PaginationParams } from "src/core/repositories/pagination-params";
 import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";

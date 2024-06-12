@@ -4,7 +4,7 @@ import { makeBuyerAddress } from "./make-buyer-address";
 import { OrderStatus } from "src/core/entities/order-status";
 import { OrderStatusTracking } from "src/core/entities/order-status-tracking";
 import { makeOrderProduct } from "./make-order-product";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaOrderMapper } from "src/infra/database/prisma/mappers/prisma-order-mapper";
 import { PrismaOrderProductMapper } from "src/infra/database/prisma/mappers/prisma-order-product-mapper";
 import { PrismaBuyerAddressMapper } from "src/infra/database/prisma/mappers/prisma-buyer-address-mapper";

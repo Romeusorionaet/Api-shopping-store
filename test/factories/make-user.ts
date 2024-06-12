@@ -2,7 +2,7 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { faker } from "@faker-js/faker";
 import { User, UserProps } from "src/domain/store/enterprise/entities/user";
 import { FakeHasher } from "../cryptography/fake-hasher";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaUserMapper } from "src/infra/database/prisma/mappers/prisma-user-mapper";
 
 export async function makeUser(

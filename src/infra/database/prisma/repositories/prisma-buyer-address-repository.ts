@@ -1,6 +1,6 @@
 import { BuyerAddressRepository } from "src/domain/store/application/repositories/buyer-address-repository";
 import { BuyerAddress } from "src/domain/store/enterprise/entities/buyer-address";
-import { prisma } from "../prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaBuyerAddressMapper } from "../mappers/prisma-buyer-address-mapper";
 import { CacheKeysPrefix } from "src/core/constants/cache-keys-prefix";
 import { CacheRepository } from "src/infra/cache/cache-repository";

@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "src/app";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 
 describe("Create Category (E2E)", () => {
   beforeAll(async () => {

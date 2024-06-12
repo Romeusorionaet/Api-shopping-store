@@ -4,7 +4,7 @@ import {
   UserAddress,
   UserAddressProps,
 } from "src/domain/store/enterprise/entities/user-address";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaUserAddressMapper } from "src/infra/database/prisma/mappers/prisma-user-address-mapper";
 
 export function makeUserAddress(

@@ -2,7 +2,7 @@ import { QuantityOfProducts } from "src/core/constants/quantity-of-products";
 import { ProductRatingRepository } from "src/domain/store/application/repositories/product-rating-repository";
 import { Product } from "src/domain/store/enterprise/entities/product";
 import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
-import { prisma } from "../prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { CacheRepository } from "src/infra/cache/cache-repository";
 import { CacheKeysPrefix } from "src/core/constants/cache-keys-prefix";
 

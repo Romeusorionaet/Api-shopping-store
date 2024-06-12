@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { hash } from "bcryptjs";
 import { FastifyInstance } from "fastify";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import request from "supertest";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
 

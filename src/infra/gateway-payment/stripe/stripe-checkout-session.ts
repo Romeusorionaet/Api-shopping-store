@@ -1,6 +1,6 @@
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { initializeStripe } from "./stripe";
 import { env } from "src/infra/env";
+import { stripe } from "src/infra/service/setup-stripe/stripe";
 
 interface OrderProductProps {
   productId: UniqueEntityID;
@@ -17,8 +17,6 @@ interface Props {
 }
 
 export async function stripeCheckoutSession({ orderId, orderProducts }: Props) {
-  const stripe = initializeStripe();
-
   const successUrl = `${env.STRIPE_SUCCESS_URL}`;
   const cancelUrl = `${env.STRIPE_CANCEL_URL}`;
 

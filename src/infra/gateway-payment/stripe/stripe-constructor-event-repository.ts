@@ -5,14 +5,12 @@ import {
   ConstructorEventProps,
   ConstructorEventRepository,
 } from "./constructor-event-repository";
-import { initializeStripe } from "src/infra/service/setup-stripe/stripe";
+import { stripe } from "src/infra/service/setup-stripe/stripe";
 
 export class StripeConstructorEventRepository
   implements ConstructorEventRepository
 {
   webhook({ data, signature }: ConstructorEventProps): Stripe.Event {
-    const stripe = initializeStripe();
-
     const event = stripe.webhooks.constructEvent(
       data,
       signature,

@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "src/app";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { CategoryFactory } from "test/factories/make-category";
 
 describe("Update Category (E2E)", () => {

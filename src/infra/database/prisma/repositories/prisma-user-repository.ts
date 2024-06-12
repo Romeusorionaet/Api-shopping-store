@@ -1,6 +1,6 @@
 import { UsersRepository } from "src/domain/store/application/repositories/users-repository";
 import { User } from "src/domain/store/enterprise/entities/user";
-import { prisma } from "../prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaUserMapper } from "../mappers/prisma-user-mapper";
 
 export class PrismaUserRepository implements UsersRepository {

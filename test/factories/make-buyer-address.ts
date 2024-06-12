@@ -4,7 +4,7 @@ import {
   BuyerAddress,
   BuyerAddressProps,
 } from "src/domain/store/enterprise/entities/buyer-address";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaBuyerAddressMapper } from "src/infra/database/prisma/mappers/prisma-buyer-address-mapper";
 
 export function makeBuyerAddress(

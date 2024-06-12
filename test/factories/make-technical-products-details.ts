@@ -3,7 +3,7 @@ import {
   TechnicalProductDetails,
   TechnicalProductDetailsProps,
 } from "src/domain/store/enterprise/entities/technical-product-details";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaTechnicalProductDetailsMapper } from "src/infra/database/prisma/mappers/prisma-technical-product-details-mapper";
 
 export function makeTechnicalProductDetails(

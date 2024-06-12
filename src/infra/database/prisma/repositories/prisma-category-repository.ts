@@ -2,7 +2,7 @@ import { PaginationParams } from "src/core/repositories/pagination-params";
 import { CategoryRepository } from "src/domain/store/application/repositories/category-repository";
 import { Category } from "src/domain/store/enterprise/entities/category";
 import { PrismaCategoryMapper } from "../mappers/prisma-category-mapper";
-import { prisma } from "../prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { CacheRepository } from "src/infra/cache/cache-repository";
 import { CacheKeysPrefix } from "src/core/constants/cache-keys-prefix";
 import { QuantityOfCategory } from "src/core/constants/quantity-of-category";

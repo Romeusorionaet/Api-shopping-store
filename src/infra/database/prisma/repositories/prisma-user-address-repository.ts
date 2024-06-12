@@ -1,4 +1,4 @@
-import { prisma } from "../prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { UserAddressRepository } from "src/domain/store/application/repositories/user-address-repository";
 import { UserAddress } from "src/domain/store/enterprise/entities/user-address";
 import { PrismaUserAddressMapper } from "../mappers/prisma-user-address-mapper";

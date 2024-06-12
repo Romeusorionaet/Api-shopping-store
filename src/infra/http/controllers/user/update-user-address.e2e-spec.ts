@@ -1,6 +1,6 @@
 import { app } from "src/app";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import request from "supertest";
 import { CreateAndAuthenticateUserWithTokensFactory } from "test/factories/make-create-and-authenticate-user";
 import { UserAddressFactory } from "test/factories/make-user-address";

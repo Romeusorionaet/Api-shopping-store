@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "src/app";
 import { CategoryFactory } from "test/factories/make-category";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 
 describe("Remove Category (E2E)", () => {
   let categoryFactory: CategoryFactory;

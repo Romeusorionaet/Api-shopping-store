@@ -1,6 +1,6 @@
 import { OrderRepository } from "src/domain/store/application/repositories/order-repository";
 import { Order } from "src/domain/store/enterprise/entities/order";
-import { prisma } from "../prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaOrderMapper } from "../mappers/prisma-order-mapper";
 import { PrismaOrderProductMapper } from "../mappers/prisma-order-product-mapper";
 import { PrismaBuyerAddressMapper } from "../mappers/prisma-buyer-address-mapper";

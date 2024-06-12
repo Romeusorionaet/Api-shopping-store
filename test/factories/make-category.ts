@@ -4,7 +4,7 @@ import {
   Category,
   CategoryProps,
 } from "src/domain/store/enterprise/entities/category";
-import { prisma } from "src/infra/database/prisma/prisma";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaCategoryMapper } from "src/infra/database/prisma/mappers/prisma-category-mapper";
 
 export function makeCategory(
