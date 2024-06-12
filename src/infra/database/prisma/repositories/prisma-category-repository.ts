@@ -3,17 +3,36 @@ import { CategoryRepository } from "src/domain/store/application/repositories/ca
 import { Category } from "src/domain/store/enterprise/entities/category";
 import { PrismaCategoryMapper } from "../mappers/prisma-category-mapper";
 import { prisma } from "../prisma";
+import { CacheRepository } from "src/infra/cache/cache-repository";
+import { CacheKeysPrefix } from "src/core/constants/cache-keys-prefix";
+import { QuantityOfCategory } from "src/core/constants/quantity-of-category";
 
 export class PrismaCategoryRepository implements CategoryRepository {
+  constructor(private cacheRepository: CacheRepository) {}
+
   async create(category: Category): Promise<void> {
     const data = PrismaCategoryMapper.toPrisma(category);
 
     await prisma.category.create({
       data,
     });
+
+    await this.cacheRepository.deleteCacheByPattern(
+      `${CacheKeysPrefix.CATEGORY_LIST}:*`,
+    );
   }
 
   async findById(id: string): Promise<Category | null> {
+    const cacheKey = `${CacheKeysPrefix.CATEGORY}:unique:${id}`;
+
+    const cacheHit = await this.cacheRepository.get(cacheKey);
+
+    if (cacheHit) {
+      const cacheData = JSON.parse(cacheHit);
+
+      return PrismaCategoryMapper.toDomain(cacheData);
+    }
+
     const category = await prisma.category.findUnique({
       where: { id },
     });
@@ -22,21 +41,37 @@ export class PrismaCategoryRepository implements CategoryRepository {
       return null;
     }
 
-    return PrismaCategoryMapper.toDomain(category);
+    const categoryMapped = PrismaCategoryMapper.toDomain(category);
+
+    await this.cacheRepository.set(cacheKey, JSON.stringify(category));
+
+    return categoryMapped;
   }
 
   async findMany({ page }: PaginationParams): Promise<Category[]> {
-    const perPage = 10;
+    const cacheKey = `${CacheKeysPrefix.CATEGORY_LIST}:allCategories:${page}`;
 
-    const category = await prisma.category.findMany({
-      take: perPage,
-      skip: (page - 1) * perPage,
+    const cacheHit = await this.cacheRepository.get(cacheKey);
+
+    if (cacheHit) {
+      const cacheData = JSON.parse(cacheHit);
+
+      return cacheData.map(PrismaCategoryMapper.toDomain);
+    }
+
+    const categories = await prisma.category.findMany({
+      take: QuantityOfCategory.PER_PAGE,
+      skip: (page - 1) * QuantityOfCategory.PER_PAGE,
       orderBy: {
         createdAt: "desc",
       },
     });
 
-    return category.map(PrismaCategoryMapper.toDomain);
+    const categoriesMapped = categories.map(PrismaCategoryMapper.toDomain);
+
+    await this.cacheRepository.set(cacheKey, JSON.stringify(categories));
+
+    return categoriesMapped;
   }
 
   async findByTitle(title: string): Promise<Category | null> {
@@ -62,6 +97,14 @@ export class PrismaCategoryRepository implements CategoryRepository {
       },
       data,
     });
+
+    await this.cacheRepository.deleteCacheByPattern(
+      `${CacheKeysPrefix.CATEGORY}:unique:${category.id}`,
+    );
+
+    await this.cacheRepository.deleteCacheByPattern(
+      `${CacheKeysPrefix.CATEGORY_LIST}:*`,
+    );
   }
 
   async remove(id: string): Promise<void> {
@@ -70,5 +113,13 @@ export class PrismaCategoryRepository implements CategoryRepository {
         id,
       },
     });
+
+    await this.cacheRepository.deleteCacheByPattern(
+      `${CacheKeysPrefix.CATEGORY}:unique:${id}`,
+    );
+
+    await this.cacheRepository.deleteCacheByPattern(
+      `${CacheKeysPrefix.CATEGORY_LIST}:*`,
+    );
   }
 }

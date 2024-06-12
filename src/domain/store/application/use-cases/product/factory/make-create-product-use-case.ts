@@ -9,7 +9,7 @@ export function makeCreateProductUseCase() {
   const redis = new RedisService();
   const cacheRepository = new RedisCacheRepository(redis);
   const productRepository = new PrismaProductRepository(cacheRepository);
-  const categoryRepository = new PrismaCategoryRepository();
+  const categoryRepository = new PrismaCategoryRepository(cacheRepository);
   const technicalProductDetailsRepository =
     new PrismaTechnicalProductDetailsRepository(cacheRepository);
 
