@@ -5,6 +5,6 @@ export interface ConstructorEventProps {
   signature: string | string[];
 }
 
-export interface ConstructorEvent {
+export interface ConstructorEventRepository {
   webhook({ data, signature }: ConstructorEventProps): Stripe.Event;
 }
