@@ -1,9 +1,10 @@
-import { QuantityOfProducts } from "src/domain/store/application/constants/quantity-of-products";
+import { QuantityOfProducts } from "src/core/constants/quantity-of-products";
 import { ProductRatingRepository } from "src/domain/store/application/repositories/product-rating-repository";
 import { Product } from "src/domain/store/enterprise/entities/product";
 import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
 import { prisma } from "../prisma";
 import { CacheRepository } from "src/infra/cache/cache-repository";
+import { CacheKeysPrefix } from "src/core/constants/cache-keys-prefix";
 
 export class PrismaProductRatingRepository implements ProductRatingRepository {
   constructor(private cacheRepository: CacheRepository) {}
@@ -20,12 +21,14 @@ export class PrismaProductRatingRepository implements ProductRatingRepository {
       },
     });
 
-    await this.cacheRepository.delete(`product:${id}`);
-    await this.cacheRepository.deleteCacheByPattern("products:*");
+    await this.cacheRepository.delete(`${CacheKeysPrefix.PRODUCT}:${id}`);
+    await this.cacheRepository.deleteCacheByPattern(
+      `${CacheKeysPrefix.PRODUCTS_LIST}:*`,
+    );
   }
 
   async findManyByDiscountPercentage(page: number): Promise<Product[] | null> {
-    const cacheKey = `products:byDiscountPercentage:${page}`;
+    const cacheKey = `${CacheKeysPrefix.PRODUCTS_LIST}:byDiscountPercentage:${page}`;
 
     const cacheHit = await this.cacheRepository.get(cacheKey);
 
@@ -55,7 +58,7 @@ export class PrismaProductRatingRepository implements ProductRatingRepository {
   }
 
   async findManyByStars(page: number): Promise<Product[] | null> {
-    const cacheKey = `products:byStars:${page}`;
+    const cacheKey = `${CacheKeysPrefix.PRODUCTS_LIST}:byStars:${page}`;
 
     const cacheHit = await this.cacheRepository.get(cacheKey);
 

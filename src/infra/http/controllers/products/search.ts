@@ -3,7 +3,7 @@ import { ProductPresenter } from "../../presenters/product-presenter";
 import { z } from "zod";
 import { makeSearchProductsUseCase } from "src/domain/store/application/use-cases/product/factory/make-search-products-use-case";
 import { ProductNotFoundError } from "src/domain/store/application/use-cases/errors/product-not-found-error";
-import { SectionForSearch } from "src/domain/store/application/constants/section-for-search";
+import { SectionForSearch } from "src/core/constants/section-for-search";
 
 const querySchema = z.object({
   query: z.string().default(""),

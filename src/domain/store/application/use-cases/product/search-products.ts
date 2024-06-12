@@ -2,7 +2,7 @@ import { Either, left, right } from "src/core/either";
 import { Product } from "../../../enterprise/entities/product";
 import { ProductRepository } from "../../repositories/product-repository";
 import { ProductNotFoundError } from "../errors/product-not-found-error";
-import { SectionForSearch } from "../../constants/section-for-search";
+import { SectionForSearch } from "../../../../../core/constants/section-for-search";
 import { ProductRatingRepository } from "../../repositories/product-rating-repository";
 
 interface SearchProductsUseCaseRequest {

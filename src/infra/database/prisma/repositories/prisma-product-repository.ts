@@ -4,8 +4,9 @@ import { prisma } from "../prisma";
 import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
 import { PaginationParams } from "src/core/repositories/pagination-params";
 import { OrderProduct } from "src/domain/store/enterprise/entities/order-product";
-import { QuantityOfProducts } from "src/domain/store/application/constants/quantity-of-products";
+import { QuantityOfProducts } from "src/core/constants/quantity-of-products";
 import { CacheRepository } from "src/infra/cache/cache-repository";
+import { CacheKeysPrefix } from "src/core/constants/cache-keys-prefix";
 
 export class PrismaProductRepository implements ProductRepository {
   constructor(private cacheRepository: CacheRepository) {}
@@ -17,11 +18,13 @@ export class PrismaProductRepository implements ProductRepository {
       data,
     });
 
-    await this.cacheRepository.deleteCacheByPattern("products:*");
+    await this.cacheRepository.deleteCacheByPattern(
+      `${CacheKeysPrefix.PRODUCTS_LIST}:*`,
+    );
   }
 
   async findMany({ page }: PaginationParams): Promise<Product[]> {
-    const cacheKey = `products:allProducts:${page}`;
+    const cacheKey = `${CacheKeysPrefix.PRODUCTS_LIST}:allProducts:${page}`;
 
     const cacheHit = await this.cacheRepository.get(cacheKey);
 
@@ -47,7 +50,7 @@ export class PrismaProductRepository implements ProductRepository {
   }
 
   async findById(id: string): Promise<Product | null> {
-    const cacheKey = `product:unique:${id}`;
+    const cacheKey = `${CacheKeysPrefix.PRODUCT}:unique:${id}`;
 
     const cacheHit = await this.cacheRepository.get(cacheKey);
 
@@ -92,7 +95,7 @@ export class PrismaProductRepository implements ProductRepository {
     id: string,
     page: number,
   ): Promise<Product[] | null> {
-    const cacheKey = `products:category:${id}:${page}`;
+    const cacheKey = `${CacheKeysPrefix.PRODUCTS_LIST}:category:${id}:${page}`;
 
     const cacheHit = await this.cacheRepository.get(cacheKey);
 
@@ -124,7 +127,7 @@ export class PrismaProductRepository implements ProductRepository {
   }
 
   async searchMany(query: string, page: number): Promise<Product[] | null> {
-    const cacheKey = `products:search:${query}:${page}`;
+    const cacheKey = `${CacheKeysPrefix.PRODUCTS_LIST}:search:${query}:${page}`;
     const cacheHit = await this.cacheRepository.get(cacheKey);
 
     if (cacheHit) {
@@ -176,9 +179,13 @@ export class PrismaProductRepository implements ProductRepository {
       data: product,
     });
 
-    await this.cacheRepository.delete(`product:${product.id}`);
+    await this.cacheRepository.delete(
+      `${CacheKeysPrefix.PRODUCT}:${product.id}`,
+    );
 
-    await this.cacheRepository.deleteCacheByPattern("products:*");
+    await this.cacheRepository.deleteCacheByPattern(
+      `${CacheKeysPrefix.PRODUCTS_LIST}:*`,
+    );
   }
 
   async decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void> {
@@ -197,9 +204,13 @@ export class PrismaProductRepository implements ProductRepository {
         },
       });
 
-      await this.cacheRepository.delete(`product:${productSold.id}`);
+      await this.cacheRepository.delete(
+        `${CacheKeysPrefix.PRODUCT}:${productSold.id}`,
+      );
     }
 
-    await this.cacheRepository.deleteCacheByPattern("products:*");
+    await this.cacheRepository.deleteCacheByPattern(
+      `${CacheKeysPrefix.PRODUCTS_LIST}:*`,
+    );
   }
 }
