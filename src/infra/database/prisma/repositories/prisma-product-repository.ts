@@ -42,7 +42,6 @@ export class PrismaProductRepository implements ProductRepository {
     const productsMapped = products.map(PrismaProductMapper.toDomain);
 
     await this.cacheRepository.set(cacheKey, JSON.stringify(products));
-    await this.cacheRepository.addCacheKeyToSet("products:allPages", cacheKey);
 
     return productsMapped;
   }
@@ -120,10 +119,6 @@ export class PrismaProductRepository implements ProductRepository {
     const productsMapped = products.map(PrismaProductMapper.toDomain);
 
     await this.cacheRepository.set(cacheKey, JSON.stringify(products));
-    await this.cacheRepository.addCacheKeyToSet(
-      `products:category:${id}:pages`,
-      cacheKey,
-    );
 
     return productsMapped;
   }
@@ -167,10 +162,6 @@ export class PrismaProductRepository implements ProductRepository {
     const productsMapped = products.map(PrismaProductMapper.toDomain);
 
     await this.cacheRepository.set(cacheKey, JSON.stringify(products));
-    await this.cacheRepository.addCacheKeyToSet(
-      "products:searchPages",
-      cacheKey,
-    );
 
     return productsMapped;
   }
