@@ -28,7 +28,7 @@ export class PrismaUserAddressRepository implements UserAddressRepository {
     if (cacheHit) {
       const cacheData = JSON.parse(cacheHit);
 
-      return cacheData.map(PrismaUserAddressMapper.toDomain);
+      return PrismaUserAddressMapper.toDomain(cacheData);
     }
 
     const userAddress = await prisma.userAddress.findFirst({

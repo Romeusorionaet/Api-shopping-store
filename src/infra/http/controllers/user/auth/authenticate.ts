@@ -10,7 +10,6 @@ export async function authenticate(
 ) {
   try {
     const { email, password } = authSchema.parse(request.body);
-
     const authenticateUserUseCase = makeAuthenticateUserUseCase();
 
     const result = await authenticateUserUseCase.execute({

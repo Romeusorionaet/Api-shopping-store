@@ -26,7 +26,6 @@ export class PrismaOrderRepository implements OrderRepository {
     if (!order) {
       return null;
     }
-
     return PrismaOrderMapper.toDomain(order);
   }
 
