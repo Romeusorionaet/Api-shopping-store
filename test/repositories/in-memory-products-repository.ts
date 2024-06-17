@@ -139,4 +139,10 @@ export class InMemoryProductsRepository implements ProductRepository {
       throw new Error("Produto não encontrado");
     }
   }
+
+  async remove(id: string): Promise<void> {
+    this.dataStore.items = this.dataStore.items.filter(
+      (item) => item.id.toString() !== id,
+    );
+  }
 }

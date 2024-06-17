@@ -9,6 +9,7 @@ export interface ProductRepository {
   findMany(page: PaginationParams): Promise<Product[]>;
   searchMany(query: string, page: number): Promise<Product[] | null>;
   update(data: Product): Promise<void>;
+  remove(id: string): Promise<void>;
   decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void>;
   findManyByCategoryId(id: string, page: number): Promise<Product[] | null>;
 }

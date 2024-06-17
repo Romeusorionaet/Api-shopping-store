@@ -213,4 +213,18 @@ export class PrismaProductRepository implements ProductRepository {
       `${CacheKeysPrefix.PRODUCTS_LIST}:*`,
     );
   }
+
+  async remove(id: string): Promise<void> {
+    await prisma.product.delete({
+      where: {
+        id,
+      },
+    });
+
+    await this.cacheRepository.delete(`${CacheKeysPrefix.PRODUCT}:${id}`);
+
+    await this.cacheRepository.deleteCacheByPattern(
+      `${CacheKeysPrefix.PRODUCTS_LIST}:*`,
+    );
+  }
 }

@@ -30,7 +30,7 @@ export class GetProductDetailsUseCase {
     const product = await this.productRepository.findById(productId);
 
     if (!product) {
-      return left(new ProductNotFoundError(""));
+      return left(new ProductNotFoundError());
     }
 
     const technicalProductDetails =
