@@ -10,6 +10,7 @@ CREATE TYPE "OrderStatusTracking" AS ENUM ('WAITING', 'CANCELED', 'PRODUCT_DELIV
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
+    "public_id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password_hash" TEXT NOT NULL,

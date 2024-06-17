@@ -26,6 +26,7 @@ enum OrderStatusTracking {
 
 model User {
   id           String    @id @default(uuid())
+  publicId     String    @default(uuid()) @map("public_id")
   username     String
   email        String    @unique
   passwordHash String    @map("password_hash")

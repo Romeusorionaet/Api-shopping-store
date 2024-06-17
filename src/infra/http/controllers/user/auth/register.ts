@@ -31,7 +31,9 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
       }
     }
 
-    return reply.status(201).send();
+    return reply
+      .status(201)
+      .send({ message: "Usuário registrado com sucesso!" });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return reply.status(400).send({

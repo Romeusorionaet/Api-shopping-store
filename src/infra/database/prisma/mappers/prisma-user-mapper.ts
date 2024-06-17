@@ -6,6 +6,7 @@ export class PrismaUserMapper {
   static toDomain(raw: PrismaUser): User {
     return User.create(
       {
+        publicId: new UniqueEntityID(raw.publicId),
         username: raw.username,
         email: raw.email,
         password: raw.passwordHash,
