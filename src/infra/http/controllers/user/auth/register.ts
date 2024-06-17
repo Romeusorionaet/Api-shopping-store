@@ -6,7 +6,7 @@ import { z } from "zod";
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
   try {
-    const { username, email, password } = profileFromUserSchema.parse(
+    const { username, email, password, picture } = profileFromUserSchema.parse(
       request.body,
     );
 
@@ -16,6 +16,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
       username,
       email,
       password,
+      picture,
     });
 
     if (result.isLeft()) {
@@ -38,6 +39,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     if (err instanceof z.ZodError) {
       return reply.status(400).send({
         error: err.errors[0].message,
+        path: err.errors[0].path, // TODO aplicar esse path em outros controllers
       });
     }
   }

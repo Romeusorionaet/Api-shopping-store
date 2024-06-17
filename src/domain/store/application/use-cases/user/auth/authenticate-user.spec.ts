@@ -5,6 +5,7 @@ import { FakeEncrypter } from "test/cryptography/fake-encrypter";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { makeUser } from "test/factories/make-user";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
+import { EmailNotVerifiedError } from "../../errors/email-not-verified-error";
 
 let usersRepository: InMemoryUsersRepository;
 let fakeHasher: FakeHasher;
@@ -82,5 +83,26 @@ describe("Authenticate User", () => {
 
     expect(result.isLeft()).toBe(true);
     expect(result.value).toBeInstanceOf(InvalidCredentialsError);
+  });
+
+  test("should not be able to authenticate with email not verified", async () => {
+    const user = await makeUser(
+      {
+        email: "firstuser@gmail.com",
+        password: await fakeHasher.hash("123456"),
+        emailVerified: false,
+      },
+      new UniqueEntityID("user-test-id-02"),
+    );
+
+    await usersRepository.create(user);
+
+    const result = await sut.execute({
+      email: "firstuser@gmail.com",
+      password: "123456",
+    });
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).instanceOf(EmailNotVerifiedError);
   });
 });

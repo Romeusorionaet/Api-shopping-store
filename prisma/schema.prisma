@@ -25,13 +25,15 @@ enum OrderStatusTracking {
 }
 
 model User {
-  id           String    @id @default(uuid())
-  publicId     String    @default(uuid()) @map("public_id")
-  username     String
-  email        String    @unique
-  passwordHash String    @map("password_hash")
-  updatedAt    DateTime? @default(now()) @updatedAt @map("updated_at")
-  createdAt    DateTime  @default(now()) @map("created_at")
+  id            String    @id @default(uuid())
+  publicId      String    @default(uuid()) @map("public_id")
+  username      String
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  picture       String
+  emailVerified Boolean   @map("email_verified")
+  updatedAt     DateTime? @default(now()) @updatedAt @map("updated_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
 
   order        Order[]
   buyerAddress BuyerAddress[]

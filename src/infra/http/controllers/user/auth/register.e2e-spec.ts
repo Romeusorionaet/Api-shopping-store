@@ -17,6 +17,7 @@ describe("Register User (E2E)", () => {
         username: "User test 01",
         email: "usertest01@gmail.com",
         password: "123456",
+        picture: "http://faker_picture.com",
       });
 
     expect(response.statusCode).toEqual(201);
@@ -27,6 +28,7 @@ describe("Register User (E2E)", () => {
       username: "User test 01",
       email: "usertest01@gmail.com",
       password: "123456",
+      picture: "http://faker_picture.com",
     });
 
     const response = await request(app.server)
@@ -35,6 +37,7 @@ describe("Register User (E2E)", () => {
         username: "User test 01",
         email: "usertest01@gmail.com",
         password: "123456",
+        picture: "http://faker_picture.com",
       });
 
     expect(response.statusCode).toEqual(400);

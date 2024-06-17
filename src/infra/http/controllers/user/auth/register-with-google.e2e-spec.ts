@@ -16,6 +16,8 @@ describe("Register With Google (E2E)", () => {
       .send({
         username: "User test 01",
         email: "usertest01@gmail.com",
+        picture: "http://faker_picture.com",
+        emailVerified: true,
       });
 
     expect(response.body).toEqual(

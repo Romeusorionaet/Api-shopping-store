@@ -7,6 +7,8 @@ export interface UserProps {
   username: string;
   email: string;
   password: string;
+  picture: string;
+  emailVerified: boolean;
   createdAt: Date;
   updatedAt?: Date | null;
 }
@@ -26,6 +28,14 @@ export class User extends Entity<UserProps> {
 
   get password() {
     return this.props.password;
+  }
+
+  get picture() {
+    return this.props.picture;
+  }
+
+  get emailVerified() {
+    return this.props.emailVerified;
   }
 
   get createdAt() {

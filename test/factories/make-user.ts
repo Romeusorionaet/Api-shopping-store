@@ -17,6 +17,8 @@ export async function makeUser(
       username: faker.person.fullName(),
       email: faker.lorem.sentence(10),
       password: hashedPassword,
+      picture: `http://${faker.person.firstName}/faker_picture.com`,
+      emailVerified: true,
       ...override,
     },
     id,

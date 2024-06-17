@@ -22,6 +22,7 @@ describe("Register User", () => {
       username: "first user",
       email: "firstuser@gmail.com",
       password: "123456",
+      picture: "http://faker_picture.com",
     });
 
     expect(result.isRight()).toBe(true);
@@ -52,12 +53,14 @@ describe("Register User", () => {
       username: "first user",
       email: "firstuser@gmail.com",
       password: "123456",
+      picture: "http://faker_picture.com",
     });
 
     const result = await sut.execute({
       username: "first user",
       email: "firstuser@gmail.com",
       password: "123456",
+      picture: "http://faker_picture.com",
     });
 
     expect(result.isLeft()).toBe(true);

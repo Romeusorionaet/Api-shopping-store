@@ -11,7 +11,8 @@ export async function registerWithGoogle(
   reply: FastifyReply,
 ) {
   try {
-    const { email, username } = profileFromGoogleSchema.parse(request.body);
+    const { email, username, picture, emailVerified } =
+      profileFromGoogleSchema.parse(request.body);
 
     const registerUserWithGoogleUseCase = makeRegisterUserWithGoogleUseCase();
 
@@ -19,6 +20,8 @@ export async function registerWithGoogle(
       await registerUserWithGoogleUseCase.execute({
         email,
         username,
+        picture,
+        emailVerified,
       });
 
     const user = resultRegisterWithGoogle.user;

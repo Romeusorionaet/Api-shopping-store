@@ -8,6 +8,7 @@ interface RegisterUserUseCaseRequest {
   username: string;
   email: string;
   password: string;
+  picture: string;
 }
 
 type RegisterUserUseCaseResponse = Either<
@@ -27,6 +28,7 @@ export class RegisterUserUseCase {
     username,
     email,
     password,
+    picture,
   }: RegisterUserUseCaseRequest): Promise<RegisterUserUseCaseResponse> {
     const userWithSameEmail = await this.usersRepository.findByEmail(email);
 
@@ -36,7 +38,13 @@ export class RegisterUserUseCase {
 
     const hashedPassword = await this.hashGenerator.hash(password);
 
-    const user = User.create({ username, email, password: hashedPassword });
+    const user = User.create({
+      username,
+      email,
+      password: hashedPassword,
+      picture,
+      emailVerified: false,
+    });
 
     await this.usersRepository.create(user);
 

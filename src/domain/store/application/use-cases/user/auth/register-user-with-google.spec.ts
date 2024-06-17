@@ -15,6 +15,8 @@ describe("Register User With Google", () => {
     const result = await sut.execute({
       username: "first user",
       email: "firstuser@gmail.com",
+      picture: "http://faker_picture.com",
+      emailVerified: false,
     });
 
     if (result.user) {

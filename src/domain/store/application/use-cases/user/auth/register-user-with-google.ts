@@ -5,6 +5,8 @@ import { hash } from "bcryptjs";
 interface RegisterUserWithGoogleUseCaseRequest {
   email: string;
   username: string;
+  picture: string;
+  emailVerified: boolean;
 }
 
 type RegisterUserWithGoogleUseCaseResponse = {
@@ -17,6 +19,8 @@ export class RegisterUserWithGoogleUseCase {
   async execute({
     email,
     username,
+    picture,
+    emailVerified,
   }: RegisterUserWithGoogleUseCaseRequest): Promise<RegisterUserWithGoogleUseCaseResponse> {
     const user = await this.usersRepository.findByEmail(email);
 
@@ -25,6 +29,8 @@ export class RegisterUserWithGoogleUseCase {
         email,
         username,
         password: await hash("123456", 8), // senha temporária
+        picture,
+        emailVerified,
       });
 
       await this.usersRepository.create(user);

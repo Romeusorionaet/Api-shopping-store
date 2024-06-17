@@ -3,6 +3,7 @@ import { Either, left, right } from "src/core/either";
 import { UsersRepository } from "../../../repositories/users-repository";
 import { HashComparer } from "../../../cryptography/hash-comparer";
 import { Encrypter } from "../../../cryptography/encrypter";
+import { EmailNotVerifiedError } from "../../errors/email-not-verified-error";
 
 interface AuthenticateUserUseCaseRequest {
   email: string;
@@ -10,7 +11,7 @@ interface AuthenticateUserUseCaseRequest {
 }
 
 type AuthenticateUserUseCaseResponse = Either<
-  InvalidCredentialsError,
+  InvalidCredentialsError | EmailNotVerifiedError,
   {
     accessToken: string;
     refreshToken: string;
@@ -32,6 +33,10 @@ export class AuthenticateUserUseCase {
 
     if (!user) {
       return left(new InvalidCredentialsError());
+    }
+
+    if (!user.emailVerified) {
+      return left(new EmailNotVerifiedError());
     }
 
     const isPasswordValid = await this.hashComparer.compare(

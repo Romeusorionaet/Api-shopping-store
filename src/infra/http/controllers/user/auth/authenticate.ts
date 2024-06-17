@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
+import { EmailNotVerifiedError } from "src/domain/store/application/use-cases/errors/email-not-verified-error";
 import { makeAuthenticateUserUseCase } from "src/domain/store/application/use-cases/user/factory/make-authenticate-user-use-case";
 import { authSchema } from "src/infra/http/schemas/auth-schema";
 import { z } from "zod";
@@ -21,6 +22,7 @@ export async function authenticate(
       const err = result.value;
       switch (err.constructor) {
         case InvalidCredentialsError:
+        case EmailNotVerifiedError:
           return reply.status(400).send({
             error: err.message,
           });
