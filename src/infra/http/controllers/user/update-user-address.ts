@@ -38,6 +38,7 @@ export async function updateUserAddress(
     if (err instanceof z.ZodError) {
       return reply.status(400).send({
         error: err.errors[0].message,
+        error_path: err.errors[0].path,
       });
     }
   }

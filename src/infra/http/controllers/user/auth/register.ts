@@ -45,7 +45,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     if (err instanceof z.ZodError) {
       return reply.status(400).send({
         error: err.errors[0].message,
-        path: err.errors[0].path, // TODO aplicar esse path em outros controllers
+        error_path: err.errors[0].path,
       });
     }
   }

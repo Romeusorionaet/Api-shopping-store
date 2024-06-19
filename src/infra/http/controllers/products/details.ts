@@ -22,9 +22,6 @@ export async function details(request: FastifyRequest, reply: FastifyReply) {
       const err = result.value;
       switch (err.constructor) {
         case ProductNotFoundError:
-          return reply.status(400).send({
-            error: err.message,
-          });
         case TechnicalProductNotFoundError:
           return reply.status(400).send({
             error: err.message,
@@ -45,6 +42,7 @@ export async function details(request: FastifyRequest, reply: FastifyReply) {
     if (err instanceof z.ZodError) {
       return reply.status(400).send({
         error: err.errors[0].message,
+        error_path: err.errors[0].path,
       });
     }
   }
