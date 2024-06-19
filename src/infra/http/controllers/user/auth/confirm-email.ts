@@ -11,26 +11,35 @@ export async function confirmEmail(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const { token } = confirmEmailSchema.parse(request.params);
+  try {
+    const { token } = confirmEmailSchema.parse(request.params);
 
-  const confirmEmailUseCase = makeConfirmEmailCase();
+    const confirmEmailUseCase = makeConfirmEmailCase();
 
-  const result = await confirmEmailUseCase.execute({
-    token,
-  });
+    const result = await confirmEmailUseCase.execute({
+      token,
+    });
 
-  if (result.isLeft()) {
-    const err = result.value;
-    switch (err.constructor) {
-      case ResourceNotFoundError:
-        return reply.status(400).send({
-          error: err.message,
-        });
+    if (result.isLeft()) {
+      const err = result.value;
+      switch (err.constructor) {
+        case ResourceNotFoundError:
+          return reply.status(400).send({
+            error: err.message,
+          });
 
-      default:
-        throw new Error(err.message);
+        default:
+          throw new Error(err.message);
+      }
+    }
+
+    return reply.status(200).send({ success: true });
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return reply.status(400).send({
+        error: err.errors[0].message,
+        error_path: err.errors[0].path,
+      });
     }
   }
-
-  return reply.status(200).send({ success: true });
 }
