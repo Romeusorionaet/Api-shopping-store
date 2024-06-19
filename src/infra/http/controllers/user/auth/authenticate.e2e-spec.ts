@@ -26,7 +26,7 @@ describe("Authenticate (E2E)", () => {
       .post("/auth/user/authenticate")
       .send({ email: "romeu@gmail.com", password: "123456" });
 
-    expect(result.statusCode).toEqual(201);
+    expect(result.statusCode).toEqual(200);
     expect(result.body).toEqual(
       expect.objectContaining({
         accessToken: expect.any(String),

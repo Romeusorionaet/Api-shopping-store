@@ -4,6 +4,7 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 export interface UserProps {
   publicId?: UniqueEntityID;
+  validationId: UniqueEntityID | null;
   username: string;
   email: string;
   password: string;
@@ -16,6 +17,14 @@ export interface UserProps {
 export class User extends Entity<UserProps> {
   get publicId() {
     return this.props.publicId;
+  }
+
+  get validationId() {
+    return this.props.validationId;
+  }
+
+  set validationId(value: UniqueEntityID | null) {
+    this.props.validationId = value;
   }
 
   get username() {
@@ -36,6 +45,10 @@ export class User extends Entity<UserProps> {
 
   get emailVerified() {
     return this.props.emailVerified;
+  }
+
+  set emailVerified(value: boolean) {
+    this.props.emailVerified = value;
   }
 
   get createdAt() {

@@ -11,9 +11,12 @@ CREATE TYPE "OrderStatusTracking" AS ENUM ('WAITING', 'CANCELED', 'PRODUCT_DELIV
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "public_id" TEXT NOT NULL,
+    "validation_id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password_hash" TEXT NOT NULL,
+    "picture" TEXT NOT NULL,
+    "email_verified" BOOLEAN NOT NULL,
     "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -144,6 +147,12 @@ CREATE TABLE "order_products" (
 
     CONSTRAINT "order_products_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_public_id_key" ON "users"("public_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_validation_id_key" ON "users"("validation_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");

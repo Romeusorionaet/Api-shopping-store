@@ -31,6 +31,7 @@ export class RegisterUserWithGoogleUseCase {
         password: await hash("123456", 8), // senha temporária
         picture,
         emailVerified,
+        validationId: null,
       });
 
       await this.usersRepository.create(user);

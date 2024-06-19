@@ -14,6 +14,7 @@ export async function makeUser(
 
   const user = User.create(
     {
+      validationId: new UniqueEntityID(),
       username: faker.person.fullName(),
       email: faker.lorem.sentence(10),
       password: hashedPassword,

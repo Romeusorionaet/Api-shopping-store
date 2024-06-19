@@ -7,6 +7,7 @@ export class PrismaUserMapper {
     return User.create(
       {
         publicId: new UniqueEntityID(raw.publicId),
+        validationId: new UniqueEntityID(raw.validationId),
         username: raw.username,
         email: raw.email,
         password: raw.passwordHash,
@@ -22,6 +23,7 @@ export class PrismaUserMapper {
   static toPrisma(user: User): Prisma.UserUncheckedCreateInput {
     return {
       id: user.id.toString(),
+      validationId: user.validationId?.toString(),
       username: user.username,
       email: user.email,
       passwordHash: user.password,

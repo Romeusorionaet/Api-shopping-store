@@ -32,7 +32,7 @@ export async function authenticate(
       }
     }
 
-    return reply.status(201).send({
+    return reply.status(200).send({
       accessToken: result.value.accessToken,
       refreshToken: result.value.refreshToken,
     });

@@ -27,4 +27,19 @@ export class InMemoryUsersRepository implements UsersRepository {
 
     return user;
   }
+
+  async confirmEmail(token: string): Promise<object | null> {
+    const userIndex = this.items.findIndex(
+      (item) => item.validationId?.toString() === token,
+    );
+
+    if (userIndex !== -1) {
+      this.items[userIndex].emailVerified = true;
+      this.items[userIndex].validationId = null;
+
+      return {};
+    }
+
+    return null;
+  }
 }

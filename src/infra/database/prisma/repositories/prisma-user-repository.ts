@@ -35,4 +35,22 @@ export class PrismaUserRepository implements UsersRepository {
 
     return userProfile;
   }
+
+  async confirmEmail(token: string): Promise<object | null> {
+    const result = await prisma.user.update({
+      where: {
+        validationId: token,
+      },
+      data: {
+        emailVerified: true,
+        validationId: "",
+      },
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    return result;
+  }
 }

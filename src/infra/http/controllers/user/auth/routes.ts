@@ -4,6 +4,7 @@ import { register } from "./register";
 import { refreshToken } from "./refresh-token";
 import { authenticate } from "./authenticate";
 import { verifyJWTRefreshToken } from "src/infra/http/middlewares/verify-jwt-refresh-token";
+import { confirmEmail } from "./confirm-email";
 
 export async function authRoutes(app: FastifyInstance) {
   app.post("/auth/register/oauth-google/callback", registerWithGoogle);
@@ -14,4 +15,5 @@ export async function authRoutes(app: FastifyInstance) {
     refreshToken,
   );
   app.post("/auth/user/authenticate", authenticate);
+  app.post("/auth/confirm-email/:token", confirmEmail);
 }
