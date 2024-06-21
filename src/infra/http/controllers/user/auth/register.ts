@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { UserAlreadyExistsError } from "src/domain/store/application/use-cases/errors/user-already-exists-error";
 import { makeRegisterUserUseCase } from "src/domain/store/application/use-cases/user/factory/make-register-user-use-case";
 import { profileFromUserSchema } from "src/infra/http/schemas/profile-schema";
-import { validationEmailWithNodeMailer } from "src/infra/service/setup-nodemailer/nodemailer";
+import { validationEmailWithNodeMailer } from "src/infra/service/setup-send-email-validation/nodemailer";
 import { z } from "zod";
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {

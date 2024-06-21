@@ -6,7 +6,7 @@ export class InsufficientProductInventoryError
 {
   constructor(identifier: string) {
     super(
-      `The quantity ordered for the product [ ${identifier} ] exceeds the available inventory.`,
+      `A quantidade requisitado para o produto [ ${identifier} ] é superior ao que tem em estoque`,
     );
   }
 }

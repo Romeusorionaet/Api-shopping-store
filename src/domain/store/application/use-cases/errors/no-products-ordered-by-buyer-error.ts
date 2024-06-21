@@ -5,6 +5,6 @@ export class NoProductsOrderedByBuyerError
   implements UseCaseError
 {
   constructor() {
-    super("No products ordered by buyer.");
+    super("Produto pedido pelo comprador não encontrado");
   }
 }

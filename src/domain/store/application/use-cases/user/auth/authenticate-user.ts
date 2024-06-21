@@ -35,10 +35,6 @@ export class AuthenticateUserUseCase {
       return left(new InvalidCredentialsError());
     }
 
-    if (!user.emailVerified) {
-      return left(new EmailNotVerifiedError());
-    }
-
     const isPasswordValid = await this.hashComparer.compare(
       password,
       user.password,
@@ -46,6 +42,10 @@ export class AuthenticateUserUseCase {
 
     if (!isPasswordValid) {
       return left(new InvalidCredentialsError());
+    }
+
+    if (!user.emailVerified) {
+      return left(new EmailNotVerifiedError());
     }
 
     const accessToken = await this.encrypter.encryptAccessToken({

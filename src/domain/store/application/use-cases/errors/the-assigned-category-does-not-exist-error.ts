@@ -5,6 +5,6 @@ export class TheAssignedCategoryDoesNotExistError
   implements UseCaseError
 {
   constructor() {
-    super("The Assigned Category Does Not Exist.");
+    super("A categoria atribuída não existe");
   }
 }
