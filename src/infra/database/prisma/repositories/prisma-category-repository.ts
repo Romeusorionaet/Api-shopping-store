@@ -6,6 +6,7 @@ import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { CacheRepository } from "src/infra/cache/cache-repository";
 import { CacheKeysPrefix } from "src/core/constants/cache-keys-prefix";
 import { QuantityOfCategory } from "src/core/constants/quantity-of-category";
+import { CacheTimeInMinutes } from "src/core/constants/cache-time-in-minutes";
 
 export class PrismaCategoryRepository implements CategoryRepository {
   constructor(private cacheRepository: CacheRepository) {}
@@ -43,7 +44,11 @@ export class PrismaCategoryRepository implements CategoryRepository {
 
     const categoryMapped = PrismaCategoryMapper.toDomain(category);
 
-    await this.cacheRepository.set(cacheKey, JSON.stringify(category));
+    await this.cacheRepository.set(
+      cacheKey,
+      JSON.stringify(category),
+      CacheTimeInMinutes.categoryTime,
+    );
 
     return categoryMapped;
   }
@@ -69,7 +74,11 @@ export class PrismaCategoryRepository implements CategoryRepository {
 
     const categoriesMapped = categories.map(PrismaCategoryMapper.toDomain);
 
-    await this.cacheRepository.set(cacheKey, JSON.stringify(categories));
+    await this.cacheRepository.set(
+      cacheKey,
+      JSON.stringify(categories),
+      CacheTimeInMinutes.categoryTime,
+    );
 
     return categoriesMapped;
   }

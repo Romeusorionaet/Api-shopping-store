@@ -11,7 +11,7 @@ import { orderSchema } from "../../schemas/order-schema";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { subSchema } from "../../schemas/sub-schema";
 import { z } from "zod";
-import { NotificationService } from "src/infra/web-sockets/notification-service";
+import { IOEmitNotificationRepository } from "src/infra/web-sockets/socket-io/io-notification-repository";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   if (request.method !== "POST") {
@@ -57,9 +57,9 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 
   const notification = resultNotification.notification;
 
-  const notify = new NotificationService();
+  const IONotify = new IOEmitNotificationRepository();
 
-  notify.emitOrderPlacedNotification({
+  IONotify.emitNotificationForUniqueUser({
     userPublicId: publicId,
     notification: NotificationPresenter.toHTTP(notification),
   });
