@@ -79,6 +79,9 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
       where: {
         recipientId,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     await this.cacheRepository.set(

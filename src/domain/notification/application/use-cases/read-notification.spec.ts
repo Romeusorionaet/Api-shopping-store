@@ -1,4 +1,3 @@
-import { expect, test, describe, beforeEach } from "vitest";
 import { ReadNotificationUseCase } from "./read-notification";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { InMemoryNotificationsRepository } from "test/repositories/in-memory-notifications-repository";

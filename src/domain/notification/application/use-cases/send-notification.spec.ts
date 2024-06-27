@@ -1,4 +1,3 @@
-import { expect, test, describe, beforeEach } from "vitest";
 import { SendNotificationUseCase } from "./send-notification";
 import { InMemoryNotificationsRepository } from "test/repositories/in-memory-notifications-repository";
 

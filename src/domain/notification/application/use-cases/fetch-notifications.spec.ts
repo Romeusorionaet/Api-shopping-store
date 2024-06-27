@@ -1,4 +1,3 @@
-import { expect, test, describe, beforeEach } from "vitest";
 import { InMemoryNotificationsRepository } from "test/repositories/in-memory-notifications-repository";
 import { makeNotification } from "test/factories/make-notification";
 import { FetchNotificationsUseCase } from "./fetch-notifications";
