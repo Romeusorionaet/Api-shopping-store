@@ -1,17 +1,23 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
+interface JwtPayload {
+  sub: string;
+  publicId: string;
+  permissions: string[];
+  iat?: number;
+  exp?: number;
+}
+
 export async function verifyJWTAccessToken(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
-    await request.jwtVerify();
+    const payload = await request.jwtVerify<JwtPayload>();
 
-    const tokenPayload = request.user as { permissions?: string[] };
-    if (
-      !tokenPayload.permissions ||
-      !tokenPayload.permissions.includes("read")
-    ) {
+    const permissions = payload.permissions;
+
+    if (!permissions || !permissions.includes("read")) {
       return reply.status(401).send({
         error: "Token não possui permissão para acessar esta rota.",
       });

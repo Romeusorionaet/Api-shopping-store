@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
 import { makeRegisterUserWithGoogleUseCase } from "src/domain/store/application/use-cases/user/factory/make-register-user-with-google-use-case";
-import { makeAuthenticateUserWithGoogleUseCase } from "src/domain/store/application/use-cases/user/factory/make-authenticate-user-with-google-use-case";
 import { env } from "src/infra/env";
 import { z } from "zod";
 import { profileFromGoogleSchema } from "src/infra/http/schemas/profile-schema";
+import { makeRefreshTokenUseCase } from "src/domain/store/application/use-cases/user/factory/make-refresh-token-use-case";
 
 export async function registerWithGoogle(
   request: FastifyRequest,
@@ -26,11 +26,11 @@ export async function registerWithGoogle(
 
     const user = resultRegisterWithGoogle.user;
 
-    const authenticateUserWithGoogleUseCase =
-      makeAuthenticateUserWithGoogleUseCase();
+    const refreshTokenUseCase = makeRefreshTokenUseCase();
 
-    const result = await authenticateUserWithGoogleUseCase.execute({
+    const result = await refreshTokenUseCase.execute({
       userId: user.id.toString(),
+      publicId: user.publicId.toString(),
     });
 
     if (result.isLeft()) {
