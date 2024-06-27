@@ -24,7 +24,7 @@ export class SendNotificationUseCase {
       content,
     });
 
-    await this.notificationsRepository.create(notification);
+    await this.notificationsRepository.create(notification, recipientId);
 
     return { notification };
   }

@@ -5,4 +5,6 @@ export const CacheKeysPrefix = {
   CATEGORY: "category",
   BUYER_ADDRESS: "buyerAddress",
   USER_ADDRESS: "userAddress",
+  NOTIFICATION_LIST: "notificationList",
+  NOTIFICATION: "notification",
 };

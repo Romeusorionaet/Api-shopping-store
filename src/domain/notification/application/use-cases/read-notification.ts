@@ -35,7 +35,7 @@ export class ReadNotificationUseCase {
     if (!notification.readAt) {
       notification.read();
 
-      await this.notificationsRepository.save(notification);
+      await this.notificationsRepository.update(notification, recipientId);
     }
 
     return right({ notification });

@@ -98,7 +98,7 @@ export class PrismaCategoryRepository implements CategoryRepository {
       data,
     });
 
-    await this.cacheRepository.deleteCacheByPattern(
+    await this.cacheRepository.delete(
       `${CacheKeysPrefix.CATEGORY}:unique:${category.id}`,
     );
 
@@ -114,7 +114,7 @@ export class PrismaCategoryRepository implements CategoryRepository {
       },
     });
 
-    await this.cacheRepository.deleteCacheByPattern(
+    await this.cacheRepository.delete(
       `${CacheKeysPrefix.CATEGORY}:unique:${id}`,
     );
 
