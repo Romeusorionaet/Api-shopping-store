@@ -6,7 +6,4 @@ coverage
 *.md
 dist
 data
-
-# certs
-certs
 seed.ts

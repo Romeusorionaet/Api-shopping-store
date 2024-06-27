@@ -45,6 +45,7 @@ export class RegisterUserUseCase {
       password: hashedPassword,
       picture,
       emailVerified: false,
+      publicId: new UniqueEntityID(),
       validationId: new UniqueEntityID(),
     });
 

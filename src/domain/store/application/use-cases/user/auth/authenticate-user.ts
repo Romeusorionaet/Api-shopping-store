@@ -50,10 +50,12 @@ export class AuthenticateUserUseCase {
 
     const accessToken = await this.encrypter.encryptAccessToken({
       sub: user.id.toString(),
+      publicId: user.publicId.toString(),
     });
 
-    const refreshToken = await this.encrypter.encryptAccessToken({
+    const refreshToken = await this.encrypter.encryptRefreshToken({
       sub: user.id.toString(),
+      publicId: user.publicId.toString(),
     });
 
     return right({

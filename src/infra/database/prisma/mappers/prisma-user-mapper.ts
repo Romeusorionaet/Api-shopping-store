@@ -24,6 +24,7 @@ export class PrismaUserMapper {
     return {
       id: user.id.toString(),
       validationId: user.validationId?.toString(),
+      publicId: user.publicId.toString(),
       username: user.username,
       email: user.email,
       passwordHash: user.password,

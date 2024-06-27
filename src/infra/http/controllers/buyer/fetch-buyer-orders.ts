@@ -4,7 +4,7 @@ import { BuyerOrderPresenter } from "../../presenters/buyer-order-presenter";
 import { subSchema } from "../../schemas/sub-schema";
 import { z } from "zod";
 
-export async function getBuyerOrders(
+export async function fetchBuyerOrders(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {

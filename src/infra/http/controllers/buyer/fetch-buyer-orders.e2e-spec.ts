@@ -9,7 +9,7 @@ import { makeOrderProduct } from "test/factories/make-order-product";
 import { ProductFactory } from "test/factories/make-product";
 import { UserAddressFactory } from "test/factories/make-user-address";
 
-describe("Get buyer orders (E2E)", () => {
+describe("Fetch buyer orders (E2E)", () => {
   let userAddressFactory: UserAddressFactory;
   let orderFactory: OrderFactory;
   let categoryFactory: CategoryFactory;

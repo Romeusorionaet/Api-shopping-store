@@ -1,18 +1,27 @@
-import fastify from "fastify";
-import { ZodError } from "zod";
-import { env } from "./infra/env";
-import fastifyJWT from "@fastify/jwt";
 import { categoriesRoutes } from "./infra/http/controllers/category/routes";
 import { productsRoutes } from "./infra/http/controllers/products/routes";
-import CORS from "@fastify/cors";
+import { webhookRoutes } from "./infra/http/controllers/webhook/routes";
+import { authRoutes } from "./infra/http/controllers/user/auth/routes";
 import { buyerRoutes } from "./infra/http/controllers/buyer/routes";
 import { orderRoutes } from "./infra/http/controllers/order/routes";
-import { authRoutes } from "./infra/http/controllers/user/auth/routes";
 import { userRoutes } from "./infra/http/controllers/user/routes";
-import { webhookRoutes } from "./infra/http/controllers/webhook/routes";
 import rawBody from "fastify-raw-body";
+import fastifyJWT from "@fastify/jwt";
+import { Server } from "socket.io";
+import { env } from "./infra/env";
+import CORS from "@fastify/cors";
+import { ZodError } from "zod";
+import fastify from "fastify";
 
 export const app = fastify();
+
+const serverHttp = app.server;
+
+export const io = new Server(serverHttp, {
+  cors: {
+    origin: env.SHOPPING_STORE_URL_WEB,
+  },
+});
 
 app.register(CORS, {
   origin: env.SHOPPING_STORE_URL_WEB,

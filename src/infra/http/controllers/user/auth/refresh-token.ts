@@ -9,11 +9,11 @@ export async function refreshToken(
   reply: FastifyReply,
 ) {
   try {
-    const { sub: id } = subSchema.parse(request.user);
+    const { sub: id, publicId } = subSchema.parse(request.user);
 
     const refreshTokenUseCase = makeRefreshTokenUseCase();
 
-    const result = await refreshTokenUseCase.execute({ userId: id });
+    const result = await refreshTokenUseCase.execute({ userId: id, publicId });
 
     if (result.isLeft()) {
       const err = result.value;

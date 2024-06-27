@@ -38,6 +38,7 @@ describe("Refresh Token", () => {
 
     const result = await sut.execute({
       userId: user.id.toString(),
+      publicId: user.publicId.toString(),
     });
 
     expect(result.isRight()).toBe(true);

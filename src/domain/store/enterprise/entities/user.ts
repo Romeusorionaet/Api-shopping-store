@@ -3,7 +3,7 @@ import { Entity } from "src/core/entities/entity";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 export interface UserProps {
-  publicId?: UniqueEntityID;
+  publicId: UniqueEntityID;
   validationId: UniqueEntityID | null;
   username: string;
   email: string;
@@ -73,7 +73,6 @@ export class User extends Entity<UserProps> {
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
-        publicId: props.publicId ?? new UniqueEntityID(),
       },
       id,
     );

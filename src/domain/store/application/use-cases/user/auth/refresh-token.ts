@@ -4,6 +4,7 @@ import { Encrypter } from "../../../cryptography/encrypter";
 
 interface RefreshTokenUseCaseRequest {
   userId: string;
+  publicId: string;
 }
 
 type RefreshTokenUseCaseResponse = Either<
@@ -19,13 +20,16 @@ export class RefreshTokenUseCase {
 
   async execute({
     userId,
+    publicId,
   }: RefreshTokenUseCaseRequest): Promise<RefreshTokenUseCaseResponse> {
     const accessToken = await this.encrypter.encryptAccessToken({
       sub: userId,
+      publicId,
     });
 
     const refreshToken = await this.encrypter.encryptRefreshToken({
       sub: userId,
+      publicId,
     });
 
     return right({ accessToken, refreshToken });

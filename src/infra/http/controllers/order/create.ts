@@ -1,14 +1,17 @@
-import { FastifyRequest, FastifyReply } from "fastify";
-import { UserNotFoundError } from "src/core/errors/user-not-found-error";
+import { makeSendNotificationUseCase } from "src/domain/notification/application/use-cases/factory/make-send-notification-use-case";
 import { InsufficientProductInventoryError } from "src/domain/store/application/use-cases/errors/insufficient-product-Inventory.error";
+import { makePurchaseOrderUseCase } from "src/domain/store/application/use-cases/order/factory/make-purchase-order-use-case";
 import { OrderWithEmptyAddressError } from "src/domain/store/application/use-cases/errors/order-with-empty-address-error";
 import { ProductIsOutOfStockError } from "src/domain/store/application/use-cases/errors/product-is-out-of-stock-error";
 import { ProductNotFoundError } from "src/domain/store/application/use-cases/errors/product-not-found-error";
-import { makePurchaseOrderUseCase } from "src/domain/store/application/use-cases/order/factory/make-purchase-order-use-case";
-import { z } from "zod";
-import { subSchema } from "../../schemas/sub-schema";
-import { orderSchema } from "../../schemas/order-schema";
 import { stripeCheckoutSession } from "src/infra/gateway-payment/stripe/stripe-checkout-session";
+import { NotificationPresenter } from "../../presenters/notification-presenter";
+import { UserNotFoundError } from "src/core/errors/user-not-found-error";
+import { orderSchema } from "../../schemas/order-schema";
+import { FastifyRequest, FastifyReply } from "fastify";
+import { subSchema } from "../../schemas/sub-schema";
+import { z } from "zod";
+import { NotificationService } from "src/infra/web-sockets/notification-service";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   if (request.method !== "POST") {
@@ -16,7 +19,8 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   }
 
   const { orderProducts } = orderSchema.parse(request.body);
-  const { sub: buyerId } = subSchema.parse(request.user);
+
+  const { sub: buyerId, publicId } = subSchema.parse(request.user);
 
   const createOrderUseCase = makePurchaseOrderUseCase();
 
@@ -42,6 +46,23 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   }
 
   const orderId = result.value.order.id.toString();
+
+  const sendNotificationUseCase = makeSendNotificationUseCase();
+
+  const resultNotification = await sendNotificationUseCase.execute({
+    recipientId: buyerId,
+    title: "Pedido realizado a espera de um pagamento",
+    content: `Endereço do pedido: ${orderId}.`,
+  });
+
+  const notification = resultNotification.notification;
+
+  const notify = new NotificationService();
+
+  notify.emitOrderPlacedNotification({
+    userPublicId: publicId,
+    notification: NotificationPresenter.toHTTP(notification),
+  });
 
   try {
     const { checkoutUrl, successUrlWithSessionId } =
