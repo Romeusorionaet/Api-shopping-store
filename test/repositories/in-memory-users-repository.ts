@@ -34,12 +34,24 @@ export class InMemoryUsersRepository implements UsersRepository {
     );
 
     if (userIndex !== -1) {
-      this.items[userIndex].emailVerified = true;
-      this.items[userIndex].validationId = null;
+      this.items[userIndex].update({
+        emailVerified: true,
+        validationId: null,
+      });
 
       return {};
     }
 
     return null;
+  }
+
+  async update(user: User): Promise<void> {
+    const existingUser = this.items.find((item) => item.id === user.id);
+
+    if (existingUser) {
+      Object.assign(existingUser, user);
+    } else {
+      throw new Error("Usuário não encontrado");
+    }
   }
 }

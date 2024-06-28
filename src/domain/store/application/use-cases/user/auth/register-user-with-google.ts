@@ -3,12 +3,6 @@ import { UsersRepository } from "../../../repositories/users-repository";
 import { hash } from "bcryptjs";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
-// TODO quando eu crio uma conta com um email mas n valido, e decido logar com o google
-// com esse mesmo email, esse email não esta validando
-
-// TODO ao se registrar pela primeira vez o validação está funcioando, mas o id de
-// validation precisa ser apagado
-
 interface RegisterUserWithGoogleUseCaseRequest {
   email: string;
   username: string;
@@ -45,6 +39,15 @@ export class RegisterUserWithGoogleUseCase {
       await this.usersRepository.create(user);
 
       return { user };
+    }
+
+    if (!user.emailVerified) {
+      const userUpdated = user.update({
+        emailVerified: true,
+        validationId: null,
+      });
+
+      await this.usersRepository.update(userUpdated);
     }
 
     return { user };

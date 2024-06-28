@@ -5,4 +5,5 @@ export interface UsersRepository {
   findByEmail(email: string): Promise<User | null>;
   findById(id: string): Promise<User | null>;
   confirmEmail(token: string): Promise<object | null>;
+  update(user: User): Promise<void>;
 }

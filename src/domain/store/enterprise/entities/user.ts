@@ -23,10 +23,6 @@ export class User extends Entity<UserProps> {
     return this.props.validationId;
   }
 
-  set validationId(value: UniqueEntityID | null) {
-    this.props.validationId = value;
-  }
-
   get username() {
     return this.props.username;
   }
@@ -47,8 +43,9 @@ export class User extends Entity<UserProps> {
     return this.props.emailVerified;
   }
 
-  set emailVerified(value: boolean) {
+  private set emailVerified(value: boolean) {
     this.props.emailVerified = value;
+    this.touch();
   }
 
   get createdAt() {
@@ -63,11 +60,6 @@ export class User extends Entity<UserProps> {
     this.props.updatedAt = new Date();
   }
 
-  set username(name: string) {
-    this.props.username = name;
-    this.touch();
-  }
-
   static create(props: Optional<UserProps, "createdAt">, id?: UniqueEntityID) {
     const user = new User(
       {
@@ -78,5 +70,16 @@ export class User extends Entity<UserProps> {
     );
 
     return user;
+  }
+
+  update(props: Partial<UserProps>): User {
+    return new User(
+      {
+        ...this.props,
+        ...props,
+        updatedAt: new Date(),
+      },
+      this.id,
+    );
   }
 }

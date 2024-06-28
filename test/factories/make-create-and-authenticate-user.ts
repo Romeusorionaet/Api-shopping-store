@@ -23,6 +23,7 @@ export class CreateAndAuthenticateUserWithTokensFactory {
         email: `${fakeFirstName}@gmail.com`,
         passwordHash: await hash("123456", 8),
         picture: `http://${faker.person.firstName}/faker_picture.com`,
+        validationId: "",
         emailVerified: true,
       },
     });
