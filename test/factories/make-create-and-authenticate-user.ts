@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { hash } from "bcryptjs";
 import { FastifyInstance } from "fastify";
+import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { prisma } from "src/infra/service/setup-prisma/prisma";
 import request from "supertest";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
@@ -16,6 +17,7 @@ export async function makeAuthenticateUserWithTokens(userId: string) {
 export class CreateAndAuthenticateUserWithTokensFactory {
   async makePrismaCreateAndAuthenticateUserWithTokens(app: FastifyInstance) {
     const fakeFirstName = faker.person.firstName();
+    const validationId = new UniqueEntityID().toValue();
 
     const user = await prisma.user.create({
       data: {
@@ -23,7 +25,7 @@ export class CreateAndAuthenticateUserWithTokensFactory {
         email: `${fakeFirstName}@gmail.com`,
         passwordHash: await hash("123456", 8),
         picture: `http://${faker.person.firstName}/faker_picture.com`,
-        validationId: "",
+        validationId,
         emailVerified: true,
       },
     });

@@ -34,7 +34,7 @@ export class InMemoryUsersRepository implements UsersRepository {
     );
 
     if (userIndex !== -1) {
-      this.items[userIndex].update({
+      this.items[userIndex] = this.items[userIndex].update({
         emailVerified: true,
         validationId: null,
       });

@@ -18,6 +18,7 @@ describe("Confirm email", () => {
     const user = await makeUser(
       {
         email: "firstuser@gmail.com",
+        emailVerified: false,
       },
       new UniqueEntityID("user-test-id-01"),
     );
