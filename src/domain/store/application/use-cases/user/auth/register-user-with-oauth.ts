@@ -3,18 +3,18 @@ import { UsersRepository } from "../../../repositories/users-repository";
 import { hash } from "bcryptjs";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
-interface RegisterUserWithGoogleUseCaseRequest {
+interface RegisterUserWithOAuthUseCaseRequest {
   email: string;
   username: string;
   picture: string;
   emailVerified: boolean;
 }
 
-type RegisterUserWithGoogleUseCaseResponse = {
+type RegisterUserWithOAuthUseCaseResponse = {
   user: User;
 };
 
-export class RegisterUserWithGoogleUseCase {
+export class RegisterUserWithOAuthUseCase {
   constructor(private usersRepository: UsersRepository) {}
 
   async execute({
@@ -22,7 +22,7 @@ export class RegisterUserWithGoogleUseCase {
     username,
     picture,
     emailVerified,
-  }: RegisterUserWithGoogleUseCaseRequest): Promise<RegisterUserWithGoogleUseCaseResponse> {
+  }: RegisterUserWithOAuthUseCaseRequest): Promise<RegisterUserWithOAuthUseCaseResponse> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {

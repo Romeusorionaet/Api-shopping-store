@@ -1,14 +1,14 @@
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
-import { RegisterUserWithGoogleUseCase } from "./register-user-with-google";
+import { RegisterUserWithOAuthUseCase } from "./register-user-with-oauth";
 
 let usersRepository: InMemoryUsersRepository;
-let sut: RegisterUserWithGoogleUseCase;
+let sut: RegisterUserWithOAuthUseCase;
 
 describe("Register User With Google", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
 
-    sut = new RegisterUserWithGoogleUseCase(usersRepository);
+    sut = new RegisterUserWithOAuthUseCase(usersRepository);
   });
 
   test("should be able to register user with google", async () => {

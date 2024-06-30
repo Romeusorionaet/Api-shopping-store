@@ -1,7 +1,7 @@
 import { app } from "src/app";
 import request from "supertest";
 
-describe("Register With Google (E2E)", () => {
+describe("Register With OAuth (E2E)", () => {
   beforeAll(async () => {
     await app.ready();
   });
@@ -10,7 +10,7 @@ describe("Register With Google (E2E)", () => {
     await app.close();
   });
 
-  test("[POST] /auth/register/oauth-google/callback", async () => {
+  test("[POST] /auth/register/oauth/callback", async () => {
     const response = await request(app.server)
       .post("/auth/register/oauth-google/callback")
       .send({

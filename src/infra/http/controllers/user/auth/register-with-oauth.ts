@@ -1,12 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { InvalidCredentialsError } from "src/core/errors/invalid-credentials-errors";
-import { makeRegisterUserWithGoogleUseCase } from "src/domain/store/application/use-cases/user/factory/make-register-user-with-google-use-case";
 import { env } from "src/infra/env";
 import { z } from "zod";
 import { profileFromGoogleSchema } from "src/infra/http/schemas/profile-schema";
 import { makeRefreshTokenUseCase } from "src/domain/store/application/use-cases/user/factory/make-refresh-token-use-case";
+import { makeRegisterUserWithOAuthUseCase } from "src/domain/store/application/use-cases/user/factory/make-register-user-with-oauth-use-case";
 
-export async function registerWithGoogle(
+export async function registerWithOAuth(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -14,17 +14,16 @@ export async function registerWithGoogle(
     const { email, username, picture, emailVerified } =
       profileFromGoogleSchema.parse(request.body);
 
-    const registerUserWithGoogleUseCase = makeRegisterUserWithGoogleUseCase();
+    const registerUserWithOAuthUseCase = makeRegisterUserWithOAuthUseCase();
 
-    const resultRegisterWithGoogle =
-      await registerUserWithGoogleUseCase.execute({
-        email,
-        username,
-        picture,
-        emailVerified,
-      });
+    const resultRegisterWithOAuth = await registerUserWithOAuthUseCase.execute({
+      email,
+      username,
+      picture,
+      emailVerified,
+    });
 
-    const user = resultRegisterWithGoogle.user;
+    const user = resultRegisterWithOAuth.user;
 
     const refreshTokenUseCase = makeRefreshTokenUseCase();
 
