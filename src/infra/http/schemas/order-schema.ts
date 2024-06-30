@@ -21,9 +21,7 @@ export const orderSchema = z.object({
       basePrice: z.coerce
         .number()
         .min(1, { message: "É preciso informar o valor do produto." }),
-      discountPercentage: z.coerce
-        .number()
-        .min(1, { message: "É preciso informar o desconto (%) do produto." }),
+      discountPercentage: z.coerce.number(),
       quantity: z.coerce
         .number()
         .min(1, { message: "É preciso informar a quantidade do produto." }),

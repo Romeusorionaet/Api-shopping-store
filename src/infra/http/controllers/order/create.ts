@@ -18,53 +18,53 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(405).send({ error: "Method not allowed" });
   }
 
-  const { orderProducts } = orderSchema.parse(request.body);
-
-  const { sub: buyerId, publicId } = subSchema.parse(request.user);
-
-  const createOrderUseCase = makePurchaseOrderUseCase();
-
-  const result = await createOrderUseCase.execute({
-    buyerId,
-    orderProducts,
-  });
-
-  if (result.isLeft()) {
-    const err = result.value;
-    switch (err.constructor) {
-      case OrderWithEmptyAddressError:
-      case UserNotFoundError:
-      case ProductNotFoundError:
-      case ProductIsOutOfStockError:
-      case InsufficientProductInventoryError:
-        return reply.status(400).send({
-          error: err.message,
-        });
-      default:
-        throw new Error(err.message);
-    }
-  }
-
-  const orderId = result.value.order.id.toString();
-
-  const sendNotificationUseCase = makeSendNotificationUseCase();
-
-  const resultNotification = await sendNotificationUseCase.execute({
-    recipientId: buyerId,
-    title: "Pedido realizado a espera de um pagamento",
-    content: `Endereço do pedido: ${orderId}.`,
-  });
-
-  const notification = resultNotification.notification;
-
-  const IONotify = new IOEmitNotificationRepository();
-
-  IONotify.emitNotificationForUniqueUser({
-    userPublicId: publicId,
-    notification: NotificationPresenter.toHTTP(notification),
-  });
-
   try {
+    const { orderProducts } = orderSchema.parse(request.body);
+
+    const { sub: buyerId, publicId } = subSchema.parse(request.user);
+
+    const createOrderUseCase = makePurchaseOrderUseCase();
+
+    const result = await createOrderUseCase.execute({
+      buyerId,
+      orderProducts,
+    });
+
+    if (result.isLeft()) {
+      const err = result.value;
+      switch (err.constructor) {
+        case OrderWithEmptyAddressError:
+        case UserNotFoundError:
+        case ProductNotFoundError:
+        case ProductIsOutOfStockError:
+        case InsufficientProductInventoryError:
+          return reply.status(400).send({
+            error: err.message,
+          });
+        default:
+          throw new Error(err.message);
+      }
+    }
+
+    const orderId = result.value.order.id.toString();
+
+    const sendNotificationUseCase = makeSendNotificationUseCase();
+
+    const resultNotification = await sendNotificationUseCase.execute({
+      recipientId: buyerId,
+      title: "Pedido realizado a espera de um pagamento",
+      content: `Endereço do pedido: ${orderId}.`,
+    });
+
+    const notification = resultNotification.notification;
+
+    const IONotify = new IOEmitNotificationRepository();
+
+    IONotify.emitNotificationForUniqueUser({
+      userPublicId: publicId,
+      notification: NotificationPresenter.toHTTP(notification),
+    });
+
     const { checkoutUrl, successUrlWithSessionId } =
       await stripeCheckoutSession({ orderId, orderProducts });
 

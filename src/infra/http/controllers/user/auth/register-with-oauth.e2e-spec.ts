@@ -12,7 +12,7 @@ describe("Register With OAuth (E2E)", () => {
 
   test("[POST] /auth/register/oauth/callback", async () => {
     const response = await request(app.server)
-      .post("/auth/register/oauth-google/callback")
+      .post("/auth/register/oauth/callback")
       .send({
         username: "User test 01",
         email: "usertest01@gmail.com",
