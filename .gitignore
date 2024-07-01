@@ -3,7 +3,6 @@ build
 coverage
 .env
 .env.test
-*.md
 dist
 data
 seed.ts
