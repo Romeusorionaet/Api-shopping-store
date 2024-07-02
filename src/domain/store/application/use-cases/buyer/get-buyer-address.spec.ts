@@ -28,7 +28,7 @@ describe("Get buyer Address", () => {
       new UniqueEntityID("address id 01"),
     );
 
-    await buyerAddressRepository.items.push(buyerAddress);
+    buyerAddressRepository.items.push(buyerAddress);
 
     const result = await sut.execute({
       buyerId: buyerAddress.buyerId.toString(),
