@@ -12,9 +12,10 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
           cache: "npm"
 
-      - run: npm ci
-
-      - run: npm run test:unit
+      - run: |
+          npm ci
+          npm run build
+          npm run test:unit

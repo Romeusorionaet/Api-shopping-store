@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src --external supertest --external @faker-js/faker",
+    "build": "CI=false && tsup src --external supertest --external @faker-js/faker",
     "start": "node dist/server.js",
     "seed": "ts-node prisma/seed.ts",
     "test:unit": "vitest run",
