@@ -38,3 +38,4 @@ jobs:
           STRIPE_CANCEL_URL: ${{ secrets.STRIPE_CANCEL_URL }}
           UPSTASH_REDIS_PASSWORD: ${{ secrets.UPSTASH_REDIS_PASSWORD }}
           UPSTASH_REDIS_URL: ${{ secrets.UPSTASH_REDIS_URL }}
+          RUST_BACKTRACE: 1
