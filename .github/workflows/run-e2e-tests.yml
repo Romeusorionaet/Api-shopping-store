@@ -31,7 +31,9 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
 
       - name: Start services
-        run: docker-compose up -d
+        run: |
+          sudo docker-compose up -d
+          sudo chown -R $USER:$USER data/pg
 
       - name: Install dependencies
         run: npm ci
@@ -63,4 +65,5 @@ jobs:
           RUST_BACKTRACE: 1
 
       - name: Stop services
-        run: docker-compose down
+        run: |
+          sudo docker-compose down
