@@ -4,9 +4,9 @@ import {
   Product,
   ProductProps,
 } from "src/domain/store/enterprise/entities/product";
-import { ModeOfSale } from "@prisma/client";
 import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaProductMapper } from "src/infra/database/prisma/mappers/prisma-product-mapper";
+import { ModeOfSale } from "src/core/entities/mode-of-sale";
 
 export function makeProduct(
   override: Partial<ProductProps> = {},
