@@ -1,23 +1,20 @@
 version: '3.8'
 
-services: 
+services:
   apistore:
     container_name: api-store-pg
-    image: postgres
+    image: bitnami/postgresql
     ports:
       - 5432:5432
     environment:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: apiStore
-      PGDATA: /data/postgres
-    volumes:
-      - ./data/pg:/data/postgres
 
   cache:
     container_name: api-store-cache
     image: redis
     ports:
       - 6379:6379
-    volumes: 
+    volumes:
       - ./data/redis:/data

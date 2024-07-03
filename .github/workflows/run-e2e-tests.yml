@@ -1,0 +1,72 @@
+name: Run E2E Tests
+
+on: [pull_request, push]
+
+jobs:
+  run-e2e-tests:
+    name: Run E2E Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: bitnami/postgresql
+        ports:
+          - 5433:5432
+        env:
+          POSTGRES_USERNAME: postgres
+          POSTGRES_PASSWORD: docker
+          POSTGRES_DB: apiStore
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create data directories
+        run: |
+          mkdir -p data/pg
+          mkdir -p data/redis
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5433; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 5
+          done
+
+      - name: Run e2e tests
+        run: npm run test:e2e
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
+          COOKIE_PRIVATE_KEY: ${{ secrets.COOKIE_PRIVATE_KEY }}
+          DOMAIN_COOKIE_TOKEN: ${{ secrets.DOMAIN_COOKIE_TOKEN }}
+          SHOPPING_STORE_URL_WEB: ${{ secrets.SHOPPING_STORE_URL_WEB }}
+          CONFIRM_EMAIL_PAGE_STORE_URL_WEB: ${{ secrets.CONFIRM_EMAIL_PAGE_STORE_URL_WEB }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET_ID: ${{ secrets.GOOGLE_CLIENT_SECRET_ID }}
+          GOOGLE_CLIENT_REDIRECT_URL: ${{ secrets.GOOGLE_CLIENT_REDIRECT_URL }}
+          NODE_MAILER_EMAIL: ${{ secrets.NODE_MAILER_EMAIL }}
+          NODE_MAILER_PASS: ${{ secrets.NODE_MAILER_PASS }}
+          STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET_KEY: ${{ secrets.STRIPE_WEBHOOK_SECRET_KEY }}
+          STRIPE_SUCCESS_URL: ${{ secrets.STRIPE_SUCCESS_URL }}
+          STRIPE_CANCEL_URL: ${{ secrets.STRIPE_CANCEL_URL }}
+          UPSTASH_REDIS_PASSWORD: ${{ secrets.UPSTASH_REDIS_PASSWORD }}
+          UPSTASH_REDIS_URL: ${{ secrets.UPSTASH_REDIS_URL }}
+          RUST_BACKTRACE: 1
