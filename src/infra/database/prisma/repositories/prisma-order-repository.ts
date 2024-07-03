@@ -4,9 +4,9 @@ import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaOrderMapper } from "../mappers/prisma-order-mapper";
 import { PrismaOrderProductMapper } from "../mappers/prisma-order-product-mapper";
 import { PrismaBuyerAddressMapper } from "../mappers/prisma-buyer-address-mapper";
-import { OrderStatus } from "@prisma/client";
 import { PrismaProductRepository } from "./prisma-product-repository";
 import { ProductRatingRepository } from "src/domain/store/application/repositories/product-rating-repository";
+import { OrderStatus } from "src/core/entities/order-status";
 
 export class PrismaOrderRepository implements OrderRepository {
   constructor(
