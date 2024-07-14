@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "CI=false && tsup src --external supertest --external @faker-js/faker",
+    "build": "tsup src --external supertest --external @faker-js/faker",
     "start": "node dist/server.js",
     "seed": "ts-node prisma/seed.ts",
     "test:unit": "vitest run",
@@ -26,7 +26,7 @@
     "@fastify/cors": "9.0.1",
     "@fastify/jwt": "8.0.0",
     "@fastify/multipart": "8.2.0",
-    "@prisma/client": "5.14.0",
+    "@prisma/client": "5.16.2",
     "axios": "1.6.8",
     "bcryptjs": "2.4.3",
     "dayjs": "^1.11.10",
@@ -53,12 +53,12 @@
     "@types/supertest": "6.0.2",
     "eslint": "^8.56.0",
     "npm-run-all": "4.1.5",
-    "prisma": "5.14.0",
+    "prisma": "5.16.2",
     "supertest": "6.3.4",
     "tsx": "4.7.1",
     "typescript": "^5.3.3",
     "unplugin-swc": "1.4.4",
     "vite-tsconfig-paths": "^4.3.1",
-    "vitest": "1.3.1"
+    "vitest": "2.0.2"
   }
 }

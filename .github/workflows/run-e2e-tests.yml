@@ -1,6 +1,10 @@
 name: Run E2E Tests
 
-on: [pull_request, push]
+on:
+  push:
+    branches: [recovery-branch]
+  pull_request:
+    branches: [recovery-branch]
 
 jobs:
   run-e2e-tests:
