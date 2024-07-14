@@ -27,9 +27,10 @@ app.register(CORS, {
   origin: env.SHOPPING_STORE_URL_WEB,
   credentials: true,
   allowedHeaders: [
-    "content-type",
+    "Content-type",
     "Access-Control-Credentials",
     "Access-Control-Allow-Origin",
+    "Authorization",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
 });
