@@ -43,7 +43,7 @@ export class PrismaUserRepository implements UsersRepository {
       },
       data: {
         emailVerified: true,
-        validationId: "",
+        validationId: null,
       },
     });
 
