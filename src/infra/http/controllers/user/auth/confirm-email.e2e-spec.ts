@@ -36,6 +36,6 @@ describe("Confirm email (E2E)", () => {
     });
 
     expect(validationEmailUserOnDatabase?.emailVerified).toBeTruthy();
-    expect(validationEmailUserOnDatabase?.validationId).toEqual("");
+    expect(validationEmailUserOnDatabase?.validationId).toEqual(null);
   });
 });
