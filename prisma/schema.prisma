@@ -27,7 +27,7 @@ enum OrderStatusTracking {
 model User {
   id            String    @id @default(uuid())
   publicId      String    @unique @default(uuid()) @map("public_id")
-  validationId  String?   @unique @map("validation_id")
+  validationId  String?   @map("validation_id")
   username      String
   email         String    @unique
   passwordHash  String    @map("password_hash")
