@@ -12,6 +12,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { subSchema } from "../../schemas/sub-schema";
 import { z } from "zod";
 import { IOEmitNotificationRepository } from "src/infra/web-sockets/socket-io/io-notification-repository";
+import { NotificationFormatter } from "src/infra/web-sockets/formatter/notification-formatter";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   if (request.method !== "POST") {
@@ -48,12 +49,17 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 
     const orderId = result.value.order.id.toString();
 
+    const listOrderTitles = orderProducts.map((order) => order.title);
+
+    const formattedNotification =
+      NotificationFormatter.formatOrderNotification(listOrderTitles);
+
     const sendNotificationUseCase = makeSendNotificationUseCase();
 
     const resultNotification = await sendNotificationUseCase.execute({
       recipientId: buyerId,
-      title: "Pedido realizado a espera de um pagamento",
-      content: `Endereço do pedido: ${orderId}.`,
+      title: formattedNotification.title,
+      content: formattedNotification.content,
     });
 
     const notification = resultNotification.notification;

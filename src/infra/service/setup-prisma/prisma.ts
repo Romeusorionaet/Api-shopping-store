@@ -5,6 +5,4 @@ import { env } from "src/infra/env";
 config();
 console.log("Node env:", env.NODE_ENV);
 
-export const prisma = new PrismaClient({
-  log: env.NODE_ENV === "dev" ? ["query"] : [],
-});
+export const prisma = new PrismaClient();
