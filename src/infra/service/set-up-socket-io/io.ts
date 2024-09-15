@@ -1,4 +1,4 @@
-import { io } from "src/app";
+import { io } from "src/infra/app";
 import { env } from "src/infra/env";
 
 io.on("connection", (socket) => {

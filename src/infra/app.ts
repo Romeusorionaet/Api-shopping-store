@@ -1,17 +1,17 @@
-import { categoriesRoutes } from "./infra/http/controllers/category/routes";
-import { productsRoutes } from "./infra/http/controllers/products/routes";
-import { webhookRoutes } from "./infra/http/controllers/webhook/routes";
-import { authRoutes } from "./infra/http/controllers/user/auth/routes";
-import { buyerRoutes } from "./infra/http/controllers/buyer/routes";
-import { orderRoutes } from "./infra/http/controllers/order/routes";
-import { userRoutes } from "./infra/http/controllers/user/routes";
 import rawBody from "fastify-raw-body";
 import fastifyJWT from "@fastify/jwt";
 import { Server } from "socket.io";
-import { env } from "./infra/env";
 import CORS from "@fastify/cors";
 import { ZodError } from "zod";
 import fastify from "fastify";
+import { env } from "./env";
+import { categoriesRoutes } from "./http/controllers/category/routes";
+import { productsRoutes } from "./http/controllers/products/routes";
+import { userRoutes } from "./http/controllers/user/routes";
+import { orderRoutes } from "./http/controllers/order/routes";
+import { buyerRoutes } from "./http/controllers/buyer/routes";
+import { authRoutes } from "./http/controllers/user/auth/routes";
+import { webhookRoutes } from "./http/controllers/webhook/routes";
 
 export const app = fastify();
 

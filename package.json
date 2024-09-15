@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/infra/server.ts",
     "build": "tsup src --external supertest --external @faker-js/faker",
     "start": "node dist/server.js",
     "seed": "ts-node prisma/seed.ts",
@@ -27,6 +27,7 @@
     "@fastify/jwt": "8.0.0",
     "@fastify/multipart": "8.2.0",
     "@prisma/client": "5.16.2",
+    "api-shopping-store": "file:",
     "axios": "1.6.8",
     "bcryptjs": "2.4.3",
     "dayjs": "^1.11.10",

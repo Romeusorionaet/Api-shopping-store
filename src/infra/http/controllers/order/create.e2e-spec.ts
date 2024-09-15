@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app } from "src/app";
+import { app } from "src/infra/app";
 import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { ProductFactory } from "test/factories/make-product";

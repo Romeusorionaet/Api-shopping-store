@@ -1,5 +1,5 @@
 import { hash } from "bcryptjs";
-import { app } from "src/app";
+import { app } from "src/infra/app";
 import request from "supertest";
 import { UserFactory } from "test/factories/make-user";
 

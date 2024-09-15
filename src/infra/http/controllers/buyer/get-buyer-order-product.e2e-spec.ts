@@ -1,4 +1,4 @@
-import { app } from "src/app";
+import { app } from "src/infra/app";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import request from "supertest";
 import { makeBuyerAddress } from "test/factories/make-buyer-address";

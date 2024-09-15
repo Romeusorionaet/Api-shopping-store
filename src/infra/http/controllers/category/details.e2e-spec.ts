@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app } from "src/app";
+import { app } from "src/infra/app";
 import { CategoryFactory } from "test/factories/make-category";
 
 describe("Category Details (E2E)", () => {
