@@ -1,5 +1,5 @@
 import { Encrypter } from "src/domain/store/application/cryptography/encrypter";
-import { app } from "../../app";
+import { app } from "../app";
 import jwt from "jsonwebtoken";
 
 export class JwtEncrypter implements Encrypter {

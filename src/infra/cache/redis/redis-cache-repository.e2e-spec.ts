@@ -1,4 +1,4 @@
-import { app } from "src/app";
+import { app } from "src/infra/app";
 import { RedisCacheRepository } from "src/infra/cache/redis/redis-cache-repository";
 import { RedisService } from "src/infra/service/setup-cache/redis-service";
 

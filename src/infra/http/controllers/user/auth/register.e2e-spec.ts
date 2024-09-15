@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app } from "src/app";
+import { app } from "src/infra/app";
 
 describe("Register User (E2E)", () => {
   beforeAll(async () => {

@@ -1,4 +1,4 @@
-import { app } from "src/app";
+import { app } from "src/infra/app";
 import { prisma } from "src/infra/service/setup-prisma/prisma";
 import request from "supertest";
 import { CreateAndAuthenticateUserWithTokensFactory } from "test/factories/make-create-and-authenticate-user";
