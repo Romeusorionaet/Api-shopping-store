@@ -6,16 +6,23 @@ import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-rep
 import { makeTechnicalProductDetails } from "test/factories/make-technical-products-details";
 import { InMemoryTechnicalProductDetailsRepository } from "test/repositories/in-memory-technical-product-details-repository";
 import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 
 let productsRepository: InMemoryProductsRepository;
 let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let orderRepository: InMemoryOrdersRepository;
 let technicalProductDetailsRepository: InMemoryTechnicalProductDetailsRepository;
+let usersRepository: InMemoryUsersRepository;
 let sut: GetProductDetailsUseCase;
 
 describe("Get Product Details", () => {
   beforeEach(() => {
-    orderRepository = new InMemoryOrdersRepository(productsRepository);
+    usersRepository = new InMemoryUsersRepository();
+
+    orderRepository = new InMemoryOrdersRepository(
+      productsRepository,
+      usersRepository,
+    );
 
     productDataStoreRepository = new InMemoryProductDataStoreRepository();
 
@@ -23,8 +30,6 @@ describe("Get Product Details", () => {
       productDataStoreRepository,
       orderRepository,
     );
-
-    orderRepository = new InMemoryOrdersRepository(productsRepository);
 
     technicalProductDetailsRepository =
       new InMemoryTechnicalProductDetailsRepository();

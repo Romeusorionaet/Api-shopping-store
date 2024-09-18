@@ -9,17 +9,23 @@ import { makeTechnicalProductDetails } from "test/factories/make-technical-produ
 import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 import { InMemoryTechnicalProductDetailsRepository } from "test/repositories/in-memory-technical-product-details-repository";
 import { ModeOfSale } from "src/core/entities/mode-of-sale";
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 
 let productsRepository: InMemoryProductsRepository;
 let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let categoryRepository: InMemoryCategoriesRepository;
 let orderRepository: InMemoryOrdersRepository;
 let technicalProductDetailsRepository: InMemoryTechnicalProductDetailsRepository;
+let usersRepository: InMemoryUsersRepository;
 let sut: CreateProductUseCase;
 
 describe("Create Product", () => {
   beforeEach(() => {
-    orderRepository = new InMemoryOrdersRepository(productsRepository);
+    usersRepository = new InMemoryUsersRepository();
+    orderRepository = new InMemoryOrdersRepository(
+      productsRepository,
+      usersRepository,
+    );
 
     productDataStoreRepository = new InMemoryProductDataStoreRepository();
 

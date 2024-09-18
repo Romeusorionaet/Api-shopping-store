@@ -28,11 +28,14 @@ describe("Purchase Order", () => {
       orderRepository,
     );
 
-    orderRepository = new InMemoryOrdersRepository(productRepository);
+    usersRepository = new InMemoryUsersRepository();
+
+    orderRepository = new InMemoryOrdersRepository(
+      productRepository,
+      usersRepository,
+    );
 
     userAddressRepository = new InMemoryUsersAddressRepository();
-
-    usersRepository = new InMemoryUsersRepository();
 
     sut = new PurchaseOrderUseCase(
       orderRepository,

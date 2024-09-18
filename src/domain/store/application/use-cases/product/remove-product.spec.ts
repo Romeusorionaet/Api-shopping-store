@@ -3,17 +3,24 @@ import { RemoveProductUseCase } from "./remove-product";
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
 import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 
 let productsRepository: InMemoryProductsRepository;
 let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let orderRepository: InMemoryOrdersRepository;
+let usersRepository: InMemoryUsersRepository;
 let sut: RemoveProductUseCase;
 
 describe("Remove Product", () => {
   beforeEach(() => {
     productDataStoreRepository = new InMemoryProductDataStoreRepository();
 
-    orderRepository = new InMemoryOrdersRepository(productsRepository);
+    usersRepository = new InMemoryUsersRepository();
+
+    orderRepository = new InMemoryOrdersRepository(
+      productsRepository,
+      usersRepository,
+    );
 
     productsRepository = new InMemoryProductsRepository(
       productDataStoreRepository,

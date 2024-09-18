@@ -1,5 +1,8 @@
 import { Either, left, right } from "src/core/either";
-import { OrderRepository } from "../../repositories/order-repository";
+import {
+  ConfirmPaymentResponse,
+  OrderRepository,
+} from "../../repositories/order-repository";
 
 import { OrderNotFoundError } from "../errors/order-not-found-error";
 
@@ -7,7 +10,10 @@ interface ConfirmOrderPaymentUseCaseRequest {
   orderId: string;
 }
 
-type ConfirmOrderPaymentUseCaseResponse = Either<OrderNotFoundError, object>;
+type ConfirmOrderPaymentUseCaseResponse = Either<
+  OrderNotFoundError,
+  ConfirmPaymentResponse
+>;
 
 export class ConfirmOrderPaymentUseCase {
   constructor(private orderRepository: OrderRepository) {}
@@ -21,8 +27,12 @@ export class ConfirmOrderPaymentUseCase {
       return left(new OrderNotFoundError());
     }
 
-    await this.orderRepository.confirmPayment(orderId);
+    const result = await this.orderRepository.confirmPayment(orderId);
 
-    return right({});
+    return right({
+      buyerId: result.buyerId,
+      publicId: result.publicId,
+      listOrderTitles: result.listOrderTitles,
+    });
   }
 }
