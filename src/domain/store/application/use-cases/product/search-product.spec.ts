@@ -5,16 +5,23 @@ import { makeCategory } from "test/factories/make-category";
 import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
 import { InMemoryProductRatingRepository } from "test/repositories/in-memory-product-rating-repository";
 import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 
 let productsRepository: InMemoryProductsRepository;
 let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let orderRepository: InMemoryOrdersRepository;
 let productRatingRepository: InMemoryProductRatingRepository;
+let usersRepository: InMemoryUsersRepository;
 let sut: SearchProductsUseCase;
 
 describe("Search Products", () => {
   beforeEach(() => {
-    orderRepository = new InMemoryOrdersRepository(productsRepository);
+    usersRepository = new InMemoryUsersRepository();
+
+    orderRepository = new InMemoryOrdersRepository(
+      productsRepository,
+      usersRepository,
+    );
 
     productDataStoreRepository = new InMemoryProductDataStoreRepository();
 

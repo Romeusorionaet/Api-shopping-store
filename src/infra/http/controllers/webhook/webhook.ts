@@ -3,6 +3,8 @@ import { OrderNotFoundError } from "src/domain/store/application/use-cases/error
 import { makeConfirmOderPaymentUseCase } from "src/domain/store/application/use-cases/order/factory/make-confirm-order-payment-use-case";
 import { StripeConstructorEventRepository } from "src/infra/gateway-payment/stripe/stripe-constructor-event-repository";
 import { stripe } from "src/infra/service/setup-stripe/stripe";
+import { makeNotificationProcess } from "../../helpers/make-notification-process";
+import { NotificationFormatter } from "src/infra/web-sockets/formatter/notification-formatter";
 
 export async function webhook(request: FastifyRequest, reply: FastifyReply) {
   const signature = request.headers?.["stripe-signature"];
@@ -49,6 +51,17 @@ export async function webhook(request: FastifyRequest, reply: FastifyReply) {
       if (result.isLeft()) {
         reply.status(400).send({
           OrderNotFoundError,
+        });
+      } else {
+        const formattedNotification =
+          NotificationFormatter.notifyPaymentSuccess(
+            result.value.listOrderTitles,
+          );
+
+        await makeNotificationProcess({
+          publicId: result.value.publicId,
+          buyerId: result.value.buyerId,
+          formattedNotification,
         });
       }
 

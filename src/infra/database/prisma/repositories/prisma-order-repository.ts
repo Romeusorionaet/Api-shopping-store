@@ -1,4 +1,7 @@
-import { OrderRepository } from "src/domain/store/application/repositories/order-repository";
+import {
+  ConfirmPaymentResponse,
+  OrderRepository,
+} from "src/domain/store/application/repositories/order-repository";
 import { Order } from "src/domain/store/enterprise/entities/order";
 import { prisma } from "src/infra/service/setup-prisma/prisma";
 import { PrismaOrderMapper } from "../mappers/prisma-order-mapper";
@@ -29,7 +32,7 @@ export class PrismaOrderRepository implements OrderRepository {
     return PrismaOrderMapper.toDomain(order);
   }
 
-  async confirmPayment(orderId: string): Promise<void> {
+  async confirmPayment(orderId: string): Promise<ConfirmPaymentResponse> {
     const order = await prisma.order.update({
       where: { id: orderId },
       data: {
@@ -37,6 +40,11 @@ export class PrismaOrderRepository implements OrderRepository {
       },
       include: {
         orderProducts: true,
+        user: {
+          select: {
+            publicId: true,
+          },
+        },
       },
     });
 
@@ -50,6 +58,12 @@ export class PrismaOrderRepository implements OrderRepository {
         orderProduct.productId.toString(),
       ),
     );
+
+    return {
+      buyerId: order.buyerId,
+      publicId: order.user.publicId,
+      listOrderTitles: order.orderProducts.map((item) => item.title),
+    };
   }
 
   async create(order: Order): Promise<void> {
