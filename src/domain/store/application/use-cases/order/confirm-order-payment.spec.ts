@@ -8,6 +8,7 @@ import { makeOrderProduct } from "test/factories/make-order-product";
 import { makeProduct } from "test/factories/make-product";
 import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
+import { makeUser } from "test/factories/make-user";
 
 let orderRepository: InMemoryOrdersRepository;
 let productDataStoreRepository: InMemoryProductDataStoreRepository;
@@ -35,16 +36,20 @@ describe("Confirm Order Payment", () => {
   });
 
   test("should be able to confirm a order payment", async () => {
+    const user = await makeUser({}, new UniqueEntityID("test-buyer-id"));
+
+    await usersRepository.create(user);
+
     const order = await makeOrder(
       {
-        buyerId: new UniqueEntityID("test-buyer-id"),
+        buyerId: user.id,
       },
       new UniqueEntityID("test-order-id"),
     );
 
     await orderRepository.create(order);
 
-    const user = await usersRepository.findById(order.buyerId.toString());
+    const userSaved = await usersRepository.findById(order.buyerId.toString());
 
     const result = await sut.execute({ orderId: order.id.toString() });
 
@@ -53,7 +58,7 @@ describe("Confirm Order Payment", () => {
     if (result.isRight()) {
       expect(result.value).toEqual(
         expect.objectContaining({
-          publicId: user?.publicId.toString(),
+          publicId: userSaved?.publicId.toString(),
           buyerId: order.buyerId.toString(),
           listOrderTitles: order.orderProducts.map((order) => order.title),
         }),
@@ -69,6 +74,10 @@ describe("Confirm Order Payment", () => {
   });
 
   test("should be able to decrement product stock quantity", async () => {
+    const user = await makeUser({}, new UniqueEntityID("test-buyer-id-02"));
+
+    await usersRepository.create(user);
+
     const productFirst = makeProduct({
       title: "Cell Phone",
       stockQuantity: 10,
@@ -98,7 +107,7 @@ describe("Confirm Order Payment", () => {
     orderProducts.push(orderProductSecond);
 
     const order = await makeOrder({
-      buyerId: new UniqueEntityID("test-buyer-id-01"),
+      buyerId: user.id,
       orderProducts,
     });
 
