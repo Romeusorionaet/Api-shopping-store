@@ -25,7 +25,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
       }
     }
 
-    return reply.status(201).send();
+    return reply.status(201).send({ message: "Categoria criado com sucesso!" });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return reply.status(400).send({
