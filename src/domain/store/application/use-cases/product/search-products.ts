@@ -9,6 +9,7 @@ interface SearchProductsUseCaseRequest {
   query: string;
   section: string | null;
   page: number;
+  categoryId: string | null;
 }
 
 type SearchProductsUseCaseResponse = Either<
@@ -28,7 +29,21 @@ export class SearchProductsUseCase {
     query,
     section,
     page,
+    categoryId,
   }: SearchProductsUseCaseRequest): Promise<SearchProductsUseCaseResponse> {
+    if (categoryId && !query) {
+      const products = await this.productRepository.findManyByCategoryId(
+        categoryId,
+        page,
+      );
+
+      if (!products) {
+        return left(new ProductNotFoundError(query));
+      }
+
+      return right({ products });
+    }
+
     const thisIsStarsSection =
       section && section === SectionForSearch.STARS && !query;
 

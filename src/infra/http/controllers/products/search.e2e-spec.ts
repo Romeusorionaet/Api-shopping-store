@@ -46,7 +46,7 @@ describe("Search Products (E2E)", () => {
     });
   });
 
-  test("[GET] /products/search - should not be able to search with a section", async () => {
+  test("[GET] /products/search - should be able to search with a section", async () => {
     const category = await categoryFactory.makePrismaCategory();
 
     await Promise.all([
@@ -71,6 +71,43 @@ describe("Search Products (E2E)", () => {
     expect(response.body).toEqual({
       products: expect.arrayContaining([
         expect.objectContaining({ title: "product title 04", stars: 10 }),
+      ]),
+    });
+  });
+
+  test("[GET] /products/search - should be able to search by category Id", async () => {
+    const category = await categoryFactory.makePrismaCategory({
+      title: "xiaomi",
+    });
+    const categorySecond = await categoryFactory.makePrismaCategory({
+      title: "iphone",
+    });
+
+    await Promise.all([
+      productFactory.makePrismaProduct({
+        categoryId: category.id,
+        categoryTitle: category.title,
+        title: "readme note 7 pro",
+      }),
+
+      productFactory.makePrismaProduct({
+        categoryId: category.id,
+        categoryTitle: categorySecond.title,
+        title: "iphone 15",
+      }),
+    ]);
+
+    const response = await request(app.server)
+      .get("/products/search")
+      .query({ page: 1, categoryId: category.id });
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toEqual({
+      products: expect.arrayContaining([
+        expect.objectContaining({
+          categoryTitle: "xiaomi",
+          title: "readme note 7 pro",
+        }),
       ]),
     });
   });
