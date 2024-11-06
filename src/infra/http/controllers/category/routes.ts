@@ -6,7 +6,7 @@ import { update } from "./update";
 import { remove } from "./remove-category";
 
 export async function categoriesRoutes(app: FastifyInstance) {
-  app.post("/category", create);
+  app.post("/category/create", create);
   app.get("/category/details/:categoryId", details);
   app.get("/categories", fetchCategories);
   app.put("/category/update", update);

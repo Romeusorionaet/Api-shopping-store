@@ -12,7 +12,7 @@ describe("Create Category (E2E)", () => {
   });
 
   test("[POST] /category", async () => {
-    const response = await request(app.server).post("/category").send({
+    const response = await request(app.server).post("/category/create").send({
       title: "category test title create 01",
       imgUrl: "http://teste.com.br",
     });
@@ -29,12 +29,12 @@ describe("Create Category (E2E)", () => {
   });
 
   test("[POST] should not be able to create a category twice with the same title", async () => {
-    await request(app.server).post("/category").send({
+    await request(app.server).post("/category/create").send({
       title: "category test title twice 02",
       imgUrl: "http://teste.com.br",
     });
 
-    const response = await request(app.server).post("/category").send({
+    const response = await request(app.server).post("/category/create").send({
       title: "category test title twice 02",
       imgUrl: "http://teste.com.br",
     });
