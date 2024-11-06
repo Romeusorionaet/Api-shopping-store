@@ -1,5 +1,8 @@
 import { PaginationParams } from "src/core/repositories/pagination-params";
-import { CategoryRepository } from "src/domain/store/application/repositories/category-repository";
+import {
+  CategoriesBasicDataProps,
+  CategoryRepository,
+} from "src/domain/store/application/repositories/category-repository";
 import { Category } from "src/domain/store/enterprise/entities/category";
 import { PrismaCategoryMapper } from "../mappers/prisma-category-mapper";
 import { prisma } from "src/infra/service/setup-prisma/prisma";
@@ -53,7 +56,15 @@ export class PrismaCategoryRepository implements CategoryRepository {
     return categoryMapped;
   }
 
-  async findMany({ page }: PaginationParams): Promise<Category[]> {
+  async findMany({
+    page,
+  }: PaginationParams): Promise<Category[] | CategoriesBasicDataProps[]> {
+    if (!page) {
+      const categories = await this.findManyBasicData();
+
+      return categories;
+    }
+
     const cacheKey = `${CacheKeysPrefix.CATEGORY_LIST}:allCategories:${page}`;
 
     const cacheHit = await this.cacheRepository.get(cacheKey);
@@ -81,6 +92,37 @@ export class PrismaCategoryRepository implements CategoryRepository {
     );
 
     return categoriesMapped;
+  }
+
+  async findManyBasicData(): Promise<CategoriesBasicDataProps[]> {
+    const cacheKey = `${CacheKeysPrefix.CATEGORY_LIST}:allCategoriesBasicData`;
+
+    const cacheHit = await this.cacheRepository.get(cacheKey);
+
+    if (cacheHit) {
+      const cacheData = JSON.parse(cacheHit);
+
+      return cacheData;
+    }
+
+    const categories = await prisma.category.findMany({
+      take: QuantityOfCategory.PER_PAGE,
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+
+    await this.cacheRepository.set(
+      cacheKey,
+      JSON.stringify(categories),
+      CacheTimeInMinutes.categoryTime,
+    );
+
+    return categories;
   }
 
   async findByTitle(title: string): Promise<Category | null> {

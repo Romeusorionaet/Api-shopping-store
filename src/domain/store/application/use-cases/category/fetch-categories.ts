@@ -1,15 +1,18 @@
 import { Either, right } from "src/core/either";
 import { Category } from "../../../enterprise/entities/category";
-import { CategoryRepository } from "../../repositories/category-repository";
+import {
+  CategoriesBasicDataProps,
+  CategoryRepository,
+} from "../../repositories/category-repository";
 
 interface FetchCategoriesUseCaseRequest {
-  page: number;
+  page?: number;
 }
 
 type FetchCategoriesUseCaseResponse = Either<
   null,
   {
-    categories: Category[];
+    categories: Category[] | CategoriesBasicDataProps[];
   }
 >;
 
