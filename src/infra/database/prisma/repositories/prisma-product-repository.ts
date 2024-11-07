@@ -38,7 +38,7 @@ export class PrismaProductRepository implements ProductRepository {
       orderBy: {
         createdAt: "desc",
       },
-      skip: (page - 1) * QuantityOfProducts.PER_PAGE,
+      skip: ((page || 1) - 1) * QuantityOfProducts.PER_PAGE,
       take: QuantityOfProducts.PER_PAGE,
     });
 
@@ -135,24 +135,24 @@ export class PrismaProductRepository implements ProductRepository {
       return cacheData.map(PrismaProductMapper.toDomain);
     }
 
-    const queryWords = query.toLowerCase().split(" ");
+    const queryWords = query.toLowerCase();
 
     const products = await prisma.product.findMany({
       where: {
-        OR: queryWords.flatMap((word) => [
+        OR: [
           {
             title: {
-              contains: word,
+              contains: queryWords,
               mode: "insensitive",
             },
           },
           {
             categoryTitle: {
-              contains: word,
+              contains: queryWords,
               mode: "insensitive",
             },
           },
-        ]),
+        ],
       },
       skip: (page - 1) * QuantityOfProducts.PER_PAGE,
       take: QuantityOfProducts.PER_PAGE,
