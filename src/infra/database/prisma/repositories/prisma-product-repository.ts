@@ -180,7 +180,7 @@ export class PrismaProductRepository implements ProductRepository {
     });
 
     await this.cacheRepository.delete(
-      `${CacheKeysPrefix.PRODUCT}:${product.id}`,
+      `${CacheKeysPrefix.PRODUCT}:unique:${product.id}`,
     );
 
     await this.cacheRepository.deleteCacheByPattern(

@@ -7,21 +7,21 @@ import { productUpdateSchema } from "../../schemas/product-schema";
 
 export async function update(request: FastifyRequest, reply: FastifyReply) {
   try {
-    const productData = productUpdateSchema.parse(request.body);
+    const { product } = productUpdateSchema.parse(request.body);
 
     const updateProductUseCase = makeUpdateProductUseCase();
 
-    const result = await updateProductUseCase.execute(productData);
+    const result = await updateProductUseCase.execute(product);
 
     if (result.isLeft()) {
       const err = result.value;
       switch (err.constructor) {
         case ProductNotFoundError:
-          return reply.status(400).send({
+          return reply.status(404).send({
             error: err.message,
           });
         case TechnicalProductNotFoundError:
-          return reply.status(400).send({
+          return reply.status(404).send({
             error: err.message,
           });
 
@@ -30,9 +30,12 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
       }
     }
 
-    return reply.status(201).send();
+    return reply
+      .status(201)
+      .send({ message: "Produto atualizado com sucesso!" });
   } catch (err) {
     if (err instanceof z.ZodError) {
+      console.log(err.errors[0].path, "====err");
       return reply.status(400).send({
         error: err.errors[0].message,
         error_path: err.errors[0].path,

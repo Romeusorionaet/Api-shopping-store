@@ -81,8 +81,8 @@ describe("Create Product", () => {
       discountPercentage: product.discountPercentage,
       corsList: product.corsList,
       placeOfSale: ModeOfSale.ONLINE_STORE,
+      technicalProductId: technicalProduct.id.toString(),
       technicalProductDetails: {
-        technicalProductId: technicalProduct.id.toString(),
         brand: "Iphone",
         ram: technicalProduct.ram,
         rom: technicalProduct.rom,
