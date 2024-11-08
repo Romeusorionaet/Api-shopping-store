@@ -8,7 +8,7 @@ import { fetchProductsByCategory } from "./fetch-products-by-category";
 import { remove } from "./remove";
 
 export async function productsRoutes(app: FastifyInstance) {
-  app.post("/product", create);
+  app.post("/product/create", create);
   app.get("/products/search", search);
   app.get("/products", fetchProducts);
   app.get("/products/same-category", fetchProductsByCategory);

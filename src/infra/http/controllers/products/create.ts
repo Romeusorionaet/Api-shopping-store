@@ -8,11 +8,11 @@ import { z } from "zod";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   try {
-    const productData = productCreateSchema.parse(request.body);
+    const { product } = productCreateSchema.parse(request.body);
 
     const createProductUseCase = makeCreateProductUseCase();
 
-    const result = await createProductUseCase.execute(productData);
+    const result = await createProductUseCase.execute(product);
 
     if (result.isLeft()) {
       const err = result.value;
@@ -28,7 +28,9 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
       }
     }
 
-    return reply.status(201).send();
+    return reply
+      .status(201)
+      .send({ message: "Produto registrado com sucesso!" });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return reply.status(400).send({
