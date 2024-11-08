@@ -25,7 +25,7 @@ describe("Update Product (E2E)", () => {
   test("[PUT] /product/update", async () => {
     const category = await categoryFactory.makePrismaCategory();
 
-    const product = await productFactory.makePrismaProduct({
+    const productCreated = await productFactory.makePrismaProduct({
       categoryId: category.id,
       title: "product register 01",
       description: "description for product",
@@ -34,41 +34,45 @@ describe("Update Product (E2E)", () => {
 
     const technicalProduct =
       await technicalProductDetailsFactory.makePrismaTechnicalProductDetails({
-        productId: product.id,
+        productId: productCreated.id,
         brand: "Moto G",
       });
 
+    const product = {
+      id: productCreated.id.toString(),
+      technicalProductId: technicalProduct.id.toString(),
+      categoryId: category.id.toString(),
+      categoryTitle: category.title,
+      title: "product 01 updated",
+      description: "description for product updated",
+      price: 150,
+      imgUrlList: productCreated.imgUrlList,
+      stockQuantity: productCreated.stockQuantity,
+      minimumQuantityStock: productCreated.minimumQuantityStock,
+      discountPercentage: productCreated.discountPercentage,
+      corsList: productCreated.corsList,
+      placeOfSale: productCreated.placeOfSale,
+      technicalProductDetails: {
+        brand: "Iphone",
+        ram: technicalProduct.ram,
+        rom: technicalProduct.rom,
+        width: technicalProduct.width,
+        height: technicalProduct.height,
+        weight: technicalProduct.weight,
+        model: technicalProduct.model,
+        averageBatteryLife: technicalProduct.averageBatteryLife,
+        batteryCapacity: technicalProduct.batteryCapacity,
+        operatingSystem: technicalProduct.operatingSystem,
+        processorBrand: technicalProduct.processorBrand,
+        screenOrWatchFace: technicalProduct.screenOrWatchFace,
+        videoCaptureResolution: technicalProduct.videoCaptureResolution,
+        videoResolution: technicalProduct.videoResolution,
+      },
+    };
+
     const response = await request(app.server)
       .put("/product/update")
-      .send({
-        id: product.id.toString(),
-        title: "product 01 updated",
-        description: "description for product updated",
-        price: 150,
-        imgUrlList: product.imgUrlList,
-        stockQuantity: product.stockQuantity,
-        minimumQuantityStock: product.minimumQuantityStock,
-        discountPercentage: product.discountPercentage,
-        corsList: product.corsList,
-        placeOfSale: product.placeOfSale,
-        technicalProductDetails: {
-          technicalProductId: technicalProduct.id.toString(),
-          brand: "Iphone",
-          ram: technicalProduct.ram,
-          rom: technicalProduct.rom,
-          width: technicalProduct.width,
-          height: technicalProduct.height,
-          weight: technicalProduct.weight,
-          model: technicalProduct.model,
-          averageBatteryLife: technicalProduct.averageBatteryLife,
-          batteryCapacity: technicalProduct.batteryCapacity,
-          operatingSystem: technicalProduct.operatingSystem,
-          processorBrand: technicalProduct.processorBrand,
-          screenOrWatchFace: technicalProduct.screenOrWatchFace,
-          videoCaptureResolution: technicalProduct.videoCaptureResolution,
-          videoResolution: technicalProduct.videoResolution,
-        },
-      });
+      .send({ product });
 
     expect(response.statusCode).toEqual(201);
 

@@ -1,4 +1,4 @@
-import { Encrypter } from "src/domain/store/application/cryptography/encrypter";
+import type { Encrypter } from "src/domain/store/application/cryptography/encrypter";
 import { app } from "../app";
 import jwt from "jsonwebtoken";
 
@@ -11,7 +11,7 @@ export class JwtEncrypter implements Encrypter {
     jwt.decode(token, { complete: true });
 
     const accessToken = app.jwt.sign(payload, {
-      expiresIn: "30m",
+      expiresIn: "60m",
       algorithm: "HS512",
     });
 
@@ -24,7 +24,7 @@ export class JwtEncrypter implements Encrypter {
     jwt.decode(token, { complete: true });
 
     const refreshToken = app.jwt.sign(payload, {
-      expiresIn: "60m",
+      expiresIn: "120m",
       algorithm: "HS512",
     });
 

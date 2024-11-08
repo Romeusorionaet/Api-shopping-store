@@ -1,5 +1,8 @@
 import { PaginationParams } from "src/core/repositories/pagination-params";
-import { CategoryRepository } from "src/domain/store/application/repositories/category-repository";
+import {
+  CategoriesBasicDataProps,
+  CategoryRepository,
+} from "src/domain/store/application/repositories/category-repository";
 import { Category } from "src/domain/store/enterprise/entities/category";
 
 export class InMemoryCategoriesRepository implements CategoryRepository {
@@ -19,12 +22,29 @@ export class InMemoryCategoriesRepository implements CategoryRepository {
     return category;
   }
 
-  async findMany({ page }: PaginationParams): Promise<Category[]> {
+  async findMany({
+    page,
+  }: PaginationParams): Promise<Category[] | CategoriesBasicDataProps[]> {
+    if (!page) {
+      const categories = await this.findManyBasicData();
+
+      return categories;
+    }
+
     const perPage = 10;
 
     const startIndex = (page - 1) * perPage;
     const endIndex = startIndex + perPage;
     const categories = this.items.slice(startIndex, endIndex);
+
+    return categories;
+  }
+
+  async findManyBasicData(): Promise<CategoriesBasicDataProps[]> {
+    const categories = this.items.map((category) => ({
+      id: category.id.toString(),
+      title: category.title,
+    }));
 
     return categories;
   }

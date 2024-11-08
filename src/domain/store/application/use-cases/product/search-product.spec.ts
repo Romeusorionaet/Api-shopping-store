@@ -51,7 +51,12 @@ describe("Search Products", () => {
       productsRepository.create(products3),
     ]);
 
-    const result = await sut.execute({ query: "java", section: "", page: 1 });
+    const result = await sut.execute({
+      query: "java",
+      section: "",
+      page: 1,
+      categoryId: "",
+    });
 
     expect(result.isRight()).toBe(true);
 
@@ -69,6 +74,7 @@ describe("Search Products", () => {
       query: "product",
       section: "",
       page: 2,
+      categoryId: "",
     });
 
     if (result.isRight()) {
@@ -105,7 +111,12 @@ describe("Search Products", () => {
       productsRepository.create(thirdProduct),
     ]);
 
-    const result = await sut.execute({ query: "first", section: "", page: 1 });
+    const result = await sut.execute({
+      query: "first",
+      section: "",
+      page: 1,
+      categoryId: "",
+    });
 
     expect(result.isRight()).toBe(true);
 
@@ -140,6 +151,7 @@ describe("Search Products", () => {
       query: "",
       section: "discountPercentage",
       page: 1,
+      categoryId: "",
     });
 
     expect(result.isRight()).toBe(true);
@@ -183,6 +195,7 @@ describe("Search Products", () => {
       query: "",
       section: "stars",
       page: 1,
+      categoryId: "",
     });
 
     expect(result.isRight()).toBe(true);

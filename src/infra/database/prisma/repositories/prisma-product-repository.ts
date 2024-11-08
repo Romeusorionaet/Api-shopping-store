@@ -38,7 +38,7 @@ export class PrismaProductRepository implements ProductRepository {
       orderBy: {
         createdAt: "desc",
       },
-      skip: (page - 1) * QuantityOfProducts.PER_PAGE,
+      skip: ((page || 1) - 1) * QuantityOfProducts.PER_PAGE,
       take: QuantityOfProducts.PER_PAGE,
     });
 
@@ -135,24 +135,24 @@ export class PrismaProductRepository implements ProductRepository {
       return cacheData.map(PrismaProductMapper.toDomain);
     }
 
-    const queryWords = query.toLowerCase().split(" ");
+    const queryWords = query.toLowerCase();
 
     const products = await prisma.product.findMany({
       where: {
-        OR: queryWords.flatMap((word) => [
+        OR: [
           {
             title: {
-              contains: word,
+              contains: queryWords,
               mode: "insensitive",
             },
           },
           {
             categoryTitle: {
-              contains: word,
+              contains: queryWords,
               mode: "insensitive",
             },
           },
-        ]),
+        ],
       },
       skip: (page - 1) * QuantityOfProducts.PER_PAGE,
       take: QuantityOfProducts.PER_PAGE,
@@ -180,7 +180,7 @@ export class PrismaProductRepository implements ProductRepository {
     });
 
     await this.cacheRepository.delete(
-      `${CacheKeysPrefix.PRODUCT}:${product.id}`,
+      `${CacheKeysPrefix.PRODUCT}:unique:${product.id}`,
     );
 
     await this.cacheRepository.deleteCacheByPattern(
@@ -205,7 +205,7 @@ export class PrismaProductRepository implements ProductRepository {
       });
 
       await this.cacheRepository.delete(
-        `${CacheKeysPrefix.PRODUCT}:${productSold.id}`,
+        `${CacheKeysPrefix.PRODUCT}:unique:${productSold.id}`,
       );
     }
 
@@ -221,7 +221,9 @@ export class PrismaProductRepository implements ProductRepository {
       },
     });
 
-    await this.cacheRepository.delete(`${CacheKeysPrefix.PRODUCT}:${id}`);
+    await this.cacheRepository.delete(
+      `${CacheKeysPrefix.PRODUCT}:unique:${id}`,
+    );
 
     await this.cacheRepository.deleteCacheByPattern(
       `${CacheKeysPrefix.PRODUCTS_LIST}:*`,

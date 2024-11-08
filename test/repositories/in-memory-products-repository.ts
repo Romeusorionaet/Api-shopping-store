@@ -32,7 +32,7 @@ export class InMemoryProductsRepository implements ProductRepository {
   async findMany({ page }: PaginationParams): Promise<Product[]> {
     const perPage = 10;
 
-    const startIndex = (page - 1) * perPage;
+    const startIndex = ((page || 1) - 1) * perPage;
     const endIndex = startIndex + perPage;
     const products = this.dataStore.items.slice(startIndex, endIndex);
 

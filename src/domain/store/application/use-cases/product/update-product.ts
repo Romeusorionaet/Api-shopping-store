@@ -17,8 +17,8 @@ interface UpdateProductUseCaseRequest {
   minimumQuantityStock: number;
   discountPercentage: number;
   placeOfSale: ModeOfSale;
+  technicalProductId: string;
   technicalProductDetails: {
-    technicalProductId: string;
     width: string;
     height: string;
     weight: string;
@@ -60,8 +60,8 @@ export class UpdateProductUseCase {
     minimumQuantityStock,
     discountPercentage,
     placeOfSale,
+    technicalProductId,
     technicalProductDetails: {
-      technicalProductId,
       width,
       height,
       weight,

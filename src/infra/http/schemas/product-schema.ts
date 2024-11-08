@@ -19,11 +19,11 @@ const baseProductSchema = z.object({
   minimumQuantityStock: z.coerce.number(),
   discountPercentage: z.coerce.number(),
   placeOfSale: z.nativeEnum(ModeOfSale),
+  categoryId: z.string(),
+  categoryTitle: z.string(),
 });
 
 const additionalProductCreateSchema = z.object({
-  categoryId: z.string(),
-  categoryTitle: z.string(),
   technicalProductDetails: z.object({
     width: z.string(),
     height: z.string(),
@@ -44,8 +44,8 @@ const additionalProductCreateSchema = z.object({
 
 const additionalProductUpdateSchema = z.object({
   id: z.string().uuid(),
+  technicalProductId: z.string().uuid(),
   technicalProductDetails: z.object({
-    technicalProductId: z.string().uuid(),
     width: z.string(),
     height: z.string(),
     weight: z.string(),
@@ -63,8 +63,10 @@ const additionalProductUpdateSchema = z.object({
   }),
 });
 
-export const productCreateSchema =
-  additionalProductCreateSchema.merge(baseProductSchema);
+export const productCreateSchema = z.object({
+  product: additionalProductCreateSchema.merge(baseProductSchema),
+});
 
-export const productUpdateSchema =
-  additionalProductUpdateSchema.merge(baseProductSchema);
+export const productUpdateSchema = z.object({
+  product: additionalProductUpdateSchema.merge(baseProductSchema),
+});

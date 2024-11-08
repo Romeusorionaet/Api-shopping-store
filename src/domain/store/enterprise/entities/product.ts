@@ -115,7 +115,7 @@ export class Product extends Entity<ProductProps> {
     props: Optional<ProductProps, "createdAt" | "slug">,
     id?: UniqueEntityID,
   ) {
-    const product = new Product(
+    return new Product(
       {
         ...props,
         slug: props.slug ?? Slug.createFromText(props.title),
@@ -123,10 +123,13 @@ export class Product extends Entity<ProductProps> {
       },
       id,
     );
-    return product;
   }
 
   update(props: Partial<ProductProps>): Product {
+    if (props.title) {
+      this.title = props.title;
+    }
+
     return new Product(
       {
         ...this.props,
