@@ -24,6 +24,17 @@ enum OrderStatusTracking {
   PRODUCT_DELIVERED_TO_CLIENT
 }
 
+enum ActivityStatus {
+  CREATED
+  UPDATED
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  SUPPORT
+}
+
 model User {
   id            String    @id @default(uuid())
   publicId      String    @unique @default(uuid()) @map("public_id")
@@ -36,11 +47,23 @@ model User {
   updatedAt     DateTime? @default(now()) @updatedAt @map("updated_at")
   createdAt     DateTime  @default(now()) @map("created_at")
 
+  staff        Staff[]
   order        Order[]
   buyerAddress BuyerAddress[]
   notification Notification[]
 
   @@map("users")
+}
+
+model Staff {
+  id       String  @id @default(uuid())
+  role     Role
+  isActive Boolean @default(false) @map("is_active")
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  activityRecord ActivityRecord[]
 }
 
 model UserAddress {
@@ -195,4 +218,14 @@ model Notification {
   recipient User @relation(fields: [recipientId], references: [id])
 
   @@map("notifications")
+}
+
+model ActivityRecord {
+  id          String         @id @default(uuid())
+  dateTimeIso String         @map("date_time_iso")
+  status      ActivityStatus @map("activity_status")
+  commit      String
+
+  staffId String
+  staff   Staff  @relation(fields: [staffId], references: [id])
 }
