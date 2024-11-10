@@ -5,6 +5,7 @@ import {
   ActivityRecordProps,
 } from "src/domain/store/enterprise/entities/activity-record";
 import { ActivityStatus } from "src/core/entities/activity-status";
+import { EntityType } from "src/core/entities/entity-type";
 
 export function makeActivityRecord(
   override: Partial<ActivityRecordProps> = {},
@@ -13,6 +14,8 @@ export function makeActivityRecord(
   const activityRecord = ActivityRecord.create(
     {
       staffId: new UniqueEntityID(),
+      entityId: new UniqueEntityID(),
+      entityType: EntityType.CATEGORY,
       dateTimeIso: new Date().toISOString(),
       status: ActivityStatus.CREATED,
       commit: faker.lorem.text(),

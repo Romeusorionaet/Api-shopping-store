@@ -20,6 +20,8 @@ describe("Create activity record", () => {
 
     const result = await sut.execute({
       staffId: activityRecord.staffId.toString(),
+      entityId: activityRecord.entityId.toString(),
+      entityType: activityRecord.entityType,
       dateTimeIso: activityRecord.dateTimeIso,
       status: activityRecord.status,
       commit: activityRecord.commit,

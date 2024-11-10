@@ -27,12 +27,18 @@ enum OrderStatusTracking {
 enum ActivityStatus {
   CREATED
   UPDATED
+  DELETED
 }
 
 enum Role {
   ADMIN
   MANAGER
   SUPPORT
+}
+
+enum EntityType {
+  PRODUCT
+  CATEGORY
 }
 
 model User {
@@ -225,6 +231,9 @@ model ActivityRecord {
   dateTimeIso String         @map("date_time_iso")
   status      ActivityStatus @map("activity_status")
   commit      String
+
+  entityId   String     @map("entity_id")
+  entityType EntityType @map("entity_type")
 
   staffId String
   staff   Staff  @relation(fields: [staffId], references: [id])
