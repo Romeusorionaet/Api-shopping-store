@@ -20,7 +20,7 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
       const err = result.value;
       switch (err.constructor) {
         case ResourceNotFoundError:
-          return reply.status(400).send({
+          return reply.status(404).send({
             error: err.message,
           });
 
