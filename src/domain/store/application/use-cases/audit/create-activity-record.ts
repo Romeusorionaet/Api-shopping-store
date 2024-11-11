@@ -5,7 +5,7 @@ import { ActivityRecord } from "src/domain/store/enterprise/entities/activity-re
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { EntityType } from "src/core/entities/entity-type";
 
-interface ActivityRecordUseCaseRequest {
+interface CreateActivityRecordUseCaseRequest {
   staffId: string;
   entityId: string;
   entityType: EntityType;
@@ -14,9 +14,9 @@ interface ActivityRecordUseCaseRequest {
   commit: string;
 }
 
-type ActivityRecordUseCaseResponse = Either<null, object>;
+type CreateActivityRecordUseCaseResponse = Either<null, object>;
 
-export class ActivityRecordUseCase {
+export class CreateActivityRecordUseCase {
   constructor(private auditRepository: AuditRepository) {}
 
   async execute({
@@ -26,7 +26,7 @@ export class ActivityRecordUseCase {
     status,
     dateTimeIso,
     commit,
-  }: ActivityRecordUseCaseRequest): Promise<ActivityRecordUseCaseResponse> {
+  }: CreateActivityRecordUseCaseRequest): Promise<CreateActivityRecordUseCaseResponse> {
     const activityRecord = ActivityRecord.create({
       staffId: new UniqueEntityID(staffId),
       entityId: new UniqueEntityID(entityId),

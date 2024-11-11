@@ -1,15 +1,15 @@
-import { ActivityRecordUseCase } from "./activity-record";
 import { InMemoryAuditRepository } from "test/repositories/in-memory-audit-repository";
 import { makeActivityRecord } from "test/factories/make-activity-record";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
+import { CreateActivityRecordUseCase } from "./create-activity-record";
 
 let auditRepository: InMemoryAuditRepository;
-let sut: ActivityRecordUseCase;
+let sut: CreateActivityRecordUseCase;
 
 describe("Create activity record", () => {
   beforeEach(() => {
     auditRepository = new InMemoryAuditRepository();
-    sut = new ActivityRecordUseCase(auditRepository);
+    sut = new CreateActivityRecordUseCase(auditRepository);
   });
 
   test("should be able create a activity record", async () => {
