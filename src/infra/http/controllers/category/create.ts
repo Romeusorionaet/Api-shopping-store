@@ -3,14 +3,20 @@ import { makeCreateCategoryUseCase } from "src/domain/store/application/use-case
 import { CategoryAlreadyExistsError } from "src/domain/store/application/use-cases/errors/category-already-exists-error";
 import { z } from "zod";
 import { categoryCreateSchema } from "../../schemas/category-schema";
+import { makeCreateActivityRecordUseCase } from "src/domain/store/application/use-cases/audit/factory/make-activity-record-use-case";
+import { EntityType } from "src/core/entities/entity-type";
+import { ActivityStatus } from "src/core/entities/activity-status";
+import { subAdminSchema } from "../../schemas/sub-admin-schema";
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   try {
-    const categoryData = categoryCreateSchema.parse(request.body);
+    const { staffId } = subAdminSchema.parse(request.user);
+
+    const { imgUrl, title, commit } = categoryCreateSchema.parse(request.body);
 
     const createCategoryUseCase = makeCreateCategoryUseCase();
 
-    const result = await createCategoryUseCase.execute(categoryData);
+    const result = await createCategoryUseCase.execute({ imgUrl, title });
 
     if (result.isLeft()) {
       const err = result.value;
@@ -24,6 +30,17 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
           throw new Error(err.message);
       }
     }
+
+    const createActivityRecordUseCase = makeCreateActivityRecordUseCase();
+
+    await createActivityRecordUseCase.execute({
+      staffId,
+      entityId: result.value.category.id.toString(),
+      entityType: EntityType.CATEGORY,
+      dateTimeIso: result.value.category.createdAt.toString(),
+      status: ActivityStatus.CREATED,
+      commit,
+    });
 
     return reply.status(201).send({ message: "Categoria criado com sucesso!" });
   } catch (err) {
