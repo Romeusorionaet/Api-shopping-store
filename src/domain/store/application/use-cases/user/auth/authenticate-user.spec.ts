@@ -6,8 +6,10 @@ import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repos
 import { makeUser } from "test/factories/make-user";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { EmailNotVerifiedError } from "../../errors/email-not-verified-error";
+import { InMemoryStaffRepository } from "test/repositories/in-memory-staff-repository";
 
 let usersRepository: InMemoryUsersRepository;
+let staffRepository: InMemoryStaffRepository;
 let fakeHasher: FakeHasher;
 let fakeEncrypter: FakeEncrypter;
 
@@ -16,6 +18,7 @@ let sut: AuthenticateUserUseCase;
 describe("Authenticate User", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
+    staffRepository = new InMemoryStaffRepository();
 
     fakeHasher = new FakeHasher();
 
@@ -23,6 +26,7 @@ describe("Authenticate User", () => {
 
     sut = new AuthenticateUserUseCase(
       usersRepository,
+      staffRepository,
       fakeHasher,
       fakeEncrypter,
     );

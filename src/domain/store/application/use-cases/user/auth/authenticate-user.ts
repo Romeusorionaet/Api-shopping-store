@@ -4,6 +4,7 @@ import { UsersRepository } from "../../../repositories/users-repository";
 import { HashComparer } from "../../../cryptography/hash-comparer";
 import { Encrypter } from "../../../cryptography/encrypter";
 import { EmailNotVerifiedError } from "../../errors/email-not-verified-error";
+import { StaffRepository } from "../../../repositories/staff-repository";
 
 interface AuthenticateUserUseCaseRequest {
   email: string;
@@ -21,6 +22,7 @@ type AuthenticateUserUseCaseResponse = Either<
 export class AuthenticateUserUseCase {
   constructor(
     private usersRepository: UsersRepository,
+    private staffRepository: StaffRepository,
     private hashComparer: HashComparer,
     private encrypter: Encrypter,
   ) {}
@@ -48,13 +50,19 @@ export class AuthenticateUserUseCase {
       return left(new EmailNotVerifiedError());
     }
 
+    const staff = await this.staffRepository.findByUserId(user.id.toString());
+
     const accessToken = await this.encrypter.encryptAccessToken({
       sub: user.id.toString(),
+      staffId: staff?.id.toString() || "",
+      role: staff?.role || "",
       publicId: user.publicId.toString(),
     });
 
     const refreshToken = await this.encrypter.encryptRefreshToken({
       sub: user.id.toString(),
+      staffId: staff?.id.toString() || "",
+      role: staff?.role || "",
       publicId: user.publicId.toString(),
     });
 

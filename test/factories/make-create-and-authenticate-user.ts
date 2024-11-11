@@ -42,3 +42,40 @@ export class CreateAndAuthenticateUserWithTokensFactory {
     return { accessToken, refreshToken, user };
   }
 }
+
+export class CreateAndAuthenticateUserAdminWithTokensFactory {
+  async makePrismaCreateAndAuthenticateUserAdminWithTokens(
+    app: FastifyInstance,
+  ) {
+    const fakeFirstName = faker.person.firstName();
+    const validationId = new UniqueEntityID().toValue();
+
+    const user = await prisma.user.create({
+      data: {
+        username: fakeFirstName,
+        email: `${fakeFirstName}@gmail.com`,
+        passwordHash: await hash("123456", 8),
+        picture: `http://${faker.person.firstName}/faker_picture.com`,
+        validationId,
+        emailVerified: true,
+        staff: {
+          create: {
+            role: "ADMIN",
+            isActive: true,
+          },
+        },
+      },
+    });
+
+    const result = await request(app.server)
+      .post("/auth/user/authenticate")
+      .send({
+        email: `${fakeFirstName}@gmail.com`,
+        password: "123456",
+      });
+
+    const { accessToken, refreshToken } = result.body;
+
+    return { accessToken, refreshToken, user };
+  }
+}

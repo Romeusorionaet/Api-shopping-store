@@ -1,8 +1,11 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { Role } from "src/core/entities/role";
 
 interface JwtPayload {
   sub: string;
   publicId: string;
+  staffId: string;
+  role: Role;
   permissions: string[];
   iat?: number;
   exp?: number;

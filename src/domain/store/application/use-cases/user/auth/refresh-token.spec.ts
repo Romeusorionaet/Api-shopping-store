@@ -5,8 +5,10 @@ import { makeUser } from "test/factories/make-user";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { RefreshTokenUseCase } from "./refresh-token";
 import { makeAuthenticateUserWithTokens } from "test/factories/make-create-and-authenticate-user";
+import { InMemoryStaffRepository } from "test/repositories/in-memory-staff-repository";
 
 let usersRepository: InMemoryUsersRepository;
+let staffRepository: InMemoryStaffRepository;
 let fakeHasher: FakeHasher;
 let fakeEncrypter: FakeEncrypter;
 
@@ -15,12 +17,13 @@ let sut: RefreshTokenUseCase;
 describe("Refresh Token", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
+    staffRepository = new InMemoryStaffRepository();
 
     fakeHasher = new FakeHasher();
 
     fakeEncrypter = new FakeEncrypter();
 
-    sut = new RefreshTokenUseCase(fakeEncrypter);
+    sut = new RefreshTokenUseCase(fakeEncrypter, staffRepository);
   });
 
   test("should be able to get a refresh token", async () => {
