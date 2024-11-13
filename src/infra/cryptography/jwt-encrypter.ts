@@ -7,7 +7,7 @@ export class JwtEncrypter implements Encrypter {
     if (payload.staffId === "") {
       payload.permissions = ["read"];
     } else {
-      payload.permissions = ["read", "write", "delete"];
+      payload.permissions = ["read", "write", "delete", "restricted_read"];
     }
 
     const token = app.jwt.sign(payload);
