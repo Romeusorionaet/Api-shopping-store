@@ -2,15 +2,12 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { CategoryPresenter } from "../../presenters/category-presenter";
 import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
 import { makeGetCategoryDetailsUseCase } from "src/domain/store/application/use-cases/category/factory/make-get-category-details-use-case";
+import { categoryIdParamsSchema } from "../../schemas/category-id-params-schema";
 import { z } from "zod";
-
-const getCategoryDetailsParamsSchema = z.object({
-  categoryId: z.string().uuid(),
-});
 
 export async function details(request: FastifyRequest, reply: FastifyReply) {
   try {
-    const { categoryId } = getCategoryDetailsParamsSchema.parse(request.params);
+    const { categoryId } = categoryIdParamsSchema.parse(request.params);
 
     const getCategoryDetailsUseCase = makeGetCategoryDetailsUseCase();
 
