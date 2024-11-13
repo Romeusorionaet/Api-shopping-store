@@ -3,5 +3,11 @@ import { create } from "./create";
 import { verifyJWTAccessToken } from "../../middlewares/verify-jwt-access-token";
 
 export async function orderRoutes(app: FastifyInstance) {
-  app.post("/order/create", { onRequest: verifyJWTAccessToken }, create);
+  app.post(
+    "/order/create",
+    {
+      preHandler: verifyJWTAccessToken(["read"]),
+    },
+    create,
+  );
 }

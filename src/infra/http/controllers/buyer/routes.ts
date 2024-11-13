@@ -8,48 +8,16 @@ import { fetchBuyerNotifications } from "./fetch-buyer-notifications";
 import { readBuyerNotification } from "./read-buyer-notification";
 
 export async function buyerRoutes(app: FastifyInstance) {
-  // app.addHook("onRequest", verifyJWTAccessToken);
-
-  app.get(
-    "/buyer/profile",
-    {
-      preHandler: verifyJWTAccessToken(["read"]),
-    },
-    profile,
-  );
-  app.get(
-    "/buyer/address",
-    {
-      preHandler: verifyJWTAccessToken(["read"]),
-    },
-    getBuyerAddress,
-  );
-  app.get(
-    "/buyer/orders",
-    {
-      preHandler: verifyJWTAccessToken(["read"]),
-    },
-    fetchBuyerOrders,
-  );
-  app.get(
-    "/buyer/order/products",
-    {
-      preHandler: verifyJWTAccessToken(["read"]),
-    },
-    getBuyerOrderProduct,
-  );
-  app.get(
-    "/buyer/notifications",
-    {
-      preHandler: verifyJWTAccessToken(["read"]),
-    },
-    fetchBuyerNotifications,
-  );
-  app.get(
-    "/buyer/read/notification/:notificationId",
-    {
-      preHandler: verifyJWTAccessToken(["read"]),
-    },
-    readBuyerNotification,
-  );
+  app.register(async (subApp) => {
+    subApp.addHook("preHandler", verifyJWTAccessToken(["read"]));
+    subApp.get("/buyer/profile", profile);
+    subApp.get("/buyer/address", getBuyerAddress);
+    subApp.get("/buyer/orders", fetchBuyerOrders);
+    subApp.get("/buyer/order/products", getBuyerOrderProduct);
+    subApp.get("/buyer/notifications", fetchBuyerNotifications);
+    subApp.get(
+      "/buyer/read/notification/:notificationId",
+      readBuyerNotification,
+    );
+  });
 }

@@ -64,7 +64,7 @@ describe("Create Category (E2E)", () => {
       })
       .set("Authorization", `Bearer ${accessToken}`);
 
-    expect(response.statusCode).toEqual(400);
+    expect(response.statusCode).toEqual(401);
 
     const categoryOnDatabase = await prisma.category.findUnique({
       where: {

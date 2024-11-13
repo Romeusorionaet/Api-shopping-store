@@ -5,9 +5,10 @@ import { verifyJWTAccessToken } from "../../middlewares/verify-jwt-access-token"
 import { updateUserAddress } from "./update-user-address";
 
 export async function userRoutes(app: FastifyInstance) {
-  app.addHook("onRequest", verifyJWTAccessToken);
-
-  app.put("/user/update-user-address", updateUserAddress);
-  app.post("/user/create-address", createUserAddress);
-  app.get("/user/get-address", getUserAddress);
+  app.register(async (subApp) => {
+    subApp.addHook("preHandler", verifyJWTAccessToken(["read"]));
+    subApp.put("/user/update-user-address", updateUserAddress);
+    subApp.post("/user/create-address", createUserAddress);
+    subApp.get("/user/get-address", getUserAddress);
+  });
 }
