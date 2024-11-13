@@ -1,36 +1,34 @@
 import { makeActivityRecord } from "test/factories/make-activity-record";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { CreateActivityRecordUseCase } from "./create-activity-record";
+import { GetCategoryActivitiesRecordUseCase } from "./get-category-activities-record";
 import { InMemoryActivityRecordRepository } from "test/repositories/in-memory-activity-record-repository";
 
 let activityRecordRepository: InMemoryActivityRecordRepository;
-let sut: CreateActivityRecordUseCase;
+let sut: GetCategoryActivitiesRecordUseCase;
 
-describe("Create activity record", () => {
+describe("Get category activities record", () => {
   beforeEach(() => {
     activityRecordRepository = new InMemoryActivityRecordRepository();
-    sut = new CreateActivityRecordUseCase(activityRecordRepository);
+    sut = new GetCategoryActivitiesRecordUseCase(activityRecordRepository);
   });
 
-  test("should be able create a activity record", async () => {
+  test("should be able get category activities record", async () => {
     const activityRecord = makeActivityRecord(
-      {},
+      {
+        entityId: new UniqueEntityID("entity-id-test-01"),
+      },
       new UniqueEntityID("activity-record-test-id"),
     );
 
-    const result = await sut.execute({
-      staffId: activityRecord.staffId.toString(),
-      entityId: activityRecord.entityId.toString(),
-      entityType: activityRecord.entityType,
-      dateTimeIso: activityRecord.dateTimeIso,
-      status: activityRecord.status,
-      commit: activityRecord.commit,
-    });
+    activityRecordRepository.items.push(activityRecord);
+
+    const result = await sut.execute({ id: activityRecord.id.toString() });
 
     expect(result.isRight()).toBe(true);
+    expect(activityRecordRepository.items).length(1);
     expect(activityRecordRepository.items[0]).toEqual(
       expect.objectContaining({
-        staffId: activityRecord.staffId,
+        entityId: activityRecord.entityId,
       }),
     );
   });
