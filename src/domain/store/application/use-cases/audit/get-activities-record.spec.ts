@@ -1,18 +1,18 @@
 import { makeActivityRecord } from "test/factories/make-activity-record";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { GetCategoryActivitiesRecordUseCase } from "./get-category-activities-record";
 import { InMemoryActivityRecordRepository } from "test/repositories/in-memory-activity-record-repository";
+import { GetActivitiesRecordUseCase } from "./get-activities-record";
 
 let activityRecordRepository: InMemoryActivityRecordRepository;
-let sut: GetCategoryActivitiesRecordUseCase;
+let sut: GetActivitiesRecordUseCase;
 
-describe("Get category activities record", () => {
+describe("Get activities record", () => {
   beforeEach(() => {
     activityRecordRepository = new InMemoryActivityRecordRepository();
-    sut = new GetCategoryActivitiesRecordUseCase(activityRecordRepository);
+    sut = new GetActivitiesRecordUseCase(activityRecordRepository);
   });
 
-  test("should be able get category activities record", async () => {
+  test("should be able get activities record by entityId", async () => {
     const activityRecord = makeActivityRecord(
       {
         entityId: new UniqueEntityID("entity-id-test-01"),

@@ -6,7 +6,7 @@ import { ActivityRecordRepository } from "src/domain/store/application/repositor
 export class PrismaActivityRecordRepository
   implements ActivityRecordRepository
 {
-  async createActivityRecord(data: ActivityRecord): Promise<void> {
+  async create(data: ActivityRecord): Promise<void> {
     const activityRecord = PrismaActivityRecordMapper.toPrisma(data);
 
     await prisma.activityRecord.create({

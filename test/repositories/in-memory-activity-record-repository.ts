@@ -5,7 +5,7 @@ export class InMemoryActivityRecordRepository
   implements ActivityRecordRepository
 {
   public items: ActivityRecord[] = [];
-  async createActivityRecord(data: ActivityRecord): Promise<void> {
+  async create(data: ActivityRecord): Promise<void> {
     this.items.push(data);
   }
 

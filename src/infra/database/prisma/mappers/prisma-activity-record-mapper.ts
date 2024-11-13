@@ -7,7 +7,7 @@ import { ActivityRecord } from "src/domain/store/enterprise/entities/activity-re
 export class PrismaActivityRecordMapper {
   static toDomain(raw: PrismaActivityRecord): ActivityRecord {
     const status: ActivityStatus = raw.status as ActivityStatus;
-    const entityType: EntityType = raw.status as EntityType;
+    const entityType: EntityType = raw.entityType as EntityType;
 
     return ActivityRecord.create(
       {
