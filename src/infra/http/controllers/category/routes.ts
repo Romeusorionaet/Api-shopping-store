@@ -8,7 +8,13 @@ import { fetchCategoriesBasicData } from "./fetch-categories-basic-data";
 import { verifyJWTAccessToken } from "../../middlewares/verify-jwt-access-token";
 
 export async function categoriesRoutes(app: FastifyInstance) {
-  app.post("/category/create", { onRequest: verifyJWTAccessToken }, create);
+  app.post(
+    "/category/create",
+    {
+      preHandler: verifyJWTAccessToken(["write"]),
+    },
+    create,
+  );
   app.get("/category/details/:categoryId", details);
   app.get("/categories", fetchCategories);
   app.put("/category/update", update);

@@ -22,7 +22,6 @@ export async function registerWithOAuth(
       picture,
       emailVerified,
     });
-
     const user = resultRegisterWithOAuth.user;
 
     const refreshTokenUseCase = makeRefreshTokenUseCase();

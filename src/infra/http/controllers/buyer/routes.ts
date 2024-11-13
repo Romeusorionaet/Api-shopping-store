@@ -8,12 +8,48 @@ import { fetchBuyerNotifications } from "./fetch-buyer-notifications";
 import { readBuyerNotification } from "./read-buyer-notification";
 
 export async function buyerRoutes(app: FastifyInstance) {
-  app.addHook("onRequest", verifyJWTAccessToken);
+  // app.addHook("onRequest", verifyJWTAccessToken);
 
-  app.get("/buyer/profile", profile);
-  app.get("/buyer/address", getBuyerAddress);
-  app.get("/buyer/orders", fetchBuyerOrders);
-  app.get("/buyer/order/products", getBuyerOrderProduct);
-  app.get("/buyer/notifications", fetchBuyerNotifications);
-  app.get("/buyer/read/notification/:notificationId", readBuyerNotification);
+  app.get(
+    "/buyer/profile",
+    {
+      preHandler: verifyJWTAccessToken(["read"]),
+    },
+    profile,
+  );
+  app.get(
+    "/buyer/address",
+    {
+      preHandler: verifyJWTAccessToken(["read"]),
+    },
+    getBuyerAddress,
+  );
+  app.get(
+    "/buyer/orders",
+    {
+      preHandler: verifyJWTAccessToken(["read"]),
+    },
+    fetchBuyerOrders,
+  );
+  app.get(
+    "/buyer/order/products",
+    {
+      preHandler: verifyJWTAccessToken(["read"]),
+    },
+    getBuyerOrderProduct,
+  );
+  app.get(
+    "/buyer/notifications",
+    {
+      preHandler: verifyJWTAccessToken(["read"]),
+    },
+    fetchBuyerNotifications,
+  );
+  app.get(
+    "/buyer/read/notification/:notificationId",
+    {
+      preHandler: verifyJWTAccessToken(["read"]),
+    },
+    readBuyerNotification,
+  );
 }

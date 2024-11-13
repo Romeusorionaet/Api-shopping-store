@@ -35,7 +35,6 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
       .send({ message: "Produto atualizado com sucesso!" });
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log(err.errors[0].path, "====err");
       return reply.status(400).send({
         error: err.errors[0].message,
         error_path: err.errors[0].path,

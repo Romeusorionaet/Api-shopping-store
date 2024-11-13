@@ -4,7 +4,11 @@ import jwt from "jsonwebtoken";
 
 export class JwtEncrypter implements Encrypter {
   async encryptAccessToken(payload: Record<string, unknown>): Promise<string> {
-    payload.permissions = ["read", "write", "delete"];
+    if (payload.staffId === "") {
+      payload.permissions = ["read"];
+    } else {
+      payload.permissions = ["read", "write", "delete"];
+    }
 
     const token = app.jwt.sign(payload);
 

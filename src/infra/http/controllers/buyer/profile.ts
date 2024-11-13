@@ -27,7 +27,6 @@ export async function profile(request: FastifyRequest, reply: FastifyReply) {
           throw new Error(err.message);
       }
     }
-
     return reply
       .status(200)
       .send({ profile: BuyerPresenter.toHTTP(result.value.buyer) });
