@@ -2,13 +2,21 @@ import { makeActivityRecord } from "test/factories/make-activity-record";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { CreateActivityRecordUseCase } from "./create-activity-record";
 import { InMemoryActivityRecordRepository } from "test/repositories/in-memory-activity-record-repository";
+import { InMemoryStaffRepository } from "test/repositories/in-memory-staff-repository";
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 
 let activityRecordRepository: InMemoryActivityRecordRepository;
+let staffRepository: InMemoryStaffRepository;
+let usersRepository: InMemoryUsersRepository;
 let sut: CreateActivityRecordUseCase;
 
 describe("Create activity record", () => {
   beforeEach(() => {
-    activityRecordRepository = new InMemoryActivityRecordRepository();
+    usersRepository = new InMemoryUsersRepository();
+    staffRepository = new InMemoryStaffRepository(usersRepository);
+    activityRecordRepository = new InMemoryActivityRecordRepository(
+      staffRepository,
+    );
     sut = new CreateActivityRecordUseCase(activityRecordRepository);
   });
 

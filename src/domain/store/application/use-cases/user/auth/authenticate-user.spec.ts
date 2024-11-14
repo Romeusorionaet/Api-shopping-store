@@ -18,7 +18,7 @@ let sut: AuthenticateUserUseCase;
 describe("Authenticate User", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
-    staffRepository = new InMemoryStaffRepository();
+    staffRepository = new InMemoryStaffRepository(usersRepository);
 
     fakeHasher = new FakeHasher();
 

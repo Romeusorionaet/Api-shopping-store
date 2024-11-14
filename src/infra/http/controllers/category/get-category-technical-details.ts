@@ -36,20 +36,14 @@ export async function getCategoryTechnicalDetails(
       id: categoryId,
     });
 
-    if (activityRecordResult.value?.activityRecord.length === 0) {
-      return reply.status(200).send({
-        message: "No categories found.",
-        categories: [],
-      });
-    }
-
     return reply.status(200).send({
       categoryBasicInformation: CategoryPresenter.toHTTP(
         categoryBasicDetailsResult.value.category,
       ),
-      categoryTechnicalDetails: activityRecordResult.value?.activityRecord.map(
-        ActivityRecordPresenter.toHTTP,
-      ),
+      categoryTechnicalDetails:
+        activityRecordResult.value?.activityRecordWithStaff.map(
+          ActivityRecordPresenter.toHTTP,
+        ),
     });
   } catch (err) {
     if (err instanceof z.ZodError) {

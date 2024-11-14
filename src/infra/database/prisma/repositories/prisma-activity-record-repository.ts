@@ -1,7 +1,10 @@
 import { ActivityRecord } from "src/domain/store/enterprise/entities/activity-record";
 import { prisma } from "src/infra/service/setup-prisma/prisma";
+import {
+  ActivityRecordRepository,
+  ActivityRecordWithStaffType,
+} from "src/domain/store/application/repositories/activity-record-repository";
 import { PrismaActivityRecordMapper } from "../mappers/prisma-activity-record-mapper";
-import { ActivityRecordRepository } from "src/domain/store/application/repositories/activity-record-repository";
 
 export class PrismaActivityRecordRepository
   implements ActivityRecordRepository
@@ -14,10 +17,25 @@ export class PrismaActivityRecordRepository
     });
   }
 
-  async getByEntityId(entityId: string): Promise<ActivityRecord[]> {
+  async getActivityRecordWithStaffByEntityId(
+    entityId: string,
+  ): Promise<ActivityRecordWithStaffType[]> {
     const activityRecord = await prisma.activityRecord.findMany({
       where: {
         entityId,
+      },
+      include: {
+        staff: {
+          select: {
+            role: true,
+            user: {
+              select: {
+                username: true,
+                email: true,
+              },
+            },
+          },
+        },
       },
     });
 

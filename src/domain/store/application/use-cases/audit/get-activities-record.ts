@@ -1,6 +1,8 @@
 import { Either, right } from "src/core/either";
-import { ActivityRecord } from "src/domain/store/enterprise/entities/activity-record";
-import { ActivityRecordRepository } from "../../repositories/activity-record-repository";
+import {
+  ActivityRecordRepository,
+  ActivityRecordWithStaffType,
+} from "../../repositories/activity-record-repository";
 
 interface GetActivitiesRecordUseCaseRequest {
   id: string;
@@ -9,7 +11,7 @@ interface GetActivitiesRecordUseCaseRequest {
 type GetActivitiesRecordUseCaseResponse = Either<
   null,
   {
-    activityRecord: ActivityRecord[];
+    activityRecordWithStaff: ActivityRecordWithStaffType[];
   }
 >;
 
@@ -19,9 +21,11 @@ export class GetActivitiesRecordUseCase {
   async execute({
     id,
   }: GetActivitiesRecordUseCaseRequest): Promise<GetActivitiesRecordUseCaseResponse> {
-    const activityRecord =
-      await this.activityRecordRepository.getByEntityId(id);
+    const activityRecordWithStaff =
+      await this.activityRecordRepository.getActivityRecordWithStaffByEntityId(
+        id,
+      );
 
-    return right({ activityRecord });
+    return right({ activityRecordWithStaff });
   }
 }

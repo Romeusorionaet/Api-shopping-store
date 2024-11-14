@@ -17,7 +17,7 @@ let sut: RefreshTokenUseCase;
 describe("Refresh Token", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
-    staffRepository = new InMemoryStaffRepository();
+    staffRepository = new InMemoryStaffRepository(usersRepository);
 
     fakeHasher = new FakeHasher();
 
