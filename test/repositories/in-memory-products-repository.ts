@@ -145,4 +145,10 @@ export class InMemoryProductsRepository implements ProductRepository {
       (item) => item.id.toString() !== id,
     );
   }
+
+  async countByCategoryId(id: string): Promise<number> {
+    return this.dataStore.items.filter(
+      (item) => item.categoryId.toString() === id,
+    ).length;
+  }
 }

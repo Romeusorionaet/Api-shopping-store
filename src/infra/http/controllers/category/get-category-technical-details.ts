@@ -37,6 +37,8 @@ export async function getCategoryTechnicalDetails(
     });
 
     return reply.status(200).send({
+      productQuantityPerCategory:
+        categoryBasicDetailsResult.value.countProductPerCategory,
       categoryBasicInformation: CategoryPresenter.toHTTP(
         categoryBasicDetailsResult.value.category,
       ),

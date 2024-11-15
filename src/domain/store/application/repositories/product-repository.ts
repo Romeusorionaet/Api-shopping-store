@@ -12,4 +12,5 @@ export interface ProductRepository {
   remove(id: string): Promise<void>;
   decrementStockQuantity(orderProducts: OrderProduct[]): Promise<void>;
   findManyByCategoryId(id: string, page: number): Promise<Product[] | null>;
+  countByCategoryId(id: string): Promise<number>;
 }

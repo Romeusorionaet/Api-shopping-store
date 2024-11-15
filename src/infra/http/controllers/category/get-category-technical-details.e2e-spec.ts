@@ -5,17 +5,20 @@ import { CategoryFactory } from "test/factories/make-category";
 import { EntityType } from "src/core/entities/entity-type";
 import { app } from "src/infra/app";
 import request from "supertest";
+import { ProductFactory } from "test/factories/make-product";
 
-describe("Create Category (E2E)", () => {
+describe("Get category technical details (E2E)", () => {
   let createAndAuthenticateUserAdminWithTokensFactory: CreateAndAuthenticateUserAdminWithTokensFactory;
   let categoryFactory: CategoryFactory;
   let activityRecordFactory: ActivityRecordFactory;
+  let productFactory: ProductFactory;
 
   beforeAll(async () => {
     await app.ready();
 
     categoryFactory = new CategoryFactory();
     activityRecordFactory = new ActivityRecordFactory();
+    productFactory = new ProductFactory();
 
     createAndAuthenticateUserAdminWithTokensFactory =
       new CreateAndAuthenticateUserAdminWithTokensFactory();
@@ -40,6 +43,10 @@ describe("Create Category (E2E)", () => {
         staffId,
       },
     );
+    await productFactory.makePrismaProduct({
+      categoryId: category.id,
+      categoryTitle: category.title,
+    });
 
     const response = await request(app.server)
       .get(`/category/technical-details/${category.id}`)
@@ -49,6 +56,7 @@ describe("Create Category (E2E)", () => {
     expect(response.body.categoryTechnicalDetails).toHaveLength(1);
     expect(response.body).toEqual(
       expect.objectContaining({
+        productQuantityPerCategory: 1,
         categoryBasicInformation: expect.objectContaining({
           id: category.id.toString(),
           title: category.title,

@@ -225,8 +225,18 @@ export class PrismaProductRepository implements ProductRepository {
       `${CacheKeysPrefix.PRODUCT}:unique:${id}`,
     );
 
+    await this.cacheRepository.delete(
+      `${CacheKeysPrefix.PRODUCT}:unique:${id}`,
+    );
+
     await this.cacheRepository.deleteCacheByPattern(
       `${CacheKeysPrefix.PRODUCTS_LIST}:*`,
     );
+  }
+
+  async countByCategoryId(id: string): Promise<number> {
+    return await prisma.product.count({
+      where: { categoryId: id },
+    });
   }
 }
