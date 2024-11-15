@@ -1,12 +1,13 @@
-import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { faker } from "@faker-js/faker";
 import {
   ActivityRecord,
   ActivityRecordProps,
 } from "src/domain/store/enterprise/entities/activity-record";
-import { ActivityStatus } from "src/core/entities/activity-status";
-import { EntityType } from "src/core/entities/entity-type";
 import { PrismaActivityRecordMapper } from "src/infra/database/prisma/mappers/prisma-activity-record-mapper";
+import { UniqueEntityID } from "src/core/entities/unique-entity-id";
+import { ActivityStatus } from "src/core/entities/activity-status";
+import { prisma } from "src/infra/service/setup-prisma/prisma";
+import { EntityType } from "src/core/entities/entity-type";
+import { faker } from "@faker-js/faker";
 
 export function makeActivityRecord(
   override: Partial<ActivityRecordProps> = {},
@@ -34,7 +35,7 @@ export class ActivityRecordFactory {
   ): Promise<ActivityRecord> {
     const activityRecord = makeActivityRecord(data);
 
-    await prisma.category.create({
+    await prisma.activityRecord.create({
       data: PrismaActivityRecordMapper.toPrisma(activityRecord),
     });
 

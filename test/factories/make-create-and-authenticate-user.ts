@@ -5,6 +5,8 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { prisma } from "src/infra/service/setup-prisma/prisma";
 import request from "supertest";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
+import { makeStaff } from "./make-staff";
+import { PrismaStaffMapper } from "src/infra/database/prisma/mappers/prisma-staff-mapper";
 
 export async function makeAuthenticateUserWithTokens(userId: string) {
   const fakeEncrypter = new FakeEncrypter();
@@ -58,13 +60,13 @@ export class CreateAndAuthenticateUserAdminWithTokensFactory {
         picture: `http://${faker.person.firstName}/faker_picture.com`,
         validationId,
         emailVerified: true,
-        staff: {
-          create: {
-            role: "ADMIN",
-            isActive: true,
-          },
-        },
       },
+    });
+
+    const staff = makeStaff({ userId: new UniqueEntityID(user.id) });
+
+    await prisma.staff.create({
+      data: PrismaStaffMapper.toPrisma(staff),
     });
 
     const result = await request(app.server)
@@ -76,6 +78,6 @@ export class CreateAndAuthenticateUserAdminWithTokensFactory {
 
     const { accessToken, refreshToken } = result.body;
 
-    return { accessToken, refreshToken, user };
+    return { accessToken, refreshToken, user, staffId: staff.id };
   }
 }
