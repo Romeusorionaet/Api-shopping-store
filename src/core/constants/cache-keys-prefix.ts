@@ -7,4 +7,5 @@ export const CacheKeysPrefix = {
   USER_ADDRESS: "userAddress",
   NOTIFICATION_LIST: "notificationList",
   NOTIFICATION: "notification",
+  ACTIVITY_RECORD: "activityRecord",
 };

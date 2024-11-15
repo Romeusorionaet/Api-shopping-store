@@ -2,14 +2,35 @@ import { GetCategoryDetailsUseCase } from "./get-category-details";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { makeCategory } from "test/factories/make-category";
+import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
+import { InMemoryOrdersRepository } from "test/repositories/in-memory-orders-repository";
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 
 let categoriesRepository: InMemoryCategoriesRepository;
+let productsRepository: InMemoryProductsRepository;
+let dataStore: InMemoryProductDataStoreRepository;
+let ordersRepository: InMemoryOrdersRepository;
+let usersRepository: InMemoryUsersRepository;
 let sut: GetCategoryDetailsUseCase;
 
 describe("Get Category Details", () => {
   beforeEach(() => {
     categoriesRepository = new InMemoryCategoriesRepository();
-    sut = new GetCategoryDetailsUseCase(categoriesRepository);
+    dataStore = new InMemoryProductDataStoreRepository();
+    usersRepository = new InMemoryUsersRepository();
+    ordersRepository = new InMemoryOrdersRepository(
+      productsRepository,
+      usersRepository,
+    );
+    productsRepository = new InMemoryProductsRepository(
+      dataStore,
+      ordersRepository,
+    );
+    sut = new GetCategoryDetailsUseCase(
+      categoriesRepository,
+      productsRepository,
+    );
   });
 
   test("should be able to get category details", async () => {
