@@ -2,13 +2,16 @@ import { InMemoryCategoriesRepository } from "test/repositories/in-memory-catego
 import { CreateCategoryUseCase } from "./create-category";
 import { makeCategory } from "test/factories/make-category";
 import { CategoryAlreadyExistsError } from "../errors/category-already-exists-error";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 
 let categoriesRepository: InMemoryCategoriesRepository;
+let dataStore: InMemoryProductDataStoreRepository;
 let sut: CreateCategoryUseCase;
 
 describe("Create Category", () => {
   beforeEach(() => {
-    categoriesRepository = new InMemoryCategoriesRepository();
+    dataStore = new InMemoryProductDataStoreRepository();
+    categoriesRepository = new InMemoryCategoriesRepository(dataStore);
     sut = new CreateCategoryUseCase(categoriesRepository);
   });
 

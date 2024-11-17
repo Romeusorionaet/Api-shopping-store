@@ -2,13 +2,16 @@ import { InMemoryCategoriesRepository } from "test/repositories/in-memory-catego
 import { FetchCategoriesUseCase } from "./fetch-categories";
 import { makeCategory } from "test/factories/make-category";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 
 let categoriesRepository: InMemoryCategoriesRepository;
+let dataStore: InMemoryProductDataStoreRepository;
 let sut: FetchCategoriesUseCase;
 
 describe("Fetch Categories", () => {
   beforeEach(() => {
-    categoriesRepository = new InMemoryCategoriesRepository();
+    dataStore = new InMemoryProductDataStoreRepository();
+    categoriesRepository = new InMemoryCategoriesRepository(dataStore);
     sut = new FetchCategoriesUseCase(categoriesRepository);
   });
 

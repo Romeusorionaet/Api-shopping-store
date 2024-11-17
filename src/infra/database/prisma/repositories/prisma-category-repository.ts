@@ -2,6 +2,7 @@ import { PaginationParams } from "src/core/repositories/pagination-params";
 import {
   CategoriesBasicDataProps,
   CategoryRepository,
+  CategorySummariesType,
 } from "src/domain/store/application/repositories/category-repository";
 import { Category } from "src/domain/store/enterprise/entities/category";
 import { PrismaCategoryMapper } from "../mappers/prisma-category-mapper";
@@ -172,5 +173,27 @@ export class PrismaCategoryRepository implements CategoryRepository {
     await this.cacheRepository.deleteCacheByPattern(
       `${CacheKeysPrefix.CATEGORY_LIST}:*`,
     );
+  }
+
+  async findManyCategorySummaries(): Promise<CategorySummariesType[]> {
+    const data = await prisma.category.findMany({
+      select: {
+        id: true,
+        title: true,
+        _count: {
+          select: {
+            products: true,
+          },
+        },
+      },
+    });
+
+    const categorySummaries = data.map((data) => ({
+      id: data.id,
+      title: data.title,
+      productCount: data._count.products,
+    }));
+
+    return categorySummaries;
   }
 }

@@ -2,13 +2,18 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { makeCategory } from "test/factories/make-category";
 import { UpdateCategoryUseCase } from "./update-category";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 
 let categoriesRepository: InMemoryCategoriesRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let sut: UpdateCategoryUseCase;
 
 describe("Update Category", () => {
   beforeEach(() => {
-    categoriesRepository = new InMemoryCategoriesRepository();
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
+    categoriesRepository = new InMemoryCategoriesRepository(
+      productDataStoreRepository,
+    );
     sut = new UpdateCategoryUseCase(categoriesRepository);
   });
 

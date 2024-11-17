@@ -1,13 +1,18 @@
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository";
 import { makeCategory } from "test/factories/make-category";
 import { RemoveCategoryUseCase } from "./remove-category";
+import { InMemoryProductDataStoreRepository } from "test/repositories/in-memory-product-data-store-repository";
 
 let categoriesRepository: InMemoryCategoriesRepository;
+let productDataStoreRepository: InMemoryProductDataStoreRepository;
 let sut: RemoveCategoryUseCase;
 
 describe("Remove Category", () => {
   beforeEach(() => {
-    categoriesRepository = new InMemoryCategoriesRepository();
+    productDataStoreRepository = new InMemoryProductDataStoreRepository();
+    categoriesRepository = new InMemoryCategoriesRepository(
+      productDataStoreRepository,
+    );
     sut = new RemoveCategoryUseCase(categoriesRepository);
   });
 

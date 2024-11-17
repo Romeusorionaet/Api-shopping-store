@@ -16,8 +16,8 @@ let sut: GetCategoryDetailsUseCase;
 
 describe("Get Category Details", () => {
   beforeEach(() => {
-    categoriesRepository = new InMemoryCategoriesRepository();
     dataStore = new InMemoryProductDataStoreRepository();
+    categoriesRepository = new InMemoryCategoriesRepository(dataStore);
     usersRepository = new InMemoryUsersRepository();
     ordersRepository = new InMemoryOrdersRepository(
       productsRepository,

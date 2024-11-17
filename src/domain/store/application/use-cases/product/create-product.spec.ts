@@ -34,7 +34,9 @@ describe("Create Product", () => {
       orderRepository,
     );
 
-    categoryRepository = new InMemoryCategoriesRepository();
+    categoryRepository = new InMemoryCategoriesRepository(
+      productDataStoreRepository,
+    );
 
     technicalProductDetailsRepository =
       new InMemoryTechnicalProductDetailsRepository();
