@@ -2,11 +2,15 @@ import { PaginationParams } from "src/core/repositories/pagination-params";
 import {
   CategoriesBasicDataProps,
   CategoryRepository,
+  CategorySummariesType,
 } from "src/domain/store/application/repositories/category-repository";
 import { Category } from "src/domain/store/enterprise/entities/category";
+import { InMemoryProductDataStoreRepository } from "./in-memory-product-data-store-repository";
 
 export class InMemoryCategoriesRepository implements CategoryRepository {
   public items: Category[] = [];
+
+  constructor(private dataStore: InMemoryProductDataStoreRepository) {}
 
   async create(data: Category): Promise<void> {
     this.items.push(data);
@@ -77,5 +81,19 @@ export class InMemoryCategoriesRepository implements CategoryRepository {
 
   async remove(id: string): Promise<void> {
     this.items = this.items.filter((item) => item.id.toString() !== id);
+  }
+
+  async findManyCategorySummaries(): Promise<CategorySummariesType[]> {
+    return this.items.map((category) => {
+      const productCount = this.dataStore.items.filter(
+        (product) => product.categoryId === category.id,
+      ).length;
+
+      return {
+        id: category.id.toString(),
+        title: category.title,
+        productCount,
+      };
+    });
   }
 }

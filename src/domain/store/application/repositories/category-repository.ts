@@ -6,6 +6,12 @@ export type CategoriesBasicDataProps = {
   title: string;
 };
 
+export type CategorySummariesType = {
+  id: string;
+  title: string;
+  productCount: number;
+};
+
 export interface CategoryRepository {
   create(data: Category): Promise<void>;
   findMany(
@@ -15,4 +21,5 @@ export interface CategoryRepository {
   findById(id: string): Promise<Category | null>;
   update(category: Category): Promise<void>;
   remove(id: string): Promise<void>;
+  findManyCategorySummaries(): Promise<CategorySummariesType[]>;
 }
