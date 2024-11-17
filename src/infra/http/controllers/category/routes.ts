@@ -7,6 +7,7 @@ import { remove } from "./remove-category";
 import { fetchCategoriesBasicData } from "./fetch-categories-basic-data";
 import { verifyJWTAccessToken } from "../../middlewares/verify-jwt-access-token";
 import { getCategoryTechnicalDetails } from "./get-category-technical-details";
+import { getRetrieveCategorySummaries } from "./get-retrieve-category-summaries";
 
 export async function categoriesRoutes(app: FastifyInstance) {
   app.post(
@@ -33,5 +34,12 @@ export async function categoriesRoutes(app: FastifyInstance) {
       preHandler: verifyJWTAccessToken(["restricted_read"]),
     },
     getCategoryTechnicalDetails,
+  );
+  app.get(
+    "/category/retrieve-summaries",
+    {
+      preHandler: verifyJWTAccessToken(["restricted_read"]),
+    },
+    getRetrieveCategorySummaries,
   );
 }
